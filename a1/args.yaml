@@ -1,0 +1,67 @@
+arguments:
+  lr:
+    type: float
+    help: "The learning rate"
+    default: 0.001
+
+  eps:
+    type: int
+    help: "The number of epochs"
+    default: 10
+
+  tbs:
+    type: int
+    help: "The training batch size"
+    default: 32
+
+  vbs:
+    type: int
+    help: "The validation batch size"
+    default: 32
+
+  dl:
+    type: bool
+    help: "Limit the number of data samples"
+    default: false
+
+  dlt:
+    type: int
+    help: "Maximum number of data samples to use"
+    default: 1000
+
+  ebs:
+    type: int
+    help: "Size of the embedding"
+    default: 256
+
+  hdn:
+    type: int
+    help: "Size of the hidden layers"
+    default: 512
+
+  nlayers:
+    type: int
+    help: "Number of layers in the LSTM"
+    default: 4
+
+  npreds:
+    type: int
+    help: "Number of topk words returned for prediction"
+    default: 10
+
+  vocsize:
+    type: int
+    help: "The number of words used in our vocabulary"
+    default: 1000
+
+  modlength:
+    type: int
+    help: "The maximum length of a text before truncation"
+    default: -1
+
+  run:
+    type: str
+    help: "What we want to do (create tokenizer, train, predict)"
+    default: "predict"
+
+  
