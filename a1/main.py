@@ -17,9 +17,18 @@ elif args.run == "tokenize":
     print("Building tokenizer")
     create_tokenizer(args)
 
+elif args.run == "all":
+    print("Building tokenizer")
+    create_tokenizer(args)
+    print("Initializing training")
+    train(args)
+    print("Doing prediction")
+    predict(args)
+
 else:
     print("Method you are trying to do is not implemented, choose one of the following: \n"
           "- predict \n"
           "- train \n"
           "- tokenize \n"
+          "- all"
           )

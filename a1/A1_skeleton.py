@@ -19,8 +19,7 @@ def lowercase_tokenizer(text):
 
 def create_vocabulary(tokenized_words, max_voc_size, pad_token, unk_token, bos_token, eos_token):
     cnt = Counter()
-    for word in tokenized_words:
-        cnt[word] += 1
+    cnt.update(tokenized_words)
 
     #  More words than allowed then keep only the most frequently used ones
     max_voc_size = len(cnt) + 5 if not max_voc_size else max_voc_size
@@ -312,8 +311,16 @@ class A1Trainer:
         )
 
         # TODO: Relevant arguments: args.per_device_train_batch_size, args.per_device_eval_batch_size
-        train_loader = DataLoader(self.train_dataset, batch_size=args.per_device_train_batch_size, shuffle=True)
-        val_loader = DataLoader(self.eval_dataset, batch_size=args.per_device_eval_batch_size, shuffle=False)
+        train_loader = DataLoader(
+            self.train_dataset,
+            batch_size=args.per_device_train_batch_size, 
+            shuffle=True
+        )
+        val_loader = DataLoader(
+            self.eval_dataset,
+            batch_size=args.per_device_eval_batch_size,
+            shuffle=False
+        )
         
         # TODO: Your work here is to implement the training loop.
         #       
@@ -333,8 +340,7 @@ class A1Trainer:
         #       loss.backward()
         #       optimizer.step()
 
-        def get_model_loss(batch):
-            batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
+        def get_model_loss(batch_encoding):
             input_ids = batch_encoding.get("input_ids")
             X = input_ids[:, :-1]
             Y = input_ids[:, 1:]
@@ -354,8 +360,9 @@ class A1Trainer:
                 ncols=100
             )
             for batch in train_batch_progress_bar:
-                loss = get_model_loss(batch)
-                train_loss[0] += len(batch.get("text"))
+                batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
+                loss = get_model_loss(batch_encoding)
+                train_loss[0] += batch_encoding['attention_mask'].sum()
                 train_loss[1] += loss 
                 train_batch_progress_bar.set_postfix(
                     training_loss=train_loss[1].item()/train_loss[0]
@@ -374,15 +381,17 @@ class A1Trainer:
                 )
                 with torch.no_grad():
                     for batch in val_batch_progress_bar:
-                        val_loss[0] += len(batch.get("text"))
-                        val_loss[1] += get_model_loss(batch)
+                        batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
+                        val_loss[0] += batch_encoding['attention_mask'].sum()
+                        val_loss[1] += get_model_loss(batch_encoding)
                         val_batch_progress_bar.set_postfix(
                             validation_loss=val_loss[1].item()/val_loss[0] 
                         ), 
 
             train_avrg = train_loss[1].item()/train_loss[0]
             val_avrg = val_loss[1].item()/val_loss[0]
-
+            
+            print(val_loss)
             # TODO: Check perplexity formula, divide by length of loader aka number of batches or number of samples
             # REmove padding when calculating perplexity. Currently we also count the padding, this we shouldn't do
             perplexity = np.exp(val_avrg)

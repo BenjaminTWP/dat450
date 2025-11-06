@@ -7,7 +7,7 @@ arguments:
   eps:
     type: int
     help: "The number of epochs"
-    default: 10
+    default: 1
 
   tbs:
     type: int
@@ -22,7 +22,7 @@ arguments:
   dl:
     type: bool
     help: "Limit the number of data samples"
-    default: false
+    default: True
 
   dlt:
     type: int
@@ -63,5 +63,15 @@ arguments:
     type: str
     help: "What we want to do (create tokenizer, train, predict)"
     default: "predict"
+
+  tf:
+    type: str
+    help: "Location of the training file"
+    default: "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
+
+  vf:
+    type: str
+    help: "Location of the training file"
+    default: "/data/courses/2025_dat450_dit247/assignments/a1/val.txt"
 
   
