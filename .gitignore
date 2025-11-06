@@ -1,3 +1,8 @@
+# Task specific
+a1/training
+a1/trained_model/
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

@@ -27,13 +27,13 @@ First batch from training dataloader (no shuffle):
 Model construction sanity check with a vector: 
 
 100 dimensional tensor input to embeedding:
- tensor([[ 0.6059, -0.0325,  0.1313,  ..., -0.4039, -0.4546, -0.6167],
-        [ 0.6124, -0.0320,  0.1085,  ..., -0.4005, -0.4754, -0.6079],
-        [ 0.6146,  0.0098,  0.1156,  ..., -0.4451, -0.4704, -0.5845],
+ tensor([[-0.3757, -0.2407,  0.5750,  ...,  0.2219, -0.2043, -0.4492],
+        [ 0.0024, -0.0539,  0.6177,  ...,  0.5263, -0.3874, -0.3299],
+        [-0.6053, -0.2858,  0.4203,  ...,  0.2319, -0.1310, -0.3087],
         ...,
-        [ 0.7181, -0.0524, -0.2675,  ..., -0.3147, -0.8170, -0.4815],
-        [ 0.6976,  0.3386, -0.0579,  ..., -0.7560, -0.6398, -0.3154],
-        [ 0.6343,  0.2318,  0.1253,  ..., -0.6768, -0.4693, -0.4498]],
+        [-0.2859, -0.2449,  0.6768,  ...,  0.1557, -0.2210, -0.5723],
+        [-0.5165, -0.3138,  0.5660,  ...,  0.0984, -0.1342, -0.5048],
+        [-0.4114, -0.2618,  0.5776,  ...,  0.1833, -0.1852, -0.4713]],
        grad_fn=<AddmmBackward0>)
 Vocab_size of 30000 with the embedding:
  torch.Size([100, 30000])
@@ -41,44 +41,42 @@ Vocab_size of 30000 with the embedding:
 #
 
 Device: cuda
-At epoch 0, batch 0, loss = 11.933
-At epoch 0, batch 1500, loss = 6.720
-At epoch 0, batch 3000, loss = 6.342
-At epoch 0, batch 4500, loss = 5.945
-At epoch 0, batch 6000, loss = 6.155
-At epoch 0, batch 7500, loss = 5.783
-At epoch 0, batch 9000, loss = 5.937
-
+At epoch 0, batch 0, loss = 11.935
+At epoch 0, batch 1500, loss = 6.488
+At epoch 0, batch 3000, loss = 6.239
+At epoch 0, batch 4500, loss = 6.077
+At epoch 0, batch 6000, loss = 5.840
+At epoch 0, batch 7500, loss = 5.934
+At epoch 0, batch 9000, loss = 6.016
 #
-Perplexity for the epoch is: 338.380
+Perplexity for the epoch is: 341.556
 #
-At epoch 1, batch 0, loss = 5.906
-At epoch 1, batch 1500, loss = 5.598
-At epoch 1, batch 3000, loss = 5.856
-At epoch 1, batch 4500, loss = 5.706
-At epoch 1, batch 6000, loss = 5.652
-At epoch 1, batch 7500, loss = 5.449
-At epoch 1, batch 9000, loss = 5.684
-
+At epoch 1, batch 0, loss = 5.817
+At epoch 1, batch 1500, loss = 5.874
+At epoch 1, batch 3000, loss = 5.664
+At epoch 1, batch 4500, loss = 5.780
+At epoch 1, batch 6000, loss = 5.645
+At epoch 1, batch 7500, loss = 5.568
+At epoch 1, batch 9000, loss = 5.571
 #
-Perplexity for the epoch is: 277.636
+Perplexity for the epoch is: 280.029
 #
 
 #Saving to ..
 #
 The 5 best results for following sentence 'She lives in San' is: 
 
-francisco 7.856065273284912
-diego 6.313863754272461
-and 5.571992874145508
-<UNK> 5.250258445739746
-cristóbal 5.010011196136475
+francisco 8.536397933959961
+diego 7.450388431549072
+in 5.6961822509765625
+suu 5.609806537628174
+cristóbal 5.362128257751465
 
 
 The 5 best results for following sentence 'The lecture is about to' is: 
 
-the 5.453012466430664
-be 5.072028160095215
-have 4.029440402984619
-<UNK> 3.77604079246521
-a 3.740055799484253
+be 6.034632682800293
+the 5.948526382446289
+have 4.932125568389893
+a 4.2937798500061035
+make 3.754843235015869
