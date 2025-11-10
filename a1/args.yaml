@@ -52,7 +52,7 @@ arguments:
   vocsize:
     type: int
     help: "The number of words used in our vocabulary"
-    default: 1000
+    default: 150000
 
   modlength:
     type: int
@@ -68,7 +68,6 @@ arguments:
     type: str
     help: "Location of the training file"
     default: "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
-    #default: 
 
   vf:
     type: str

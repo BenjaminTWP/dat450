@@ -27,6 +27,10 @@ def create_vocabulary(tokenized_words, max_voc_size, pad_token, unk_token, bos_t
     max_voc_size = len(cnt) + 5 if not max_voc_size else max_voc_size
     if len(cnt) > max_voc_size-4:
         cnt = Counter(cnt.most_common(max_voc_size-4))
+
+    cnt_list = list(cnt)
+    print("Most common: ", cnt_list[:5])
+    print("Least common: ", cnt_list[-5:])
     
     str_to_int = {pad_token : 0, unk_token : 1, bos_token : 2, eos_token : 3}
     int_to_str = {0 : pad_token, 1: unk_token, 2 : bos_token, 3 : eos_token}
@@ -353,7 +357,7 @@ class A1Trainer:
         losses = pd.DataFrame(columns=["Epoch", "Total training loss", "Total val loss", "Avrg training loss", "Avrg val loss", "Perplexity"])
         for i in range(args.num_train_epochs):
             train_loss = np.zeros(2)
-            val_loss = np.zeros(2)
+            val_loss = np.zeros(4)
             self.model.train()
             train_batch_progress_bar = tqdm(
                 train_loader, 
@@ -364,9 +368,9 @@ class A1Trainer:
                 batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
                 loss = get_model_loss(batch_encoding)
                 train_loss[0] += batch_encoding['attention_mask'].sum()
-                train_loss[1] += loss 
+                train_loss[1] += loss.item()
                 train_batch_progress_bar.set_postfix(
-                    training_loss=loss
+                    training_loss=loss.item()
                 ), 
 
                 optimizer.zero_grad()
@@ -383,40 +387,51 @@ class A1Trainer:
                 with torch.no_grad():
                     for batch in val_batch_progress_bar:
                         batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
-                        valid_tokens = batch_encoding['attention_mask'][:, :1]
-                        valid_tokens= valid_tokens.to(device).sum()
+                        valid = batch_encoding['attention_mask'].to(device)
+                        # Calculate how many batches we recived for our training examples.
+                        nr_batches = valid[:, 0].sum() 
+                        nr_valid_tokens= valid.sum()
                         loss = get_model_loss(batch_encoding)
 
-                        # loss returned as avrg over batch so has to "un_average" it by mult with non-padd size
-                        val_loss[1] += loss * valid_tokens
-                        val_loss[0] += valid_tokens
+                        # loss returned as avrg over batch so has to "un_average" it by mult with the number of batches
+                        #val_loss[2] += loss.item()
+                        
+                        # These are used for calculating the average etc
+                        val_loss[3] += loss.item() * nr_batches
+                        val_loss[2] += nr_batches
+                        val_loss[1] += loss.item()
+                        val_loss[0] += nr_valid_tokens
                         val_batch_progress_bar.set_postfix(
-                            validation_loss=loss
+                            validation_loss=loss.item()
                         ), 
 
 
             train_avrg = train_loss[1].item()/train_loss[0].item()
-            val_avrg = val_loss[1].item()/val_loss[0].item()
+            val_avrg = val_loss[1]/val_loss[0].item()
             
-            # TODO: Check perplexity formula, divide by length of loader aka number of batches or number of samples
-            # REmove padding when calculating perplexity. Currently we also count the padding, this we shouldn't do
-            perplexity = np.exp(val_avrg)
+            print(train_loss)
+            print(val_loss)
+
+            # TODO: check this but should be accurate
+            perplexity = np.exp(val_loss[3]/val_loss[2])
             losses = pd.concat([
                 pd.DataFrame(
-                    [[i, train_loss[1].item(), val_loss[1].item(), train_avrg, val_avrg, perplexity]], 
+                    [[i, train_loss[1], val_loss[1], train_avrg, val_avrg, perplexity]], 
                     columns=losses.columns
                 ), 
                 losses
             ])
 
+            # TODO: THe total training will be the sum of the batch averages so this is kinda wrong
+            # TODO: Here the output is the average over the average etc, change it
             print(
                 "\n---------------------------------------------------\n"
                 f"Epoch {i+1}/{args.num_train_epochs} finished!\n"
                 f"Final losses for epoch was:\n"
-                f" * Total training: {train_loss[1]}\n"
-                f" * Total validation: {val_loss[1]}\n"
-                f" - Avrg training: {train_avrg:.4f}\n"
-                f" - Avrg validation: {val_avrg:.4f}\n"
+                f" * Summed average training: {train_loss[1]}\n"
+                f" * Summed average validation: {val_loss[1]}\n"
+                #f" - Averaged Avrg training: {train_avrg:.4f}\n"
+                #f" - Averaged Avrg validation: {val_avrg:.4f}\n"
                 f" ° Perplexity validation {perplexity}\n"
                 "---------------------------------------------------\n"
             )
