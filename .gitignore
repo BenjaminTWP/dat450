@@ -1,7 +1,9 @@
 # Task specific
 a1/training
 a1/trained_model/
-
+*train.txt
+*val.txt
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
