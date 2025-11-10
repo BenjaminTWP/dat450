@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:L40s:1
 #SBATCH -J DAT450_Assignment_1
 #SBATCH -t 00:30:00
-#SBATCH -o prob.txt
+#SBATCH -o out.txt
 
 source /data/courses/2025_dat450_dit247/venvs/dat450_venv/bin/activate
 

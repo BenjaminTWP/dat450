@@ -1,5 +1,7 @@
 
 import torch, nltk, pickle
+nltk.download('punkt')
+nltk.download('punkt_tab')
 from torch import nn
 from collections import Counter
 from transformers import BatchEncoding, PretrainedConfig, PreTrainedModel
@@ -289,7 +291,6 @@ class A1Trainer:
             return torch.device('mps')
         return torch.device('cpu')
 
-
     def train(self):
         """Train the model."""
         args = self.args
@@ -365,7 +366,7 @@ class A1Trainer:
                 train_loss[0] += batch_encoding['attention_mask'].sum()
                 train_loss[1] += loss 
                 train_batch_progress_bar.set_postfix(
-                    training_loss=train_loss[1].item()/train_loss[0]
+                    training_loss=loss
                 ), 
 
                 optimizer.zero_grad()
@@ -382,16 +383,21 @@ class A1Trainer:
                 with torch.no_grad():
                     for batch in val_batch_progress_bar:
                         batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
-                        val_loss[0] += batch_encoding['attention_mask'].sum()
-                        val_loss[1] += get_model_loss(batch_encoding)
+                        valid_tokens = batch_encoding['attention_mask'][:, :1]
+                        valid_tokens= valid_tokens.to(device).sum()
+                        loss = get_model_loss(batch_encoding)
+
+                        # loss returned as avrg over batch so has to "un_average" it by mult with non-padd size
+                        val_loss[1] += loss * valid_tokens
+                        val_loss[0] += valid_tokens
                         val_batch_progress_bar.set_postfix(
-                            validation_loss=val_loss[1].item()/val_loss[0] 
+                            validation_loss=loss
                         ), 
 
-            train_avrg = train_loss[1].item()/train_loss[0]
-            val_avrg = val_loss[1].item()/val_loss[0]
+
+            train_avrg = train_loss[1].item()/train_loss[0].item()
+            val_avrg = val_loss[1].item()/val_loss[0].item()
             
-            print(val_loss)
             # TODO: Check perplexity formula, divide by length of loader aka number of batches or number of samples
             # REmove padding when calculating perplexity. Currently we also count the padding, this we shouldn't do
             perplexity = np.exp(val_avrg)
@@ -418,6 +424,4 @@ class A1Trainer:
         print(f'Saving to {args.output_dir}.')
         self.model.save_pretrained(args.output_dir)
         losses.to_csv(args.output_dir + "/losses.csv", index=False)
-
-
 

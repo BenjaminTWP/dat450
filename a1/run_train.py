@@ -8,14 +8,12 @@ from A1_skeleton import (
 )
 from transformers import TrainingArguments
 from paths import (
-    TRAIN_FILE,
-    VAL_FILE,
     TRAINER_OUTPUT,
     TOKENIZER
 )
 
 def train(args):
-    dataset = load_dataset('text', data_files={'train': TRAIN_FILE, 'val': VAL_FILE})
+    dataset = load_dataset('text', data_files={'train': args.tf, 'val': args.vf})
     dataset = dataset.filter(lambda x: x['text'].strip() != '')
 
     if args.dl:

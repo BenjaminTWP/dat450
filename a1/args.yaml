@@ -12,12 +12,12 @@ arguments:
   tbs:
     type: int
     help: "The training batch size"
-    default: 32
+    default: 16
 
   vbs:
     type: int
     help: "The validation batch size"
-    default: 32
+    default: 16
 
   dl:
     type: bool
@@ -68,6 +68,7 @@ arguments:
     type: str
     help: "Location of the training file"
     default: "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
+    #default: 
 
   vf:
     type: str
