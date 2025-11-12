@@ -61,9 +61,19 @@ class A2Attention(nn.Module):
         self.W_K = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
         self.W_V = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
         self.W_O = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
-        self.key_norm = nn.LayerNorm(config.hiden_size)
-        self.query_norm = nn.LayerNorm(config.hiden_size)
+        self.key_norm = nn.LayerNorm(config.hidden_size)
+        self.query_norm = nn.LayerNorm(config.hidden_size)
         self.config = config
+
+        self.total_dims = config.hidden_size
+        self.nr_heads = config.num_attention_heads
+
+        if self.total_dims % self.nr_heads != 0:
+            raise Exception("The number of dims must be equally divided acrosss the heads")
+
+        self.dims_per_head = self.total_dims // self.nr_heads
+
+
         # TODO: set up W_q, W_k, W_v, W_o here
         # TODO: set up normalizers here
 
@@ -72,16 +82,16 @@ class A2Attention(nn.Module):
         K = self.key_norm(self.W_K(hidden_states))
         V = self.W_V(hidden_states)     
 
-        dims = Q.view(2)
-
-        for item in [Q, K, V]:
-            item = item.view(item.size(0), item.size(1), self.config.num_attention_heads,  self.config.hidden_size).transpose(1, 2)
+        Q = Q.view(Q.size(0), Q.size(1), self.nr_heads,  self.dims_per_head).transpose(1, 2)
+        K = K.view(K.size(0), K.size(1), self.nr_heads,  self.dims_per_head).transpose(1, 2)
+        V = V.view(V.size(0), V.size(1), self.nr_heads,  self.dims_per_head).transpose(1, 2)
 
         Q_emb, K_emb = apply_rotary_pos_emb(Q, K, rope_rotations)
         attn_out = nn.functional.scaled_dot_product_attention(Q_emb, K_emb, V, is_causal=True)
+        
         assert(attn_out.shape == hidden_states.shape)
 
-        attn_out = attn_out.transpose(1, 2).reshape(Q.view(0), Q.view(1), dims)
+        attn_out = attn_out.transpose(1, 2).reshape(Q.view(0), Q.view(1), self.dims_per_head)
 
         return self.W_O(attn_out)
 
