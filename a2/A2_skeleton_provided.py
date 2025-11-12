@@ -113,7 +113,7 @@ class A2DecoderLayer(nn.Module):
 
         tmp = torch.add(hidden_states, out)
         out = self.MLP(tmp)
-        return torch.add(tmp, self.rms_1(out))
+        return torch.add(tmp, self.rms_2(out))
 
 
 class A2Transformer(PreTrainedModel):
@@ -133,7 +133,6 @@ class A2Transformer(PreTrainedModel):
         ])
         self.rms = nn.RMSNorm(config.hidden_size, eps=config.rms_norm_eps, elementwise_affine=True)
         self.linear = nn.Linear(in_features=config.hidden_size, out_features=config.vocab_size)
-        self.softmax = nn.Softmax(dim=-1)
 
         # TODO: Set up the other components here.
         # TODO: put all transformer decoder layers in a ModuleList.
@@ -146,12 +145,12 @@ class A2Transformer(PreTrainedModel):
         rope_rotations = self.rotary_emb(input_ids) # pass this to all the transformer decoder layers
 
         input = self.embedding(input_ids)
+
         for decoder in self.layers:
             input = decoder(input, rope_rotations)
 
         out = self.rms(input)
-        out = self.linear(out)
-        return self.softmax(out)
+        return self.linear(out)
 
         # TODO: Call embedding, transformer decoder layers, last normalizer, and unembedding.
         ...
