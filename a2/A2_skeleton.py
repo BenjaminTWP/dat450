@@ -160,43 +160,100 @@ class A1Tokenizer:
             return pickle.load(f)
    
 
-###
-### Part 3. Defining the model.
-###
-
-class A1RNNModelConfig(PretrainedConfig):
-    """Configuration object that stores hyperparameters that define the RNN-based language model."""
-    def __init__(self, vocab_size=None, embedding_size=None, hidden_size=None, **kwargs):
+class SwiGLUModelConfig(PretrainedConfig):
+    def __init__(self, hidden_size=None, intermediate_size=None, rms_norm_eps=None,**kwargs):
         super().__init__(**kwargs)
-        self.vocab_size = vocab_size
         self.hidden_size = hidden_size
-        self.embedding_size = embedding_size
+        self.intermediate_size = intermediate_size
+        self.rms_norm_eps = rms_norm_eps
 
-class A1RNNModel(PreTrainedModel):
-    """The neural network model that implements a RNN-based language model."""
-    config_class = A1RNNModelConfig
+
+class SwiGLU(PreTrainedModel):
+    config_class = SwiGLUModelConfig
+
+    def __init__(self, config):
+        super().__init__(config)
+        
+
+        self.linear_1 = nn.Linear(in_features=config.hidden_size, out_features=config.intermediate_size, bias=False)
+        self.linear_2 = nn.Linear(in_features=config.hidden_size, out_features=config.intermediate_size, bias=False)
+        self.linear_3 = nn.Linear(in_features=config.intermediate_size, out_features=config.hidden_size, bias=False)
+        self.SiLU = nn.SiLU()
+        self.rms = nn.RMSNorm(config.hidden_size, eps=config.rms_norm_eps, elementwise_affine=True)
+
+    def forward(self, X):
+        out_1 = self.linear_1(X)
+        out_2 = self.linear_2(X)
+        out_1 = self.SiLU(out_1)
+        out = torch.mul(out_1, out_2)
+        out = self.linear_3(out)
+        return self.rms(out)
+
+
+class MaskedMHAModelConfig(PretrainedConfig):
+    def __init__(self, hidden_size=None, num_attention_heads=None,**kwargs):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_attention_heads = num_attention_heads
+
+        if hidden_size % num_attention_heads != 0:
+            raise Exception("hidden size has to be evenly divisable by the num attention head")
+        
+
+class MaskedMHAModel(PreTrainedModel):
+    config_class = MaskedMHAModelConfig
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.W_Q = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
+        self.W_K = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
+        self.W_V = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
+        self.W_O = nn.Linear(in_features=config.hidden_size, out_features=config.hidden_size, bias=False)
+        self.key_norm = nn.LayerNorm(config.hiden_size)
+        self.query_norm = nn.LayerNorm(config.hiden_size)
+        self.config = config
+
+
+    def forward(self, hidden_states, position_embeddings): 
+        Q = self.query_norm(self.W_Q(hidden_states))
+        K = self.key_norm(self.W_K(hidden_states))
+        V = self.W_V(hidden_states)     
+
+        for item in [Q, K, V]:
+            item = item.view(item.size(0), item.size(1), self.config.num_attention_heads,  self.config.hidden_size).transpose(1, 2)
+
+        Q_emb, K_emb = apply_rotary_pos_emb(Q, K, position_embeddings)
+        attn_out = nn.functional.scaled_dot_product_attention(Q_emb, K_emb, V, is_causal=True)
+        assert(attn_out.shape == hidden_states.shape)
+
+        attn_out = attn_out.transpose(1, 2).reshape(Q.view(0), Q.view(1), self.config.hidden_size)
+
+        return self.W_O(attn_out)
+        
+        
+
+
+class A2OLMoModelConfig(PretrainedConfig):
+    """Configuration object that stores hyperparameters that define the RNN-based language model."""
+    def __init__(self, hidden_size=None, num_attention_heads=None, **kwargs):
+        super().__init__(**kwargs)
+        self.hidden_size = hidden_size
+        self.num_attention_heads = num_attention_heads
+
+        if hidden_size % num_attention_heads != 0:
+            raise Exception("hidden size has to be evenly divisable by the num attention head")
+
+class A2OLMoModel(PreTrainedModel):
+    """The neural network model that implements a OLMo-based language model."""
+    config_class = A2OLMoModelConfig
     
     def __init__(self, config):
         super().__init__(config)
-        self.embedding = torch.nn.Embedding(num_embeddings=config.vocab_size,
-                                            embedding_dim=config.embedding_size)
-        self.rnn = torch.nn.LSTM(input_size=config.embedding_size,
-                                 hidden_size=config.hidden_size, batch_first=True) 
-        #Batch first for (B=Batch size,N=sequence length,E=Embedding dimensionality)
-        self.unembedding = torch.nn.Linear(in_features=config.hidden_size, 
-                                           out_features=config.vocab_size)
-        
+
+
     def forward(self, X):
-        """The forward pass of the RNN-based language model.
-        
-           Args:
-             X:  The input tensor (2D), consisting of a batch of integer-encoded texts.
-           Returns:
-             The output tensor (3D), consisting of logits for all token positions for all vocabulary items.
-        """
-        embedded = self.embedding(X)
-        rnn_out, _ = self.rnn(embedded)
-        out = self.unembedding(rnn_out)
+
+        out = 1
         return out
 
 
