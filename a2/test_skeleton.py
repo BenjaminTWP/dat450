@@ -2,9 +2,11 @@ from A2_skeleton_provided import A2ModelConfig, A2MLP, A2Attention, A2RotaryEmbe
 import torch
 from transformers import PretrainedConfig
 
+hidden_size = 32
+
 config = A2ModelConfig(
     vocab_size=150000,
-    hidden_size=10,
+    hidden_size=hidden_size,
     max_position_embeddings=100000,
     rms_norm_eps=0.001,
     num_attention_heads=2,
@@ -15,7 +17,7 @@ config = A2ModelConfig(
     embedding_dims=128
 )
 
-tensor = torch.ones((5, 20, 10)) * 100
+tensor = torch.ones((5, 20, hidden_size)) * 100
 
 #mlp_model = A2MLP(config)
 #out = mlp_model(tensor)
@@ -26,4 +28,4 @@ rotation_emb = rotary_model(tensor)
 attention_model = A2Attention(config)
 out = attention_model(tensor, rotation_emb)
 
-print(out.shape)
+print(out.shape == tensor.shape)
