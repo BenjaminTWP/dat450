@@ -1,6 +1,7 @@
 # Task specific
 a1/training
-a1/trained_model/
+a2/vocab
+*/trained_model/*
 
 
 # Byte-compiled / optimized / DLL files

@@ -1,4 +1,5 @@
 from A1_skeleton import build_tokenizer, TrainingArguments, A1Trainer, A1Tokenizer
+from transformers import AutoTokenizer, AutoModelForCausalLM
 from datasets import load_dataset
 from A2_skeleton import *
 from torch import nn
@@ -6,6 +7,7 @@ import numpy as np
 
 train_file_loc = "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
 val_file_loc = "/data/courses/2025_dat450_dit247/assignments/a1/val.txt"
+local_dir = '/data/courses/2025_dat450_dit247/models/OLMo-2-0425-1B'
 
 def get_test_config():
     vocab_size = len(A1Tokenizer.from_file("vocab"))
@@ -17,7 +19,7 @@ def get_test_config():
                          rms_norm_eps=0.1)
 
 def get_train_config():
-    return TrainingArguments(lr=1e-3, epochs=1, batch_size=8)
+    return TrainingArguments(lr=1e-3, epochs=2, batch_size=8)
 
 def sanity_mlp_rms():
     config = get_test_config()
@@ -74,10 +76,50 @@ def train_transformer():
 
     return transformer
 
+def test_some_sentences(model):
+    tokenizer = A1Tokenizer.from_file("vocab")
+
+    sentences = ["he lives in San", 
+                 "The capital of ",
+                 "The fifth element in the periodic table is"]
+
+    for sentence in sentences:
+        print(f"The 5 best results for following sentence '{sentence}' is: \n")
+
+        encoding = tokenizer([sentence], return_tensors='pt')
+        output = model(encoding['input_ids'])
+        topk = torch.topk(output[0, -2], k=5)
+
+        for idx, score in zip(topk.indices, topk.values):
+            
+            print(tokenizer.int_to_str[idx.item()], float(score.detach()))
+        
+        print("\n")
+
+def random_sampling(model, prompt, max_length, temperature, topk):
+    pass
+
+
+def test_text_generation(model):
+    prompts = ['In natural language processing, a Transformer'
+                'Is Stockholm the capital of Sweden? Answer yes or no. The answer is'
+                'Write a Python program that reverses a list.']
+
+    for prompt in prompts:
+        random_sampling(model, prompt, max_length=7, topk=4)
+
+
+def load_local_model():
+    tokenizer = AutoTokenizer.from_pretrained(local_dir, local_files_only=True)
+    model = AutoModelForCausalLM.from_pretrained(local_dir, local_files_only=True)
+    print(model)
+
 
 if __name__ == "__main__":
     print("#", flush=True)
-    sanity_mlp_rms()
-    sanity_transformer()
+    #sanity_mlp_rms()
+    #sanity_transformer()
 
     transformer = train_transformer()
+    #trained_transformer = A2Transformer.from_pretrained("trained_model")
+    #test_some_sentences(trained_transformer)
