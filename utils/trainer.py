@@ -97,19 +97,21 @@ class A1Trainer:
 
         def get_model_loss(batch_encoding, is_training, device):
             input_ids = batch_encoding.get("input_ids")
-            X = input_ids[:, :-1]
-            Y = input_ids[:, 1:]
-            X = X.to(device)
-            Y = Y.to(device)
+            X = input_ids[:, :-1].to(device)
+            Y = input_ids[:, 1:].to(device)
 
             # Use mixed-precision during training and if we have cuda device 
-            if is_training and device.type == 'cuda':
-                with autocast(device.type):
-                    preds = self.model(X)
-                    return loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
+            #if is_training and device.type == 'cuda':
+            #    with autocast(device.type):
+            #        preds = self.model(X)
+            #        return loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
 
             preds = self.model(X)
-            return loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
+            del X
+            loss = loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
+            del Y
+            del preds
+            return loss
  
         
         losses = pd.DataFrame(columns=["Epoch", "Total training loss", "Total val loss", "Avrg training loss", "Avrg val loss", "Perplexity"])
