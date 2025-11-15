@@ -4,6 +4,7 @@ from datasets import load_dataset
 from A2_skeleton import *
 from torch import nn
 import numpy as np
+import torch
 
 train_file_loc = "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
 val_file_loc = "/data/courses/2025_dat450_dit247/assignments/a1/val.txt"
@@ -96,30 +97,97 @@ def test_some_sentences(model):
         
         print("\n")
 
-def random_sampling(model, prompt, max_length, temperature, topk):
-    pass
+def random_sampling(model, prompt, max_length=13, temp=3, topk=6):
+    tokenizer = A1Tokenizer.from_file("vocab")
+
+    for _ in range(max_length):
+        encoding = tokenizer([prompt], padding=True, truncation=True, return_tensors='pt')
+        input_ids = encoding['input_ids']
+
+        logits = model(input_ids)[0, -2]
+
+        logits = logits / temp
+
+        topk_logits, topk_idx = torch.topk(logits, k=topk)
+        probs = torch.softmax(topk_logits, dim=-1)
+
+        dist = torch.distributions.Categorical(probs)
+        next_token = topk_idx[dist.sample()].item()
+
+        prompt += ' ' + tokenizer.int_to_str[next_token]
+       
+        if tokenizer.int_to_str[next_token] == tokenizer.special_tokens['eos_token']:
+            break
+
+    return prompt
+
+def random_sampling_olmo(model, prompt, max_length=13, temp=1.0, topk=40, tokenizer=None):
+    encoding = tokenizer(prompt, return_tensors="pt")
+    input_ids = encoding["input_ids"]
+
+    for _ in range(max_length):
+        logits = model(input_ids)['logits'][0, -1]    
+
+        logits = logits / temp
+
+        topk_logits, topk_idx = torch.topk(logits, k=topk)
+        probs = torch.softmax(topk_logits, dim=-1)
+
+        dist = torch.distributions.Categorical(probs)
+        next_token_id = topk_idx[dist.sample()].item()
+
+        input_ids = torch.cat([
+            input_ids,
+            torch.tensor([[next_token_id]], dtype=torch.long)
+        ], dim=1)
+
+        if next_token_id == tokenizer.eos_token_id:
+            break
+
+    return tokenizer.decode(input_ids[0])
 
 
-def test_text_generation(model):
-    prompts = ['In natural language processing, a Transformer'
-                'Is Stockholm the capital of Sweden? Answer yes or no. The answer is'
+def test_text_generation(model, settings, olmo=False):
+    prompts = ['In natural language processing, a Transformer',
+                'Is Stockholm the capital of Sweden? Answer yes or no. The answer is',
                 'Write a Python program that reverses a list.']
 
     for prompt in prompts:
-        random_sampling(model, prompt, max_length=7, topk=4)
+        print("\n#\nTest input prompt is: ", prompt)
+        if olmo:
+            sentence = random_sampling_olmo(model, prompt, **settings)
+        else:
+            sentence = random_sampling(model, prompt, **settings)
+        print(f"\nand the result is:", sentence)
 
 
 def load_local_model():
     tokenizer = AutoTokenizer.from_pretrained(local_dir, local_files_only=True)
     model = AutoModelForCausalLM.from_pretrained(local_dir, local_files_only=True)
-    print(model)
+    return model, tokenizer
+
+def section(title):
+    print(f"\n################################ {title} ###############################\n")
 
 
 if __name__ == "__main__":
-    print("#", flush=True)
-    #sanity_mlp_rms()
-    #sanity_transformer()
+    print(flush=True)
 
+    section("Sanity check dimensions")
+    sanity_mlp_rms()
+    sanity_transformer()
+
+    section("Training of the model")
     transformer = train_transformer()
-    #trained_transformer = A2Transformer.from_pretrained("trained_model")
-    #test_some_sentences(trained_transformer)
+    trained_transformer = A2Transformer.from_pretrained("trained_model")
+
+    section("Test top k suggestions for some sentences")
+    test_some_sentences(trained_transformer)
+
+    section("Test text generation for the trained model")
+    test_text_generation(trained_transformer, {'max_length':15, 'temp':0.96, 'topk':40})
+
+    section("Load Olmo model and test text generation")
+    olmo, olmo_tok = load_local_model()
+    test_text_generation(olmo, {'max_length':20, 'temp':0.85, 'topk':40, 'tokenizer':olmo_tok}, olmo=True)
+    
