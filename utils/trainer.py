@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 from tqdm import tqdm
 import pandas as pd
+from torch.amp import autocast, GradScaler
 
 
 class A1Trainer:
@@ -49,6 +50,8 @@ class A1Trainer:
         device = self.select_device()
         print('Device:', device)
         self.model.to(device)
+
+        scaler = GradScaler()
         
         loss_func = torch.nn.CrossEntropyLoss(ignore_index=self.tokenizer.pad_token_id)
 
@@ -92,14 +95,22 @@ class A1Trainer:
         #       loss.backward()
         #       optimizer.step()
 
-        def get_model_loss(batch_encoding):
+        def get_model_loss(batch_encoding, is_training, device):
             input_ids = batch_encoding.get("input_ids")
             X = input_ids[:, :-1]
             Y = input_ids[:, 1:]
             X = X.to(device)
             Y = Y.to(device)
+
+            # Use mixed-precision during training and if we have cuda device 
+            if is_training and device.type == 'cuda':
+                with autocast(device.type):
+                    preds = self.model(X)
+                    return loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
+
             preds = self.model(X)
             return loss_func(preds.view(-1, preds.shape[-1]), Y.reshape(-1))
+ 
         
         losses = pd.DataFrame(columns=["Epoch", "Total training loss", "Total val loss", "Avrg training loss", "Avrg val loss", "Perplexity"])
         for i in range(args.num_train_epochs):
@@ -112,17 +123,23 @@ class A1Trainer:
                 ncols=100
             )
             for batch in train_batch_progress_bar:
+                optimizer.zero_grad()
                 batch_encoding = self.tokenizer(batch.get("text"), return_tensors='pt', padding=True, truncation=True)
-                loss = get_model_loss(batch_encoding)
+                loss = get_model_loss(batch_encoding, True, device)
                 train_loss[0] += batch_encoding['attention_mask'].sum()
                 train_loss[1] += loss.item()
                 train_batch_progress_bar.set_postfix(
                     training_loss=loss.item()
                 ), 
 
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+                
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+
+                #optimizer.zero_grad()
+                #loss.backward()
+                #optimizer.step()
             
             if args.eval_strategy == 'epoch':
                 self.model.eval()
@@ -138,7 +155,7 @@ class A1Trainer:
                         # Calculate how many batches we recived for our training examples.
                         nr_batches = valid[:, 0].sum() 
                         nr_valid_tokens= valid.sum()
-                        loss = get_model_loss(batch_encoding)
+                        loss = get_model_loss(batch_encoding, False, device)
 
                         # loss returned as avrg over batch so has to "un_average" it by mult with the number of batches
                         #val_loss[2] += loss.item()

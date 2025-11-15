@@ -131,7 +131,7 @@ class A2Transformer(PreTrainedModel):
             A2DecoderLayer(config) for i in range(config.num_hidden_layers)
         ])
         self.rms = nn.RMSNorm(config.hidden_size, eps=config.rms_norm_eps, elementwise_affine=True)
-        self.linear = nn.Linear(in_features=config.hidden_size, out_features=config.vocab_size)
+        self.linear = nn.Linear(in_features=config.hidden_size, out_features=config.vocab_size, bias=False)
 
         # TODO: Set up the other components here.
         # TODO: put all transformer decoder layers in a ModuleList.
