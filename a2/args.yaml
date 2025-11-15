@@ -1,0 +1,82 @@
+arguments:
+  hidden_size:
+    type: int
+    help: "Size of the hidden layers"
+    default: 128
+
+  rms_norm_eps:
+    type: float
+    help: "The epsilon we add during RMS norm"
+    default: 0.001
+
+  num_attention_heads:
+    type: int
+    help: "The number of attention heads"
+    default: 2
+
+  rope_theta:
+    type: int
+    help: "The theta we use for rotation embeddings"
+    default: 2
+
+  hidden_act:
+    type: str
+    help: "The activation function we use in MLP"
+    default: "silu"  
+  
+  intermediate_size:
+    type: int
+    help: "The intermediate size we use in the MLP"
+    default: 64
+  
+  num_hidden_layers:
+    type: int
+    help: "The number of hidden layers (MHA + SWIGLU) we are using in the transformer"
+    default: 2
+
+  max_position_embeddings:
+    type: int
+    help: "Good question"
+    default: 1000
+
+  npreds:
+    type: int
+    help: "Number of topk words returned for prediction"
+    default: 10
+
+  run:
+    type: str
+    help: "What we want to do (create tokenizer, train, predict)"
+    default: "predict"
+
+  tf:
+    type: str
+    help: "Location of the training file"
+    default: "/data/courses/2025_dat450_dit247/assignments/a1/train.txt"
+
+  vf:
+    type: str
+    help: "Location of the training file"
+    default: "/data/courses/2025_dat450_dit247/assignments/a1/val.txt"
+
+  tokenizer_file:
+    type: str
+    help: "Location of the training file"
+    default: "a2/tokenizer.pkl"
+
+  output_dir:
+    type: str
+    help: "Output directory of the saved model"
+    default: "a2/trainer_output/"
+
+  temperature:
+    type: float
+    help: "The temperature to use during prediction, should be in interval [0,1]. 0 = greedy, 1 = equally random"
+    default: 0
+
+  generation_max_length:
+    type: int
+    help: "How many tokens the model should predict"
+    default: 10
+
+ 

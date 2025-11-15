@@ -1,16 +1,10 @@
-from A1_skeleton import (
-    A1RNNModel, 
-    A1Tokenizer,
-)
+from a1.A1_skeleton import A1RNNModel
+from utils.tokenizer import A1Tokenizer
 import torch
-from paths import (
-    TRAINER_OUTPUT,
-    TOKENIZER
-)
 
 def predict(args):
-    model = A1RNNModel.from_pretrained(TRAINER_OUTPUT)
-    tokenizer = A1Tokenizer.from_file(TOKENIZER)
+    model = A1RNNModel.from_pretrained(args.output_dir)
+    tokenizer = A1Tokenizer.from_file(args.tokenizer_file)
 
     example_text = [input("Enter a sentence in which you want to predict the next word for: \n- ").strip() or "This is the default string"]
 

@@ -1,0 +1,10 @@
+arguments:
+  vocab_size:
+      type: int
+      help: "The number of words used in our vocabulary"
+      default: 150000
+
+  modlength:
+    type: int
+    help: "The maximum length of a text before truncation"
+    default: -1

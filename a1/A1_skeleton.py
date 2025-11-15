@@ -225,7 +225,6 @@ class A1RNNModel(PreTrainedModel):
                 in_features=self.rnn.hidden_size,
                 out_features=self.config.vocab_size
             ),
-            nn.Softmax(dim=-1)
         )
         
     def forward(self, X):

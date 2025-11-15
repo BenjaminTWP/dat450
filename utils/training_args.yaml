@@ -1,0 +1,41 @@
+arguments:
+  learning_rate:
+    type: float
+    help: "The learning rate"
+    default: 0.001
+
+  num_train_epochs:
+    type: int
+    help: "The number of epochs"
+    default: 1
+
+  per_device_train_batch_size:
+    type: int
+    help: "The training batch size"
+    default: 16
+
+  per_device_eval_batch_size:
+    type: int
+    help: "The validation batch size"
+    default: 16
+
+  use_data_limit:
+    type: bool
+    help: "Limit the number of data samples"
+    default: True
+
+  data_limit_threshold:
+    type: int
+    help: "Maximum number of data samples to use"
+    default: 100
+
+  optim:
+    type : str
+    help: "The optimizer to use"
+    default: "adamw_torch"
+
+
+  eval_strategy:
+    type: str
+    help: "The evaluation strategy to use"
+    default: "epoch"

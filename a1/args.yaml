@@ -1,45 +1,15 @@
 arguments:
-  lr:
-    type: float
-    help: "The learning rate"
-    default: 0.001
-
-  eps:
-    type: int
-    help: "The number of epochs"
-    default: 1
-
-  tbs:
-    type: int
-    help: "The training batch size"
-    default: 16
-
-  vbs:
-    type: int
-    help: "The validation batch size"
-    default: 16
-
-  dl:
-    type: bool
-    help: "Limit the number of data samples"
-    default: True
-
-  dlt:
-    type: int
-    help: "Maximum number of data samples to use"
-    default: 1000
-
-  ebs:
+  embedding_size:
     type: int
     help: "Size of the embedding"
     default: 256
 
-  hdn:
+  hidden_size:
     type: int
     help: "Size of the hidden layers"
     default: 512
 
-  nlayers:
+  num_layers:
     type: int
     help: "Number of layers in the LSTM"
     default: 4
@@ -48,16 +18,6 @@ arguments:
     type: int
     help: "Number of topk words returned for prediction"
     default: 10
-
-  vocsize:
-    type: int
-    help: "The number of words used in our vocabulary"
-    default: 150000
-
-  modlength:
-    type: int
-    help: "The maximum length of a text before truncation"
-    default: -1
 
   run:
     type: str
@@ -74,4 +34,13 @@ arguments:
     help: "Location of the training file"
     default: "/data/courses/2025_dat450_dit247/assignments/a1/val.txt"
 
+  tokenizer_file:
+    type: str
+    help: "Location of the training file"
+    default: "a1/tokenizer.pkl"
+
+  output_dir:
+    type: str
+    help: "Output directory of the saved model"
+    default: "a1/trainer_output/"
   

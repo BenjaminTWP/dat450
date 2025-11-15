@@ -1,11 +1,12 @@
 from utils.runtime_args import get_runtime_args
-from a1.run_prediction import predict
+from a2.run_prediction import predict
 from utils.run_train import train
 from utils.run_tokenizer import create_tokenizer
-from a1.A1_skeleton import (
-    A1RNNModel,
-    A1RNNModelConfig
+from a2.A2_skeleton import (
+    A2ModelConfig,
+    A2Transformer
 )
+from utils.tokenizer import A1Tokenizer
 
 import os
 file_path = os.path.abspath(__file__)
@@ -16,11 +17,11 @@ args = get_runtime_args(script_dir)
 
 if args.run == "predict":
     print("Doing prediction")
-    predict(args)
+    predict(A2Transformer, A1Tokenizer, args)
 
 elif args.run == "train":
     print("Initializing training")
-    train(args, A1RNNModelConfig, A1RNNModel)
+    train(args, A2ModelConfig, A2Transformer)
 
 elif args.run == "tokenize":
     print("Building tokenizer")
