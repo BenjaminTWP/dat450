@@ -17,7 +17,7 @@ args = get_runtime_args(script_dir)
 
 if args.run == "predict":
     print("Doing prediction")
-    predict(A2Transformer, A1Tokenizer, args)
+    print(predict(A2Transformer, A1Tokenizer, args))
 
 elif args.run == "train":
     print("Initializing training")
@@ -33,7 +33,7 @@ elif args.run == "all":
     print("Initializing training")
     train(args)
     print("Doing prediction")
-    predict(args)
+    print(predict(args))
 
 else:
     print("Method you are trying to do is not implemented, choose one of the following: \n"
