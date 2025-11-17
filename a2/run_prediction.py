@@ -42,21 +42,20 @@ def predict_olmo(args, prompt=None):
         casual_output = model(encoding.input_ids)
 
         logits = casual_output.logits
-        current_tokens = [tokenizer.int_to_str.get(key) for key in encoding.input_ids.squeeze().tolist()]
-        print(current_tokens)
+
         last_logits = logits[:, -1, :]
         scaled_logits = torch.exp(torch.multiply(last_logits, (1-args.temperature)))
 
 
         (values, tokens) = torch.topk(scaled_logits, k=args.npreds)
 
-        possible_next_token = [tokenizer.int_to_str.get(key) for key in tokens.squeeze().tolist()]
-        print(possible_next_token)
         distr = Categorical(logits=values)
         sampled = distr.sample()
-        chosen_token = possible_next_token[sampled] 
-        if chosen_token == tokenizer.eos_token:
+        chosen_token_id = tokens[sampled] 
+        if chosen_token_id == tokenizer.eos_token_id:
             break
+
+        chosen_token = tokenizer.decode(chosen_token_id)
 
         prompt += f" {chosen_token}"
 
