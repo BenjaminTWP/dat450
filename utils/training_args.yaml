@@ -22,7 +22,7 @@ arguments:
   use_data_limit:
     type: bool
     help: "Limit the number of data samples"
-    default: True
+    default: False
 
   data_limit_threshold:
     type: int

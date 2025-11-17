@@ -7,18 +7,8 @@ from a2.A2_skeleton import (
     A2Transformer
 )
 import torch
-
-#import os, sys
-#PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#sys.path.append(PROJECT_ROOT)
-#print("CWD:", os.getcwd())
-#print("sys.path:", sys.path)
-
-
-from a1.A1_skeleton import (
-    A1Tokenizer,
-    A1Trainer,
-)
+from a1.A1_skeleton import A1Tokenizer
+from a2.run_prediction import predict, predict_olmo
 
 hidden_size = 128
 vocab_size = 150000
@@ -68,16 +58,41 @@ emb_tensor = emb_tensor.unsqueeze(-1)
 emb_tensor = emb_tensor.expand(-1, -1, vocab_size) 
 print("Check shape match after transformer:", out.shape == emb_tensor.shape)
 
-#from a2.run_prediction import predict
-#from argparse import Namespace
+from argparse import Namespace
 
-#args = Namespace(
-#    temperature=0,
-#    generation_max_length=100,
-#    npreds=10,
-#    output_dir="a2/trainer_output"
-#)
+args = Namespace(
+    olmo_dir = "/data/courses/2025_dat450_dit247/models/OLMo-2-0425-1B",
+    generation_max_length=10,
+    temperature=0,
+    npreds=5,
+    prompt="She lives in San",
+    output_dir="a2/trainer_output",
+    tokenizer_file="a2/tokenizer.pkl"
+
+)
+
+test_prompts = [
+    "In natural language processing, a Transformer",
+    "Is Stockholm the capital of Sweden? Answer yes or no. The answer is",
+    "Write a Python program that reverses a list.",
+    "She lives in San",
+    "The lecture is about to",
+    "There are 28 days in the month",
+]
+
+print("\n-----------------------------------------")
+print("Local transformer model predictions")
+print("-----------------------------------------")
+for prompt in test_prompts:
+    print(f"\nInitial prompt is '{prompt}'")
+    out = predict(A2Transformer, A1Tokenizer, args, prompt)
+    print(f"Prediction of text is '{out}'")
 
 
-p#redict(transformer, tokenizer, args)
-
+print("\n-----------------------------------------")
+print("Olmo model predictions")
+print("-----------------------------------------")
+for prompt in test_prompts:
+    print(f"\nInitial prompt is '{prompt}'")
+    out = predict_olmo(args, prompt)
+    print(f"Prediction of text is '{out}'")

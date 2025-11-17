@@ -79,4 +79,13 @@ arguments:
     help: "How many tokens the model should predict"
     default: 10
 
+  prompt:
+    type: str
+    help: "The prompt we want to use for prediction"
+    default: "She lives in San"
+
+  olmo_dir:
+    type: str
+    help: "The directory of the olmo model"
+    default: "/data/courses/2025_dat450_dit247/models/OLMo-2-0425-1B"
  
