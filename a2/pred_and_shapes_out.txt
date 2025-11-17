@@ -1,0 +1,80 @@
+[nltk_data] Downloading package punkt to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package punkt_tab to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt_tab is already up-to-date!
+[nltk_data] Downloading package punkt to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package punkt_tab to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt_tab is already up-to-date!
+
+
+Check shape match after MLP: True
+Check shape match after attention: True
+Check shape match after decoder: True
+Check shape match after transformer: True
+
+-----------------------------------------
+Local transformer model predictions
+-----------------------------------------
+
+Initial prompt is 'In natural language processing, a Transformer'
+Prediction of text is 'In natural language processing, a Transformer , and a single set of `` b '' ,'
+
+Initial prompt is 'Is Stockholm the capital of Sweden? Answer yes or no. The answer is'
+Prediction of text is 'Is Stockholm the capital of Sweden? Answer yes or no. The answer is a number of people , and the number of people'
+
+Initial prompt is 'Write a Python program that reverses a list.'
+Prediction of text is 'Write a Python program that reverses a list.'
+
+Initial prompt is 'She lives in San'
+Prediction of text is 'She lives in San diego , california , and the united states .'
+
+Initial prompt is 'The lecture is about to'
+Prediction of text is 'The lecture is about to the world 's oldest and most important work in the'
+
+Initial prompt is 'There are 28 days in the month'
+Prediction of text is 'There are 28 days in the month of the year , the first day of the year'
+
+-----------------------------------------
+Olmo model predictions
+-----------------------------------------
+
+Initial prompt is 'In natural language processing, a Transformer'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 92.35it/s]
+Prediction of text is 'In natural language processing, a Transformer is a type of neural architecture that is used for'
+
+Initial prompt is 'Is Stockholm the capital of Sweden? Answer yes or no. The answer is'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 95.85it/s]
+Prediction of text is 'Is Stockholm the capital of Sweden? Answer yes or no. The answer is yes.'
+
+Initial prompt is 'Write a Python program that reverses a list.'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 102.35it/s]
+Prediction of text is 'Write a Python program that reverses a list. The list should be reversed in place, so that'
+
+Initial prompt is 'She lives in San'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 95.04it/s]
+Prediction of text is 'She lives in San Francisco, California.'
+
+Initial prompt is 'The lecture is about to'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 98.55it/s]
+Prediction of text is 'The lecture is about to begin.'
+
+Initial prompt is 'There are 28 days in the month'
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 93.13it/s]
+Prediction of text is 'There are 28 days in the month of February. The first day of the 28'
