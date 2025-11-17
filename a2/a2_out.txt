@@ -1,0 +1,135 @@
+
+
+################################ Sanity check dimensions ###############################
+
+
+#
+Sanity check of vector (shape=torch.Size([10, 20, 64])) for MLP layer
+#
+Shape after passing through MLP is torch.Size([10, 20, 64])
+#
+Shape after passing through normalizer is torch.Size([10, 20, 64])
+#
+Shape of value vector is torch.Size([10, 20, 64])
+#
+Shape of key vector is torch.Size([10, 20, 64])
+#
+Shape of query vector is torch.Size([10, 20, 64])
+#
+Shape after MHA: torch.Size([10, 20, 64])
+#
+Shape after decoder layer: torch.Size([10, 20, 64])
+#
+Feeding a two-dimensional tensor to the transformer, tensor shape before torch.Size([5, 10])
+#
+Output of the vector after the transformer torch.Size([5, 10, 150000])
+
+################################ Training of the model ###############################
+
+Device: cuda
+At epoch 0, batch 0, loss = 11.933
+At epoch 0, batch 1500, loss = 6.620
+At epoch 0, batch 3000, loss = 6.136
+At epoch 0, batch 4500, loss = 5.919
+At epoch 0, batch 6000, loss = 5.909
+At epoch 0, batch 7500, loss = 6.011
+At epoch 0, batch 9000, loss = 5.892
+At epoch 0, batch 10500, loss = 5.482
+At epoch 0, batch 12000, loss = 5.968
+At epoch 0, batch 13500, loss = 5.271
+At epoch 0, batch 15000, loss = 5.278
+At epoch 0, batch 16500, loss = 5.837
+At epoch 0, batch 18000, loss = 5.629
+#
+Perplexity for the epoch is: 221.200
+#
+At epoch 1, batch 0, loss = 5.237
+At epoch 1, batch 1500, loss = 5.141
+At epoch 1, batch 3000, loss = 5.567
+At epoch 1, batch 4500, loss = 5.545
+At epoch 1, batch 6000, loss = 5.085
+At epoch 1, batch 7500, loss = 5.372
+At epoch 1, batch 9000, loss = 4.979
+At epoch 1, batch 10500, loss = 5.567
+At epoch 1, batch 12000, loss = 5.069
+At epoch 1, batch 13500, loss = 5.270
+At epoch 1, batch 15000, loss = 5.003
+At epoch 1, batch 16500, loss = 5.181
+At epoch 1, batch 18000, loss = 5.271
+#
+Perplexity for the epoch is: 190.296
+#
+
+#Saving to ..
+#
+
+################################ Test top k suggestions for some sentences ###############################
+
+The 5 best results for following sentence 'he lives in San' is: 
+
+francisco 13.747427940368652
+jose 12.81304931640625
+diego 12.295553207397461
+suu 10.652665138244629
+mateo 10.36611557006836
+
+
+The 5 best results for following sentence 'The capital of ' is: 
+
+the 10.905913352966309
+<UNK> 7.5243449211120605
+a 7.380646228790283
+england 7.108575820922852
+`` 6.820180416107178
+
+
+The 5 best results for following sentence 'The fifth element in the periodic table is' is: 
+
+the 8.69499397277832
+a 7.732382774353027
+: 6.749239921569824
+not 6.54569673538208
+`` 6.457576751708984
+
+
+
+################################ Test text generation for the trained model ###############################
+
+
+#
+Test input prompt is:  In natural language processing, a Transformer
+
+and the result is: In natural language processing, a Transformer , the image is a vector product and is the same to the dimension of
+
+#
+Test input prompt is:  Is Stockholm the capital of Sweden? Answer yes or no. The answer is
+
+and the result is: Is Stockholm the capital of Sweden? Answer yes or no. The answer is it , but it has been a strong or dangerous condition , it is known
+
+#
+Test input prompt is:  Write a Python program that reverses a list.
+
+and the result is: Write a Python program that reverses a list. on a number of programming languages have also been written and <UNK> from the time
+
+################################ Load Olmo model and test text generation ###############################
+
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00, 128.42it/s]
+
+#
+Test input prompt is:  In natural language processing, a Transformer
+
+and the result is: In natural language processing, a Transformer is a neural network-based architecture designed to perform sequence processing tasks. These include natural language processing, speech
+
+#
+Test input prompt is:  Is Stockholm the capital of Sweden? Answer yes or no. The answer is
+
+and the result is: Is Stockholm the capital of Sweden? Answer yes or no. The answer is yes.
+
+This is the first sentence of the article. The second sentence is a paraphrase of the
+
+#
+Test input prompt is:  Write a Python program that reverses a list.
+
+and the result is: Write a Python program that reverses a list. Using the reverse() method in the list module, you can reverse a list. For example,
