@@ -51,12 +51,13 @@ def predict_olmo(args, prompt=None):
 
         distr = Categorical(logits=values)
         sampled = distr.sample()
-        chosen_token_id = tokens[sampled] 
+
+        chosen_token_id = tokens[0][sampled].item() 
         if chosen_token_id == tokenizer.eos_token_id:
             break
 
         chosen_token = tokenizer.decode(chosen_token_id)
 
-        prompt += f" {chosen_token}"
+        prompt += f"{chosen_token}"
 
     return prompt
