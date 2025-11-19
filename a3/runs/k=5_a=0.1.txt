@@ -1,0 +1,212 @@
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /data/users/benpe/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+
+################################ Tokenize, count all words, remove stopwords ###############################
+
+Most common words:  [('year', 5323), ('net', 4561), ('billion', 4104), ('loss', 4001), ('company', 3422), ('u.s.', 3191), ('1986', 2916), ('bank', 2755), ('shr', 2614), ('corp', 2384)]
+Note that mln=million, dlrs=dollars, lt=long term, ct=cent, pct=percent. I.e. we are seeing abbreviations.
+
+################################ Encode all documents and set hyperparameters ###############################
+
+Size of vocabulary is 10059. Number of topics is 5. alpha=beta=0.1. Running for 180 iterations.
+
+################################ Initialize LDA variables, i.e. assign randomly and such ###############################
+
+Example topic assignment for document 5: [4, 4, 2, 0, 2, 1, 3, 4, 4, 1, 1, 0, 2, 3, 2, 3, 2, 0, 4, 4, 2, 2, 1, 0]
+
+################################ Computing word co-occurrence counts (mainly to calc umass) ###############################
+
+Most common co-occurences in documents:  [(('net', 'shr'), 1384), (('shr', 'net'), 1384), (('net', 'year'), 1227), (('year', 'net'), 1227), (('year', '1986'), 1125)]
+
+################################ collapsed Gibbs sampling ###############################
+
+The total number of tokens in all documents is equal to 518085
+Iteration 1: UMass mean coherence = -421.80693534751356
+Iteration 2: UMass mean coherence = -423.11694143023976
+Iteration 3: UMass mean coherence = -425.74028124363883
+Iteration 4: UMass mean coherence = -425.12672555542713
+Iteration 5: UMass mean coherence = -411.72256904304305
+Iteration 6: UMass mean coherence = -393.3211851886862
+Iteration 7: UMass mean coherence = -382.2139920300584
+Iteration 8: UMass mean coherence = -370.51300129033507
+Iteration 9: UMass mean coherence = -362.94844283555136
+Iteration 10: UMass mean coherence = -368.5947752225871
+Iteration 11: UMass mean coherence = -383.54525019080995
+Iteration 12: UMass mean coherence = -381.0932158739842
+Iteration 13: UMass mean coherence = -383.5949468054995
+Iteration 14: UMass mean coherence = -372.723010941828
+Iteration 15: UMass mean coherence = -370.9007236605483
+Iteration 16: UMass mean coherence = -365.1376229127005
+Iteration 17: UMass mean coherence = -370.9655326733439
+Iteration 18: UMass mean coherence = -358.5099196057971
+Iteration 19: UMass mean coherence = -358.9720435295807
+Iteration 20: UMass mean coherence = -359.8668057340194
+Iteration 21: UMass mean coherence = -367.5145410075972
+Iteration 22: UMass mean coherence = -372.8965054473406
+Iteration 23: UMass mean coherence = -369.3647231112551
+Iteration 24: UMass mean coherence = -369.938099969207
+Iteration 25: UMass mean coherence = -365.6839187269337
+Iteration 26: UMass mean coherence = -369.4902532072422
+Iteration 27: UMass mean coherence = -364.2713705704808
+Iteration 28: UMass mean coherence = -366.6572712414496
+Iteration 29: UMass mean coherence = -367.79171860634295
+Iteration 30: UMass mean coherence = -359.3882268728568
+Iteration 31: UMass mean coherence = -358.04138370316724
+Iteration 32: UMass mean coherence = -352.70318707918
+Iteration 33: UMass mean coherence = -358.02674632838415
+Iteration 34: UMass mean coherence = -356.1201471326122
+Iteration 35: UMass mean coherence = -350.72794173584765
+Iteration 36: UMass mean coherence = -354.5446592224856
+Iteration 37: UMass mean coherence = -352.87862620102777
+Iteration 38: UMass mean coherence = -352.81423183053187
+Iteration 39: UMass mean coherence = -353.02164490717485
+Iteration 40: UMass mean coherence = -352.7116679542619
+Iteration 41: UMass mean coherence = -357.6616676851508
+Iteration 42: UMass mean coherence = -352.71549929220726
+Iteration 43: UMass mean coherence = -353.2254884408272
+Iteration 44: UMass mean coherence = -351.8255121658431
+Iteration 45: UMass mean coherence = -351.98745300707054
+Iteration 46: UMass mean coherence = -351.01859062595685
+Iteration 47: UMass mean coherence = -352.8812297693012
+Iteration 48: UMass mean coherence = -352.8782425415842
+Iteration 49: UMass mean coherence = -351.9235442812266
+Iteration 50: UMass mean coherence = -351.41861650047707
+Iteration 51: UMass mean coherence = -351.27125055959095
+Iteration 52: UMass mean coherence = -349.8742922200345
+Iteration 53: UMass mean coherence = -350.4042208672376
+Iteration 54: UMass mean coherence = -351.54050051987304
+Iteration 55: UMass mean coherence = -352.73055824415354
+Iteration 56: UMass mean coherence = -350.9479356151248
+Iteration 57: UMass mean coherence = -363.195132730794
+Iteration 58: UMass mean coherence = -357.5484837935964
+Iteration 59: UMass mean coherence = -360.54556897264695
+Iteration 60: UMass mean coherence = -359.77540290388606
+Iteration 61: UMass mean coherence = -357.8032973522883
+Iteration 62: UMass mean coherence = -358.5134925180879
+Iteration 63: UMass mean coherence = -358.56118706596396
+Iteration 64: UMass mean coherence = -357.1433963997363
+Iteration 65: UMass mean coherence = -357.79848935211464
+Iteration 66: UMass mean coherence = -357.40386161032626
+Iteration 67: UMass mean coherence = -356.79738108783465
+Iteration 68: UMass mean coherence = -354.61705726270213
+Iteration 69: UMass mean coherence = -355.7214977847409
+Iteration 70: UMass mean coherence = -357.76016536313364
+Iteration 71: UMass mean coherence = -356.29295725295117
+Iteration 72: UMass mean coherence = -355.97778667377816
+Iteration 73: UMass mean coherence = -361.0877777785825
+Iteration 74: UMass mean coherence = -356.37764987713314
+Iteration 75: UMass mean coherence = -355.2913682716311
+Iteration 76: UMass mean coherence = -355.42488355680047
+Iteration 77: UMass mean coherence = -353.32565912701284
+Iteration 78: UMass mean coherence = -352.72144352924204
+Iteration 79: UMass mean coherence = -355.3627948460511
+Iteration 80: UMass mean coherence = -353.0574181231783
+Iteration 81: UMass mean coherence = -356.73363226010906
+Iteration 82: UMass mean coherence = -358.0989143082098
+Iteration 83: UMass mean coherence = -350.42370447050973
+Iteration 84: UMass mean coherence = -357.4047877614904
+Iteration 85: UMass mean coherence = -357.5186134105428
+Iteration 86: UMass mean coherence = -356.9012558194465
+Iteration 87: UMass mean coherence = -356.58547285359555
+Iteration 88: UMass mean coherence = -357.94832473167014
+Iteration 89: UMass mean coherence = -355.23364494082136
+Iteration 90: UMass mean coherence = -356.81016236246177
+Iteration 91: UMass mean coherence = -354.73113249266146
+Iteration 92: UMass mean coherence = -354.72433533910174
+Iteration 93: UMass mean coherence = -354.70913525741327
+Iteration 94: UMass mean coherence = -354.7670996221427
+Iteration 95: UMass mean coherence = -353.77002154409746
+Iteration 96: UMass mean coherence = -355.02676758247514
+Iteration 97: UMass mean coherence = -355.23758635039087
+Iteration 98: UMass mean coherence = -361.16874633131584
+Iteration 99: UMass mean coherence = -360.97762758771967
+Iteration 100: UMass mean coherence = -358.07274791317985
+Iteration 101: UMass mean coherence = -356.29470117197576
+Iteration 102: UMass mean coherence = -351.9918402567191
+Iteration 103: UMass mean coherence = -354.82300697077596
+Iteration 104: UMass mean coherence = -347.8993787108048
+Iteration 105: UMass mean coherence = -352.33974269725525
+Iteration 106: UMass mean coherence = -353.9544189985258
+Iteration 107: UMass mean coherence = -353.60832347950094
+Iteration 108: UMass mean coherence = -357.363980218726
+Iteration 109: UMass mean coherence = -355.2149425300617
+Iteration 110: UMass mean coherence = -358.23518405335335
+Iteration 111: UMass mean coherence = -357.89208664433517
+Iteration 112: UMass mean coherence = -357.7335785889033
+Iteration 113: UMass mean coherence = -358.1432908326102
+Iteration 114: UMass mean coherence = -358.4052630687249
+Iteration 115: UMass mean coherence = -358.0725561867259
+Iteration 116: UMass mean coherence = -354.9467364527383
+Iteration 117: UMass mean coherence = -354.9404624425931
+Iteration 118: UMass mean coherence = -354.8142979153429
+Iteration 119: UMass mean coherence = -354.82467018411
+Iteration 120: UMass mean coherence = -351.50082408776433
+Iteration 121: UMass mean coherence = -351.48125076159255
+Iteration 122: UMass mean coherence = -351.21705165270066
+Iteration 123: UMass mean coherence = -351.4901166329119
+Iteration 124: UMass mean coherence = -349.43381577091856
+Iteration 125: UMass mean coherence = -348.9108226051253
+Iteration 126: UMass mean coherence = -349.6488935637679
+Iteration 127: UMass mean coherence = -355.1573314754175
+Iteration 128: UMass mean coherence = -352.60684961194266
+Iteration 129: UMass mean coherence = -355.2048074655944
+Iteration 130: UMass mean coherence = -350.6138737448403
+Iteration 131: UMass mean coherence = -350.8208518207121
+Iteration 132: UMass mean coherence = -355.6823734275587
+Iteration 133: UMass mean coherence = -355.82609856785103
+Iteration 134: UMass mean coherence = -357.3031796093868
+Iteration 135: UMass mean coherence = -357.03489824601627
+Iteration 136: UMass mean coherence = -360.5424215993646
+Iteration 137: UMass mean coherence = -358.7605628049201
+Iteration 138: UMass mean coherence = -356.9201114127373
+Iteration 139: UMass mean coherence = -362.4490275121563
+Iteration 140: UMass mean coherence = -353.6574304467498
+Iteration 141: UMass mean coherence = -357.61585028206764
+Iteration 142: UMass mean coherence = -352.25553024872727
+Iteration 143: UMass mean coherence = -351.8111506088009
+Iteration 144: UMass mean coherence = -352.4008871613409
+Iteration 145: UMass mean coherence = -351.426992001195
+Iteration 146: UMass mean coherence = -350.0702764615904
+Iteration 147: UMass mean coherence = -353.6678009934553
+Iteration 148: UMass mean coherence = -353.2123500012569
+Iteration 149: UMass mean coherence = -354.1065165156939
+Iteration 150: UMass mean coherence = -354.7071641470742
+Iteration 151: UMass mean coherence = -353.5629648101941
+Iteration 152: UMass mean coherence = -355.08291498706996
+Iteration 153: UMass mean coherence = -355.4909189988748
+Iteration 154: UMass mean coherence = -355.091857306697
+Iteration 155: UMass mean coherence = -354.7857929628548
+Iteration 156: UMass mean coherence = -354.3630449402124
+Iteration 157: UMass mean coherence = -352.59771300969066
+Iteration 158: UMass mean coherence = -351.50508460398555
+Iteration 159: UMass mean coherence = -353.4486702795816
+Iteration 160: UMass mean coherence = -353.77824579200023
+Iteration 161: UMass mean coherence = -351.0517337081909
+Iteration 162: UMass mean coherence = -350.97185907683837
+Iteration 163: UMass mean coherence = -351.65339362321674
+Iteration 164: UMass mean coherence = -351.89025180602056
+Iteration 165: UMass mean coherence = -353.77046537907756
+Iteration 166: UMass mean coherence = -354.96622578189306
+Iteration 167: UMass mean coherence = -357.24282135468405
+Iteration 168: UMass mean coherence = -354.20153834653473
+Iteration 169: UMass mean coherence = -355.2478503627904
+Iteration 170: UMass mean coherence = -357.051078686569
+Iteration 171: UMass mean coherence = -355.2289100303589
+Iteration 172: UMass mean coherence = -356.9553877028798
+Iteration 173: UMass mean coherence = -354.53343377904423
+Iteration 174: UMass mean coherence = -354.3883068051633
+Iteration 175: UMass mean coherence = -356.37269453504075
+Iteration 176: UMass mean coherence = -354.53455018820875
+Iteration 177: UMass mean coherence = -355.6140275423356
+Iteration 178: UMass mean coherence = -355.58644661935796
+Iteration 179: UMass mean coherence = -358.2706646848227
+Iteration 180: UMass mean coherence = -356.063585871381
+
+################################ Top words per topic: ###############################
+
+Topic 1 (last score=-316.50): ['trade', 'u.s.', 'japan', 'told', 'government', 'market', 'japanese', 'foreign', 'countries', 'agreement', 'dollar', 'international', 'meeting', 'world', 'officials', 'ec', 'economic', 'exchange', 'states', 'industry']
+Topic 2 (last score=-347.20): ['billion', 'bank', 'year', 'january', 'february', 'rate', '1986', 'rose', 'market', 'stg', 'rise', 'money', 'rates', 'growth', 'banks', 'fell', '1987', '1985', 'dollar', 'central']
+Topic 3 (last score=-292.08): ['net', 'loss', 'shr', 'year', 'profit', 'qtr', 'revs', '1986', 'sales', 'oper', 'note', 'share', 'quarter', '4th', '31', 'avg', 'shrs', 'corp', 'earnings', 'includes']
+Topic 4 (last score=-381.52): ['company', 'shares', 'corp', 'stock', 'share', 'offer', 'group', 'april', 'record', 'dividend', 'common', 'march', 'unit', 'stake', 'acquisition', 'board', 'shareholders', 'pay', 'merger', 'cash']
+Topic 5 (last score=-443.02): ['oil', 'tonnes', 'prices', 'year', 'production', 'wheat', 'u.s.', 'sugar', 'price', 'export', 'crude', 'grain', 'corn', 'gold', 'week', 'gas', '1986', 'department', 'output', 'usda']

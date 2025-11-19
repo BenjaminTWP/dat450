@@ -1,0 +1,257 @@
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /data/users/benpe/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+
+################################ Tokenize, count all words, remove stopwords ###############################
+
+Most common words:  [('year', 5323), ('net', 4561), ('billion', 4104), ('loss', 4001), ('company', 3422), ('u.s.', 3191), ('1986', 2916), ('bank', 2755), ('shr', 2614), ('corp', 2384)]
+Note that mln=million, dlrs=dollars, lt=long term, ct=cent, pct=percent. I.e. we are seeing abbreviations.
+
+################################ Encode all documents and set hyperparameters ###############################
+
+Size of vocabulary is 10059. Number of topics is 50. alpha=beta=0.01. Running for 180 iterations.
+
+################################ Initialize LDA variables, i.e. assign randomly and such ###############################
+
+Example topic assignment for document 5: [38, 17, 20, 35, 19, 38, 34, 9, 3, 44, 19, 47, 24, 42, 35, 44, 13, 43, 43, 28, 46, 13, 33, 45]
+
+################################ Computing word co-occurrence counts (mainly to calc umass) ###############################
+
+Most common co-occurences in documents:  [(('net', 'shr'), 1384), (('shr', 'net'), 1384), (('net', 'year'), 1227), (('year', 'net'), 1227), (('year', '1986'), 1125)]
+
+################################ collapsed Gibbs sampling ###############################
+
+The total number of tokens in all documents is equal to 518085
+Iteration 1: UMass mean coherence = -415.33966267458095
+Iteration 2: UMass mean coherence = -420.32779803147497
+Iteration 3: UMass mean coherence = -410.22043788925623
+Iteration 4: UMass mean coherence = -412.2271237926315
+Iteration 5: UMass mean coherence = -414.9286225239511
+Iteration 6: UMass mean coherence = -419.6976071355036
+Iteration 7: UMass mean coherence = -413.736878537483
+Iteration 8: UMass mean coherence = -418.7529851373085
+Iteration 9: UMass mean coherence = -416.98407526919834
+Iteration 10: UMass mean coherence = -415.77548194988066
+Iteration 11: UMass mean coherence = -422.4619982645317
+Iteration 12: UMass mean coherence = -421.3936256810125
+Iteration 13: UMass mean coherence = -423.43910137329897
+Iteration 14: UMass mean coherence = -425.18312428625694
+Iteration 15: UMass mean coherence = -420.5217066069343
+Iteration 16: UMass mean coherence = -422.7782649195444
+Iteration 17: UMass mean coherence = -421.96152746731946
+Iteration 18: UMass mean coherence = -420.702079482287
+Iteration 19: UMass mean coherence = -424.0342152708228
+Iteration 20: UMass mean coherence = -424.52023545233567
+Iteration 21: UMass mean coherence = -423.57280108696483
+Iteration 22: UMass mean coherence = -426.118050410714
+Iteration 23: UMass mean coherence = -427.81857300676376
+Iteration 24: UMass mean coherence = -423.8999246228232
+Iteration 25: UMass mean coherence = -426.9003083046936
+Iteration 26: UMass mean coherence = -425.0805565825327
+Iteration 27: UMass mean coherence = -423.22511166873454
+Iteration 28: UMass mean coherence = -423.4385860809694
+Iteration 29: UMass mean coherence = -419.70073072427505
+Iteration 30: UMass mean coherence = -420.73563864867094
+Iteration 31: UMass mean coherence = -418.5750979230979
+Iteration 32: UMass mean coherence = -422.9252734578796
+Iteration 33: UMass mean coherence = -418.29555094165926
+Iteration 34: UMass mean coherence = -415.87846362574345
+Iteration 35: UMass mean coherence = -411.5306074138258
+Iteration 36: UMass mean coherence = -413.3598613972631
+Iteration 37: UMass mean coherence = -413.5279098311787
+Iteration 38: UMass mean coherence = -417.0955620309609
+Iteration 39: UMass mean coherence = -416.2898051489238
+Iteration 40: UMass mean coherence = -415.802314079121
+Iteration 41: UMass mean coherence = -413.089296612065
+Iteration 42: UMass mean coherence = -414.74478979263534
+Iteration 43: UMass mean coherence = -412.4166822475197
+Iteration 44: UMass mean coherence = -413.42805738102936
+Iteration 45: UMass mean coherence = -414.2882616088516
+Iteration 46: UMass mean coherence = -412.57749942859385
+Iteration 47: UMass mean coherence = -415.43450161896476
+Iteration 48: UMass mean coherence = -412.0780375039818
+Iteration 49: UMass mean coherence = -411.7273765700634
+Iteration 50: UMass mean coherence = -411.58065736495104
+Iteration 51: UMass mean coherence = -412.15998368731266
+Iteration 52: UMass mean coherence = -412.0630915142732
+Iteration 53: UMass mean coherence = -411.13940000280195
+Iteration 54: UMass mean coherence = -412.5904731819466
+Iteration 55: UMass mean coherence = -414.6184704080481
+Iteration 56: UMass mean coherence = -413.4089192087811
+Iteration 57: UMass mean coherence = -416.7787442874441
+Iteration 58: UMass mean coherence = -413.77983608818
+Iteration 59: UMass mean coherence = -416.07040111030915
+Iteration 60: UMass mean coherence = -415.0410039977316
+Iteration 61: UMass mean coherence = -412.9007392347406
+Iteration 62: UMass mean coherence = -414.1449585335826
+Iteration 63: UMass mean coherence = -415.0234227119647
+Iteration 64: UMass mean coherence = -412.97209853724416
+Iteration 65: UMass mean coherence = -410.84216337016056
+Iteration 66: UMass mean coherence = -408.2576941623332
+Iteration 67: UMass mean coherence = -408.1889623018196
+Iteration 68: UMass mean coherence = -412.60234065159756
+Iteration 69: UMass mean coherence = -404.52289369511163
+Iteration 70: UMass mean coherence = -407.9666316557244
+Iteration 71: UMass mean coherence = -406.21544752699845
+Iteration 72: UMass mean coherence = -404.36871636538905
+Iteration 73: UMass mean coherence = -409.40262990484933
+Iteration 74: UMass mean coherence = -409.7978019111857
+Iteration 75: UMass mean coherence = -408.34479859568785
+Iteration 76: UMass mean coherence = -410.9338300133937
+Iteration 77: UMass mean coherence = -407.53682744684306
+Iteration 78: UMass mean coherence = -412.1665851431658
+Iteration 79: UMass mean coherence = -408.45718426327943
+Iteration 80: UMass mean coherence = -407.21668888084923
+Iteration 81: UMass mean coherence = -410.5169890032507
+Iteration 82: UMass mean coherence = -411.3223408535328
+Iteration 83: UMass mean coherence = -410.11528323585145
+Iteration 84: UMass mean coherence = -407.98795282682084
+Iteration 85: UMass mean coherence = -410.1931570035896
+Iteration 86: UMass mean coherence = -406.976650200827
+Iteration 87: UMass mean coherence = -404.393272353903
+Iteration 88: UMass mean coherence = -406.62572080316005
+Iteration 89: UMass mean coherence = -410.6731889569162
+Iteration 90: UMass mean coherence = -409.49985088615415
+Iteration 91: UMass mean coherence = -405.74306462979854
+Iteration 92: UMass mean coherence = -404.91055861857325
+Iteration 93: UMass mean coherence = -405.4619343664152
+Iteration 94: UMass mean coherence = -401.58324621906047
+Iteration 95: UMass mean coherence = -405.12085496533143
+Iteration 96: UMass mean coherence = -406.78939447808693
+Iteration 97: UMass mean coherence = -405.13691799418814
+Iteration 98: UMass mean coherence = -405.7148928895247
+Iteration 99: UMass mean coherence = -407.52083328019637
+Iteration 100: UMass mean coherence = -404.3075272244197
+Iteration 101: UMass mean coherence = -402.4480871933177
+Iteration 102: UMass mean coherence = -402.60066998432455
+Iteration 103: UMass mean coherence = -404.00213975691304
+Iteration 104: UMass mean coherence = -405.66514938929873
+Iteration 105: UMass mean coherence = -406.8158803737197
+Iteration 106: UMass mean coherence = -405.12163614423133
+Iteration 107: UMass mean coherence = -402.68008875450744
+Iteration 108: UMass mean coherence = -405.2074985491539
+Iteration 109: UMass mean coherence = -406.6165837429289
+Iteration 110: UMass mean coherence = -403.4357284295704
+Iteration 111: UMass mean coherence = -408.89603262062826
+Iteration 112: UMass mean coherence = -408.1311732189748
+Iteration 113: UMass mean coherence = -408.3592213846589
+Iteration 114: UMass mean coherence = -404.8654516097972
+Iteration 115: UMass mean coherence = -405.21891926016457
+Iteration 116: UMass mean coherence = -404.2293261334965
+Iteration 117: UMass mean coherence = -404.74545597255303
+Iteration 118: UMass mean coherence = -406.9227885326546
+Iteration 119: UMass mean coherence = -403.3239283760241
+Iteration 120: UMass mean coherence = -401.54617965171144
+Iteration 121: UMass mean coherence = -403.92928846489065
+Iteration 122: UMass mean coherence = -398.987272768601
+Iteration 123: UMass mean coherence = -404.8067728032569
+Iteration 124: UMass mean coherence = -402.3246718648172
+Iteration 125: UMass mean coherence = -405.0461388157998
+Iteration 126: UMass mean coherence = -404.04552639587797
+Iteration 127: UMass mean coherence = -406.08758958419025
+Iteration 128: UMass mean coherence = -406.72631452744963
+Iteration 129: UMass mean coherence = -408.4068167663455
+Iteration 130: UMass mean coherence = -406.4868734806289
+Iteration 131: UMass mean coherence = -404.5632823556201
+Iteration 132: UMass mean coherence = -407.74453353437013
+Iteration 133: UMass mean coherence = -407.6868856373946
+Iteration 134: UMass mean coherence = -411.07490703278273
+Iteration 135: UMass mean coherence = -407.49854284085717
+Iteration 136: UMass mean coherence = -405.8535218340639
+Iteration 137: UMass mean coherence = -406.66290396407743
+Iteration 138: UMass mean coherence = -405.48637000175137
+Iteration 139: UMass mean coherence = -405.2995967097843
+Iteration 140: UMass mean coherence = -408.5680630801663
+Iteration 141: UMass mean coherence = -409.4750332770207
+Iteration 142: UMass mean coherence = -407.0329705399287
+Iteration 143: UMass mean coherence = -407.22171443126604
+Iteration 144: UMass mean coherence = -405.66480844149993
+Iteration 145: UMass mean coherence = -402.8600851413296
+Iteration 146: UMass mean coherence = -406.08735016794867
+Iteration 147: UMass mean coherence = -400.7114458100175
+Iteration 148: UMass mean coherence = -405.56478859949624
+Iteration 149: UMass mean coherence = -405.2384488416912
+Iteration 150: UMass mean coherence = -405.86782915386
+Iteration 151: UMass mean coherence = -408.4393053466045
+Iteration 152: UMass mean coherence = -404.32179977268555
+Iteration 153: UMass mean coherence = -404.2171470716263
+Iteration 154: UMass mean coherence = -403.0817347233584
+Iteration 155: UMass mean coherence = -404.76521048298025
+Iteration 156: UMass mean coherence = -402.2164445635751
+Iteration 157: UMass mean coherence = -401.12933347055974
+Iteration 158: UMass mean coherence = -403.1385823885856
+Iteration 159: UMass mean coherence = -408.6068781208703
+Iteration 160: UMass mean coherence = -408.22615151321617
+Iteration 161: UMass mean coherence = -402.63461782507943
+Iteration 162: UMass mean coherence = -403.7391366937877
+Iteration 163: UMass mean coherence = -404.3995093839474
+Iteration 164: UMass mean coherence = -406.57620522695373
+Iteration 165: UMass mean coherence = -407.5389008855907
+Iteration 166: UMass mean coherence = -409.49569011314395
+Iteration 167: UMass mean coherence = -407.5819552492022
+Iteration 168: UMass mean coherence = -405.2289994248777
+Iteration 169: UMass mean coherence = -406.68445848922306
+Iteration 170: UMass mean coherence = -408.6247082315695
+Iteration 171: UMass mean coherence = -413.49370129124634
+Iteration 172: UMass mean coherence = -409.7460511973123
+Iteration 173: UMass mean coherence = -409.41301235338966
+Iteration 174: UMass mean coherence = -408.6846303102173
+Iteration 175: UMass mean coherence = -405.80255463298846
+Iteration 176: UMass mean coherence = -407.0638300770946
+Iteration 177: UMass mean coherence = -409.78225485081896
+Iteration 178: UMass mean coherence = -405.15063172135683
+Iteration 179: UMass mean coherence = -405.04355993703297
+Iteration 180: UMass mean coherence = -407.75566863059527
+
+################################ Top words per topic: ###############################
+
+Topic 1 (last score=-415.51): ['oil', 'tax', 'industry', 'production', 'energy', 'government', 'companies', 'prices', 'u.s.', 'report', 'year', 'exploration', 'president', 'petroleum', 'indonesia', 'cost', 'imports', 'import', 'national', 'plan']
+Topic 2 (last score=-451.61): ['world', 'caesars', 'talks', 'sosnoff', 'loan', 'savings', 'federal', 'round', 'companies', 'agreement', 'association', 'india', 'cable', 'board', 'bank', 'meeting', 'financial', 'system', 'company', 'issues']
+Topic 3 (last score=-537.04): ['market', 'british', 'u.k.', 'sterling', 'southern', 'stg', 'markets', 'week', 'plc', 'london', 'santa', 'today', 'analysts', 'royal', 'fe', 'britain', 'u.k', 'move', 'pacific', 'offered']
+Topic 4 (last score=-315.09): ['coffee', 'export', 'brazil', 'quotas', 'ico', 'quota', 'sugar', 'tonnes', 'producers', 'bags', 'year', 'exports', 'prices', 'trade', 'talks', 'colombia', 'meeting', 'traders', 'brazilian', 'international']
+Topic 5 (last score=-319.82): ['bank', 'dollar', 'rates', 'market', 'dealers', 'central', 'banks', 'rate', 'exchange', 'yen', 'currency', 'interest', 'money', 'foreign', 'bundesbank', 'today', 'cut', 'week', 'japan', 'dollars']
+Topic 6 (last score=-479.99): ['company', 'taft', 'share', 'stock', 'shares', 'chrysler', 'corp', 'debt', 'cash', 'capital', 'proposed', 'credit', 'financial', 'motors', 'american', 'sale', 'amc', 'preferred', 'dlr', 'proposal']
+Topic 7 (last score=-440.52): ['debt', 'company', 'bank', 'capital', 'banks', 'loans', 'interest', 'financial', 'banking', 'business', 'cash', 'credit', '1986', 'year', 'years', 'commercial', 'payments', 'long-term', 'service', 'singapore']
+Topic 8 (last score=-263.32): ['loss', 'net', 'shr', 'profit', 'revs', 'qtr', 'year', 'oper', '4th', 'note', 'shrs', 'avg', 'sales', '31', 'corp', 'mths', 'includes', 'jan', '1986', 'share']
+Topic 9 (last score=-368.14): ['1986', 'year', 'share', 'company', 'earnings', 'quarter', 'net', '31', '1987', 'billion', '1985', 'loss', 'reported', 'ended', 'results', 'sales', 'fiscal', 'income', 'fourth', 'revenues']
+Topic 10 (last score=-331.95): ['stock', 'dividend', 'split', 'share', 'april', 'record', 'shares', 'company', 'common', 'payable', 'board', 'declared', 'march', 'shareholders', 'quarterly', 'sets', 'holders', 'corp', 'cash', 'increase']
+Topic 11 (last score=-273.27): ['loss', 'net', 'shr', 'year', 'oper', 'profit', 'qtr', 'revs', 'includes', 'note', '4th', 'gain', '1986', 'share', 'excludes', '1985', 'operations', 'discontinued', 'tax', 'corp']
+Topic 12 (last score=-499.54): ['oil', 'gas', 'futures', 'china', 'crop', 'weather', 'areas', 'production', 'natural', 'year', 'prices', 'reserves', 'barrels', 'cubic', 'contracts', 'winter', 'day', 'feet', 'daily', 'drilling']
+Topic 13 (last score=-460.26): ['u.s.', 'told', 'tax', 'soybean', 'u.s', 'years', '--', 'trade', 'international', 'government', 'proposals', 'made', 'time', 'farm', 'added', 'european', 'state', 'ec', 'proposal', 'fleet']
+Topic 14 (last score=-450.05): ['corn', 'beef', 'prices', 'grain', 'price', 'meat', 'gulf', 'agriculture', 'farmers', 'wheat', 'usda', 'program', '......', 'pork', 'u.s.', 'farm', 'market', 'food', 'rice', 'city']
+Topic 15 (last score=-493.65): ['billion', 'francs', 'marks', 'bank', '1986', 'french', 'swiss', 'capital', 'year', 'group', 'ag', 'issue', 'kong', 'dome', 'hong', 'debt', 'total', 'national', 'bond', '1985']
+Topic 16 (last score=-596.91): ['bank', 'rate', 'banks', 'prime', 'chemlawn', 'national', 'rates', 'savings', 'effective', 'loan', 'waste', '7-3/4', 'supermarkets', 'dart', 'bid', 'management', 'interest', 'general', 'progressive', 'lending']
+Topic 17 (last score=-362.50): ['offer', 'shares', 'share', 'tender', 'company', 'corp', 'bid', 'cyclops', 'group', 'stock', 'purolator', 'dixons', 'board', 'dlr', 'acquisition', 'shareholders', 'outstanding', 'price', 'made', 'common']
+Topic 18 (last score=-330.82): ['shares', 'stake', 'group', 'stock', 'securities', 'investment', 'company', 'exchange', 'common', 'commission', 'total', 'firm', 'bought', 'corp', 'buy', 'outstanding', 'control', 'investor', 'filing', 'told']
+Topic 19 (last score=-365.38): ['japan', 'japanese', 'u.s.', 'market', 'officials', 'government', 'trade', 'industry', 'firms', 'semiconductor', 'ministry', 'companies', 'foreign', 'april', 'pact', 'agreement', 'official', 'minister', 'sources', 'nakasone']
+Topic 20 (last score=-354.58): ['january', 'february', 'rose', 'fell', 'rise', 'december', 'production', 'index', '1986', 'department', 'u.s.', 'sales', 'output', 'goods', 'prices', 'industrial', 'year', 'increase', 'month', 'units']
+Topic 21 (last score=-318.22): ['oil', 'opec', 'bpd', 'prices', 'crude', 'saudi', 'ecuador', 'output', 'price', 'official', 'venezuela', 'arabia', 'minister', 'barrels', 'energy', 'production', 'barrel', 'market', 'pipeline', 'day']
+Topic 22 (last score=-412.55): ['wheat', 'usda', 'program', 'u.s.', 'agriculture', '--', 'department', 'offer', 'soviet', 'farm', 'corn', 'grain', 'farmers', 'bill', 'export', 'lyng', '0/92', 'commodity', 'bonus', 'union']
+Topic 23 (last score=-333.90): ['year', 'rise', 'growth', 'demand', 'prices', 'production', 'expected', 'fall', 'market', '1987', 'report', 'world', 'lower', 'current', 'exports', 'domestic', 'output', 'increase', 'forecast', 'economy']
+Topic 24 (last score=-335.92): ['april', 'record', 'div', 'pay', 'qtly', 'prior', 'march', 'dividend', 'sets', '15', 'payout', 'quarterly', '31', '10', 'corp', '30', 'payable', '20', 'regular', '25']
+Topic 25 (last score=-470.64): ['gas', 'oil', 'shares', 'company', 'resources', 'properties', 'corp', 'australia', 'texas', 'interest', 'share', 'unit', 'cash', 'san', 'statement', 'stake', 'interests', 'continental', 'dlr', 'sale']
+Topic 26 (last score=-406.70): ['company', 'corp', 'unit', 'acquisition', 'sale', 'sell', 'agreement', 'terms', 'buy', 'systems', 'assets', 'business', 'agreed', 'acquire', 'financial', 'subsidiary', 'signed', 'services', 'group', 'purchase']
+Topic 27 (last score=-429.12): ['billion', 'year', '1986', 'quarter', 'government', 'unemployment', '1987', 'forecast', 'budget', '1985', 'march', 'end', 'expected', 'product', 'fourth', 'report', 'previous', 'gdp', 'growth', 'gross']
+Topic 28 (last score=-325.73): ['year', 'company', 'quarter', '1986', 'earnings', '1987', 'sales', 'share', 'expects', 'sees', 'billion', '1985', 'profit', 'profits', 'higher', 'reported', 'fiscal', 'results', 'expected', 'net']
+Topic 29 (last score=-507.66): ['oil', 'sugar', 'prices', 'tonnes', 'crude', 'palm', 'price', 'credit', 'sales', 'barrel', 'indonesia', 'traders', 'today', 'tonne', 'effective', 'india', 'cargoes', 'vegetable', '50', 'u.s.']
+Topic 30 (last score=-356.93): ['trade', 'u.s.', 'states', 'bill', 'countries', 'united', 'imports', 'house', 'gatt', 'japan', 'foreign', 'u.s', 'year', 'exports', 'goods', 'billion', 'reagan', 'yeutter', 'tariffs', 'south']
+Topic 31 (last score=-524.82): ['oil', 'refinery', 'crude', 'stocks', 'acres', 'south', 'barrels', 'bpd', 'petroleum', 'africa', 'gasoline', 'week', 'production', 'year', 'u.s.', 'march', 'lbs', 'crowns', 'ab', 'swedish']
+Topic 32 (last score=-333.40): ['ec', 'buffer', 'european', 'stock', 'cocoa', 'sugar', 'delegates', 'community', 'producers', 'commission', 'world', 'price', 'international', 'agreement', 'countries', 'pact', 'council', 'meeting', 'prices', 'consumers']
+Topic 33 (last score=-375.07): ['stg', 'bank', 'market', 'money', 'u.k.', 'bills', 'england', 'today', 'assistance', 'shortage', 'band', 'forecast', 'billion', 'revised', 'total', 'borg-warner', 'system', 'bill', 'provided', 'early']
+Topic 34 (last score=-361.32): ['net', 'shr', 'qtr', 'revs', 'shrs', 'avg', 'sales', 'note', '31', 'feb', '28', 'year', 'jan', '1st', 'mths', 'billion', '4th', 'corp', 'diluted', '3rd']
+Topic 35 (last score=-509.52): ['u.s.', 'taiwan', 'foreign', 'told', 'government', 'south', 'canada', 'reuters', 'canadian', 'spokesman', 'harper', 'sources', 'korea', 'exchange', 'row', 'june', 'controls', 'washington', 'talks', 'committee']
+Topic 36 (last score=-472.96): ['price', 'prices', 'analysts', 'cents', 'industry', 'cut', 'copper', 'yen', 'government', 'level', 'term', 'current', 'market', 'high', 'bond', 'set', 'japan', 'analyst', 'tin', 'steel']
+Topic 37 (last score=-477.71): ['company', 'corp', 'unit', 'sale', 'subsidiary', 'sell', 'acquisition', 'assets', 'agreement', 'products', 'terms', 'completed', 'division', 'industries', 'international', 'bp', 'standard', 'owned', 'group', 'purchase']
+Topic 38 (last score=-369.08): ['fed', 'federal', 'billion', 'u.s.', 'week', 'reserves', 'reserve', 'funds', 'march', 'customer', 'market', 'securities', 'repurchase', 'bank', 'economists', 'business', 'government', 'treasury', 'banks', 'loans']
+Topic 39 (last score=-421.13): ['company', 'shares', 'merger', 'stock', 'shareholders', 'share', 'common', 'board', 'corp', 'offer', 'acquisition', 'meeting', 'agreement', 'approved', 'outstanding', 'american', 'proposed', 'hughes', 'directors', 'approval']
+Topic 40 (last score=-395.49): ['tonnes', 'wheat', 'export', 'u.s.', 'grain', 'year', 'corn', '1986/87', 'maize', 'soviet', 'week', 'total', 'exports', 'season', 'imports', 'department', 'april', 'barley', 'tonne', 'trade']
+Topic 41 (last score=-305.96): ['dollar', 'japan', 'u.s.', 'yen', 'exchange', 'trade', 'paris', 'economic', 'nations', 'currency', 'bank', 'baker', 'major', 'rates', 'west', 'treasury', 'policy', 'japanese', 'economy', 'agreement']
+Topic 42 (last score=-408.48): ['february', 'january', 'year', 'rate', '1986', 'rise', 'prices', 'inflation', 'base', 'rose', 'march', 'figures', 'compared', 'lawson', 'german', 'rates', 'month', 'index', 'statistics', 'months']
+Topic 43 (last score=-361.69): ['billion', 'january', 'bank', 'february', 'rose', 'year', 'surplus', 'deficit', 'trade', 'money', '1986', 'december', 'account', 'current', 'supply', 'fell', 'marks', 'exports', '1985', 'foreign']
+Topic 44 (last score=-474.48): ['union', 'strike', 'port', 'workers', 'spokesman', 'ships', 'today', 'seamen', 'shipping', 'pay', 'grain', 'work', 'brazil', 'cargo', 'national', 'south', 'talks', 'transport', 'miners', 'vessels']
+Topic 45 (last score=-358.46): ['government', 'growth', 'rate', 'economic', 'policy', 'budget', 'economy', 'exchange', 'deficit', 'federal', 'cut', 'investment', 'volcker', 'chairman', '1987', 'inflation', 'tax', 'debt', 'foreign', 'markets']
+Topic 46 (last score=-602.37): ['gencorp', 'general', 'court', 'partners', 'area', 'billion', 'hectares', 'plan', 'mm', 'afg', 'certificates', 'bankruptcy', 'brown', 'futures', 'cash', 'harvest', 'decision', 'food', 'wagner', 'rains']
+Topic 47 (last score=-435.71): ['gulf', 'u.s.', 'united', 'officials', 'states', 'told', 'countries', 'oil', 'iran', 'world', 'minister', 'economic', 'kuwait', 'soviet', 'news', 'iranian', 'country', 'ministers', 'arab', 'made']
+Topic 48 (last score=-397.51): ['billion', 'profit', '1986', 'stg', 'group', 'year', 'net', 'company', 'profits', 'plc', 'turnover', 'tax', '1985', 'sales', 'pretax', 'pre-tax', 'operating', 'interest', 'results', 'income']
+Topic 49 (last score=-432.45): ['usair', 'american', 'twa', 'analysts', 'shearson', 'express', 'canadian', 'stock', 'group', 'piedmont', 'analyst', 'air', 'spokesman', 'canada', 'u.s.', 'comment', 'airlines', 'department', 'merger', 'takeover']
+Topic 50 (last score=-362.86): ['gold', 'mine', 'tons', 'ounces', 'mining', 'silver', 'ton', 'mines', 'production', 'ounce', 'ore', 'reserves', 'feet', 'copper', 'resources', 'short', 'company', 'zinc', 'canadian', 'minerals']

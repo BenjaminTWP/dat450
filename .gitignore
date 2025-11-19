@@ -2,6 +2,7 @@
 a1/training
 a2/vocab
 */trained_model/*
+a3/keep.txt
 
 
 # Byte-compiled / optimized / DLL files

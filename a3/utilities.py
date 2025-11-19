@@ -10,8 +10,7 @@ reuter_stop_words = "/data/users/benpe/downloads/data/reuters/stopwords"
 def get_stop_words():
     sw = set(stopwords.words('english'))
     sw |= set(string.punctuation)
-    sw |= {'``', "''", "'s"}
-
+    sw |= {'``', "''", "'s", "dlrs", "pct", "cts", 'lt', 'mln'}
 
     with open(reuter_stop_words, encoding="utf-8") as f:
         for line in f:
