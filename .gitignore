@@ -6,7 +6,7 @@ a1/trained_model/
 .DS_Store
 a2/vocab
 */trained_model/*
-
+a3/reuters/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
