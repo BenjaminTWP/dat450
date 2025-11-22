@@ -1,0 +1,264 @@
+[nltk_data] Downloading package reuters to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package reuters is already up-to-date!
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package punkt to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package punkt_tab to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt_tab is already up-to-date!
+Starting iterations
+For iteration 0 the mean umass score was: -406.01787275634234
+For iteration 1 the mean umass score was: -386.1510176810353
+For iteration 2 the mean umass score was: -380.13359592194143
+For iteration 3 the mean umass score was: -365.6667246079882
+For iteration 4 the mean umass score was: -362.6353403916112
+For iteration 5 the mean umass score was: -365.7851703560463
+For iteration 6 the mean umass score was: -366.69546631954154
+For iteration 7 the mean umass score was: -360.69511759905015
+For iteration 8 the mean umass score was: -360.7150696895496
+For iteration 9 the mean umass score was: -353.4561321750568
+For iteration 10 the mean umass score was: -348.5481497684733
+For iteration 11 the mean umass score was: -350.55345484598575
+For iteration 12 the mean umass score was: -349.8415490310584
+For iteration 13 the mean umass score was: -350.05573305827727
+For iteration 14 the mean umass score was: -347.7504550925934
+For iteration 15 the mean umass score was: -351.4765788615163
+For iteration 16 the mean umass score was: -346.4627848162773
+For iteration 17 the mean umass score was: -347.0481757110816
+For iteration 18 the mean umass score was: -348.24672153534846
+For iteration 19 the mean umass score was: -350.1613254413549
+For iteration 20 the mean umass score was: -348.457350871105
+For iteration 21 the mean umass score was: -345.57878084306174
+For iteration 22 the mean umass score was: -344.11638970880347
+For iteration 23 the mean umass score was: -348.9055994081289
+For iteration 24 the mean umass score was: -341.31912618172856
+For iteration 25 the mean umass score was: -342.72238083138546
+For iteration 26 the mean umass score was: -341.016829443114
+For iteration 27 the mean umass score was: -341.10981871339095
+For iteration 28 the mean umass score was: -340.54184405522983
+For iteration 29 the mean umass score was: -338.3301239239583
+For iteration 30 the mean umass score was: -336.96183491905606
+For iteration 31 the mean umass score was: -338.6219638100805
+For iteration 32 the mean umass score was: -336.54601798301655
+For iteration 33 the mean umass score was: -337.59289039307384
+For iteration 34 the mean umass score was: -335.58520831655505
+For iteration 35 the mean umass score was: -336.1072461908223
+For iteration 36 the mean umass score was: -337.04674633078105
+For iteration 37 the mean umass score was: -337.33636531900913
+For iteration 38 the mean umass score was: -340.5657453238969
+For iteration 39 the mean umass score was: -340.0619194966551
+For iteration 40 the mean umass score was: -334.27068619875405
+For iteration 41 the mean umass score was: -335.23011730484467
+For iteration 42 the mean umass score was: -334.8434433330378
+For iteration 43 the mean umass score was: -327.85794512415106
+For iteration 44 the mean umass score was: -332.8709049210211
+For iteration 45 the mean umass score was: -333.74804682515094
+For iteration 46 the mean umass score was: -336.34682674528574
+For iteration 47 the mean umass score was: -333.40689525789145
+For iteration 48 the mean umass score was: -334.5961124702158
+For iteration 49 the mean umass score was: -333.78595313153784
+For iteration 50 the mean umass score was: -333.4826153869383
+For iteration 51 the mean umass score was: -333.12793754274225
+For iteration 52 the mean umass score was: -333.54978186332386
+For iteration 53 the mean umass score was: -331.96613814234263
+For iteration 54 the mean umass score was: -334.84955402648507
+For iteration 55 the mean umass score was: -329.25055285261027
+For iteration 56 the mean umass score was: -325.7812650149922
+For iteration 57 the mean umass score was: -331.0880031116942
+For iteration 58 the mean umass score was: -332.19045515562607
+For iteration 59 the mean umass score was: -334.96094631669075
+For iteration 60 the mean umass score was: -334.55636424631126
+For iteration 61 the mean umass score was: -333.20499906456513
+For iteration 62 the mean umass score was: -329.82992675997184
+For iteration 63 the mean umass score was: -331.4264517168953
+For iteration 64 the mean umass score was: -330.58122260071053
+For iteration 65 the mean umass score was: -332.91624306151175
+For iteration 66 the mean umass score was: -330.28558590932806
+For iteration 67 the mean umass score was: -331.4063176774201
+For iteration 68 the mean umass score was: -330.03204510181297
+For iteration 69 the mean umass score was: -331.8340143893215
+For iteration 70 the mean umass score was: -331.0860505608188
+For iteration 71 the mean umass score was: -331.5557239810906
+For iteration 72 the mean umass score was: -333.81052264212326
+For iteration 73 the mean umass score was: -331.2365416607382
+For iteration 74 the mean umass score was: -332.1452711891884
+For iteration 75 the mean umass score was: -332.52229322919084
+For iteration 76 the mean umass score was: -332.2560044802709
+For iteration 77 the mean umass score was: -336.2790664133294
+For iteration 78 the mean umass score was: -330.77454671495013
+For iteration 79 the mean umass score was: -329.62050834490816
+For iteration 80 the mean umass score was: -333.36253713175677
+For iteration 81 the mean umass score was: -333.06881875500454
+For iteration 82 the mean umass score was: -333.8077483881389
+For iteration 83 the mean umass score was: -332.4855664546774
+For iteration 84 the mean umass score was: -333.7171107556936
+For iteration 85 the mean umass score was: -331.7708508865266
+For iteration 86 the mean umass score was: -334.49185564242697
+For iteration 87 the mean umass score was: -333.8611741485248
+For iteration 88 the mean umass score was: -333.7631760512005
+For iteration 89 the mean umass score was: -330.2540071438978
+For iteration 90 the mean umass score was: -331.9253163321515
+For iteration 91 the mean umass score was: -337.6622286074266
+For iteration 92 the mean umass score was: -336.20063399108335
+For iteration 93 the mean umass score was: -337.9089744023839
+For iteration 94 the mean umass score was: -335.32777710939894
+For iteration 95 the mean umass score was: -333.7461032383306
+For iteration 96 the mean umass score was: -335.7469706399981
+For iteration 97 the mean umass score was: -336.1599314704561
+For iteration 98 the mean umass score was: -334.6190599488881
+For iteration 99 the mean umass score was: -334.8792445612005
+
+The 20 most common words for topic 0 are (score=-287.0024821104591):
+['wheat', 'tonnes', 'grain', 'soviet', 'corn', 'crop', 'prices', 'season', 'agriculture', 'union', 'u.s.', 'export', 'total', 'department', 'may', '1986/87', 'winter', 'fall', 'areas', 'u.s']
+
+The 20 most common words for topic 1 are (score=-325.7214172517543):
+['--', 'merger', 'hughes', 'baker', 'purolator', 'board', 'hutton', 'crowns', 'proposed', 'meeting', 'courier', 'st', 'companies', 'decree', 'river', 'offered', 'agreement', 'co', 'directors', 'vote']
+
+The 20 most common words for topic 2 are (score=-401.91617688466937):
+['new', 'march', 'april', 'value', 'national', 'one', 'set', 'bond', 'preferred', 'months', 'issue', 'inc', 'capital', 'portion', 'market', 'series', 'date', 'expected', '25', 'issues']
+
+The 20 most common words for topic 3 are (score=-328.1365004065644):
+['fed', 'billion', 'reserves', 'federal', 'funds', 'reserve', 'market', 'money', 'dealers', 'banks', 'economists', 'bundesbank', 'yesterday', 'repurchase', 'policy', 'wednesday', 'six', 'period', 'dlr', 'customer']
+
+The 20 most common words for topic 4 are (score=-294.6487507075595):
+['quarter', 'year', '1986', 'earnings', 'fourth', 'reported', 'net', 'share', 'company', 'loss', '1985', 'results', 'revenues', 'income', 'operating', '1987', 'sees', 'losses', 'expects', 'rose']
+
+The 20 most common words for topic 5 are (score=-389.0668693055664):
+['stock', 'shares', 'company', 'share', 'split', 'common', 'shareholders', 'gold', 'per', 'also', 'board', 'ltd', 'offer', 'chemlawn', 'outstanding', 'cash', 'mines', 'waste', 'price', 'management']
+
+The 20 most common words for topic 6 are (score=-383.0964923359627):
+['vs', 'net', 'shr', 'qtr', '4th', 'year', 'revs', 'sales', 'shrs', 'inc', 'corp', 'avg', 'billion', 'stores', 'co', 'loss', 'ltd', '1.16', '42', 'nil']
+
+The 20 most common words for topic 7 are (score=-333.2057215377899):
+['would', 'market', 'one', 'new', 'government', 'may', 'could', 'u.s.', 'risk', 'cents', 'sources', 'five', 'expected', 'however', 'state', 'large', 'financial', 'public', 'rate', 'official']
+
+The 20 most common words for topic 8 are (score=-229.93719069732063):
+['vs', 'net', 'oper', 'loss', 'shr', 'year', 'profit', 'qtr', '1986', 'note', 'revs', 'excludes', 'share', '4th', '1985', 'gain', 'includes', 'extraordinary', 'per', 'tax']
+
+The 20 most common words for topic 9 are (score=-369.1080615069706):
+['japan', 'yen', 'year', 'ministry', 'sales', 'spokesman', 'record', 'cent', 'finance', 'france', 'exchange', 'cut', 'per', 'foreign', 'billion', 'line', 'new', 'ships', 'due', 'japanese']
+
+The 20 most common words for topic 10 are (score=-314.80769351836403):
+['february', 'january', 'week', 'rate', 'rose', 'bank', 'money', 'rise', 'average', 'rates', 'inflation', '1986', 'prices', 'index', 'fell', 'year', 'price', 'first', 'dealers', 'days']
+
+The 20 most common words for topic 11 are (score=-327.6416296625369):
+['market', 'analysts', 'saudi', 'prices', 'american', 'shearson', 'also', 'express', 'selling', 'may', 'arabia', 'stock', 'plans', 'sell', 'total', 'president', 'official', 'part', 'accord', 'rumors']
+
+The 20 most common words for topic 12 are (score=-363.18163674193516):
+['sales', 'week', 'last', 'year', 'february', 'soybean', 'month', 'futures', 'previous', 'levels', 'ago', 'line', 'may', 'caused', 'sources', 'traders', 'national', 'association', 'current', 'due']
+
+The 20 most common words for topic 13 are (score=-294.8495433279752):
+['last', 'rate', 'rates', 'analysts', 'could', 'debt', 'analyst', 'current', 'strong', 'budget', 'increase', 'expected', 'noted', 'since', 'also', 'unemployment', 'cut', 'make', 'economy', 'interest']
+
+The 20 most common words for topic 14 are (score=-323.6182179167527):
+['dollar', 'rate', 'bank', 'economic', 'exchange', 'central', 'currency', 'commerce', 'policy', 'monetary', 'currencies', 'treasury', 'lower', 'ortner', 'says', 'u.s.', 'european', 'auction', 'decline', 'january']
+
+The 20 most common words for topic 15 are (score=-431.7718842215479):
+['billion', 'year', '1986', 'group', 'profit', 'total', '1985', 'plc', 'rose', 'last', 'company', 'sales', 'guilders', 'gm', 'dutch', 'profits', 'end', 'shell', 'pre-tax', 'results']
+
+The 20 most common words for topic 16 are (score=-294.46139980777633):
+['trade', 'ec', 'yeutter', 'policy', 'officials', 'community', 'european', 'congress', 'states', 'farm', 'representative', 'government', 'also', 'gatt', 'tax', 'proposed', 'industry', 'meeting', 'another', 'council']
+
+The 20 most common words for topic 17 are (score=-295.9117257552769):
+['prices', 'market', 'demand', 'would', 'united', 'production', 'agreement', 'industry', 'states', 'world', 'time', 'continue', 'added', '--', 'likely', 'current', 'recent', 'level', 'told', 'well']
+
+The 20 most common words for topic 18 are (score=-283.8893542949887):
+['trade', 'u.s.', 'china', 'japan', 'exports', 'japanese', 'u.s', 'year', 'imports', 'talks', 'countries', 'major', 'years', 'two', 'agreement', 'last', 'surplus', 'economic', 'officials', 'goods']
+
+The 20 most common words for topic 19 are (score=-377.8618012332924):
+['corp', 'inc', 'agreement', 'acquisition', 'company', 'american', 'first', 'financial', 'purchase', 'savings', 'acquire', 'bank', 'signed', 'terms', 'transaction', 'subject', 'federal', 'merger', 'subsidiary', 'agreed']
+
+The 20 most common words for topic 20 are (score=-337.26611269974825):
+['per', 'year', '31', 'share', 'ended', 'fiscal', 'first', 'also', 'sales', 'period', 'december', 'stores', '1987', 'compared', 'months', 'company', 'january', 'five', 'ending', 'earlier']
+
+The 20 most common words for topic 21 are (score=-346.26299360190325):
+['oil', 'crude', 'gas', 'prices', 'barrels', 'price', 'petroleum', 'texas', 'one', 'effective', 'pipeline', 'energy', 'barrel', 'aluminium', 'posted', 'corp', 'per', 'natural', 'dlr', 'west']
+
+The 20 most common words for topic 22 are (score=-378.32173395417516):
+['u.s.', 'growth', 'says', 'rates', 'week', 'deficit', 'feb', 'fed', 'way', 'dollar', 'time', 'treasury', 'reserve', 'deposit', '25', 'deposits', 'five', 'policy', 'raise', 'could']
+
+The 20 most common words for topic 23 are (score=-375.0706050637764):
+['would', 'u.s.', 'one', 'commission', 'plan', 'offer', 'told', 'price', 'street', 'wall', "n't", 'still', 'might', 'lyng', 'officials', 'around', 'time', 'production', 'secretary', 'continue']
+
+The 20 most common words for topic 24 are (score=-346.1155046641541):
+['would', 'u.s.', 'business', 'plan', 'new', 'told', 'also', 'price', 'take', '20', 'europe', 'added', 'two', 'chairman', 'market', 'value', '50', 'u.s', 'rights', 'firm']
+
+The 20 most common words for topic 25 are (score=-349.41455877767913):
+['sugar', 'analysts', 'traders', 'two', 'week', 'yesterday', 'tender', 'agency', 'one', 'sources', 'cargoes', 'least', 'today', 'buying', 'shipment', 'march', 'waiting', '10', 'sell', 'seven']
+
+The 20 most common words for topic 26 are (score=-344.0046629167566):
+['tonnes', 'export', 'ec', 'french', 'wheat', 'west', 'german', 'barley', 'tonne', 'market', 'per', 'european', 'ecus', 'maize', 'community', 'germany', 'units', '1', 'sources', 'china']
+
+The 20 most common words for topic 27 are (score=-435.44887559616166):
+['co', 'company', 'insurance', 'ltd', 'final', 'earnings', 'share', 'life', 'canada', 'chief', 'mining', 'gold', 'executive', 'care', 'officer', 'cash', 'cost', 'royal', 'president', 'plans']
+
+The 20 most common words for topic 28 are (score=-415.6721527695689):
+['group', 'use', 'industry', 'national', 'future', 'marketing', 'three', 'business', 'study', 'two', 'corporate', 'states', 'research', 'program', 'control', 'industrial', 'based', 'development', 'drug', 'present']
+
+The 20 most common words for topic 29 are (score=-337.4909243312374):
+['last', 'brazil', 'talks', 'year', 'would', 'export', 'pesch', 'american', 'exports', 'spokesman', 'world', 'told', 'countries', 'coffee', 'foreign', 'minister', 'country', 'medical', 'could', 'following']
+
+The 20 most common words for topic 30 are (score=-423.02416227396805):
+['net', '1986', 'includes', 'share', '1985', 'year', 'per', 'comdata', 'tax', 'gain', 'ltd', 'real', 'cra', 'sale', 'rev', 'extraordinary', 'writedown', 'period', 'estate', '15']
+
+The 20 most common words for topic 31 are (score=-324.1485990522929):
+['government', 'last', 'union', 'steel', 'growth', 'workers', 'tin', 'industry', 'economy', 'says', 'atpc', 'report', 'thailand', 'world', 'markets', 'minister', 'major', 'ltd', 'new', 'economist']
+
+The 20 most common words for topic 32 are (score=-392.7074177907966):
+['billion', 'canadian', 'canada', 'francs', 'government', 'corn', 'deficit', 'account', 'u.s.', 'current', '1985', 'duty', 'bushel', 'official', 'french', 'bank', 'per', 'final', 'producers', 'cuts']
+
+The 20 most common words for topic 33 are (score=-298.65008802125413):
+['stg', 'bank', 'market', 'tons', 'money', 'u.k.', 'around', 'england', 'shortage', 'bills', 'ici', 'copper', 'two', 'assistance', 'forecast', 'today', 'band', 'short', 'one', 'billion']
+
+The 20 most common words for topic 34 are (score=-393.08719735485124):
+['tonnes', 'oil', '1987', 'production', '1986', 'year', 'last', 'rise', 'total', 'expected', 'palm', 'california', 'rose', 'according', 'beef', 'due', 'report', 'fell', 'imports', 'institute']
+
+The 20 most common words for topic 35 are (score=-353.2034990372214):
+['inc', 'company', 'corp', 'unit', 'sale', 'sell', 'division', 'co', 'operations', 'terms', 'business', 'systems', 'subsidiary', 'international', 'products', 'acquisition', 'group', 'assets', 'agreed', 'sold']
+
+The 20 most common words for topic 36 are (score=-246.8243183715201):
+['march', 'record', 'dividend', 'div', 'vs', 'april', 'pay', 'prior', 'qtly', 'quarterly', 'sets', 'payable', 'payout', 'inc', '31', '13', 'corp', 'two', '16', 'one']
+
+The 20 most common words for topic 37 are (score=-204.14675580828705):
+['coffee', 'quotas', 'ico', 'delegates', 'producers', 'export', 'brazil', 'quota', 'talks', 'meeting', 'bags', 'proposal', 'producer', 'pork', 'would', 'countries', 'international', 'prices', 'consumers', 'agreement']
+
+The 20 most common words for topic 38 are (score=-351.53651130934406):
+['billion', 'south', 'trade', 'foreign', 'surplus', 'year', 'reserves', 'taiwan', 'm-1', 'africa', 'korea', 'last', 'u.s.', 'balance', 'dlr', 'rospatch', 'economic', 'deficit', 'supply', 'two']
+
+The 20 most common words for topic 39 are (score=-340.51069427761985):
+['december', 'january', '1986', 'year', 'exports', 'rose', 'fell', 'compared', 'production', 'figures', 'growth', 'rise', 'revised', 'output', 'domestic', '1985', 'earlier', 'november', 'u.s.', 'indonesia']
+
+The 20 most common words for topic 40 are (score=-243.32260964792223):
+['usair', 'offer', 'twa', 'merger', 'would', 'piedmont', 'company', 'takeover', 'share', 'group', 'bid', 'today', 'cash', 'comment', 'spokesman', 'southern', 'board', 'inc', 'per', 'icahn']
+
+The 20 most common words for topic 41 are (score=-377.8129391401161):
+['bank', 'banks', 'exchange', 'new', 'interest', 'credit', 'capital', 'contracts', 'loan', 'loans', 'last', 'commercial', 'futures', 'current', 'securities', 'banking', 'today', 'trading', 'marks', 'swap']
+
+The 20 most common words for topic 42 are (score=-318.91578733146605):
+['bpd', 'viacom', 'february', 'output', 'quota', 'march', 'sources', 'last', 'national', 'amusements', 'early', 'rubber', 'producing', 'week', 'production', 'two', 'less', 'world', 'late', 'yesterday']
+
+The 20 most common words for topic 43 are (score=-275.3356153884225):
+['opec', 'oil', 'official', 'meeting', 'price', 'kuwait', 'output', 'december', 'members', 'day', 'today', 'crude', 'ceiling', 'qatar', 'barrel', 'next', '15.8', 'one', 'minister', 'pact']
+
+The 20 most common words for topic 44 are (score=-252.6361684547765):
+['vs', 'loss', 'net', 'shr', 'profit', 'qtr', 'revs', 'inc', '4th', '31', 'mths', 'jan', 'avg', 'shrs', 'nine', 'year', 'corp', 'sales', '12', '1st']
+
+The 20 most common words for topic 45 are (score=-314.6111508981819):
+['shares', 'company', 'stake', 'inc', 'stock', 'common', 'group', 'share', 'investment', 'corp', 'securities', 'exchange', 'offer', 'buy', 'management', 'outstanding', 'new', 'commission', 'redstone', 'interest']
+
+The 20 most common words for topic 46 are (score=-220.91426479229668):
+['vs', 'net', 'loss', 'shr', 'qtr', 'revs', 'profit', '1986', 'note', 'year', 'avg', 'sales', 'shrs', '31', 'includes', 'oper', 'billion', 'mths', 'inc', '4th']
+
+The 20 most common words for topic 47 are (score=-411.8232450211436):
+['would', 'imports', 'nil', 'u.s.', 'bill', 'quota', 'tax', '1987', 'chairman', 'congress', 'reagan', 'administration', 'within', 'members', 'import', 'house', 'agricultural', '7,500', 'officials', 'costs']
+
+The 20 most common words for topic 48 are (score=-289.6872653944362):
+['farmers', '0/92', 'bill', 'payments', 'program', 'farm', 'would', 'agriculture', 'crop', 'cost', 'certificates', 'loan', 'soybeans', 'wheat', 'committee', 'crops', 'winter', 'deficiency', '1987', 'cash']
+
+The 20 most common words for topic 49 are (score=-396.16126509388414):
+['u.s.', 'department', 'usda', 'wheat', 'program', 'administration', '--', 'price', 'credit', 'export', 'u.s', 'bonus', 'security', 'agriculture', 'rmj', 'cotton', 'soviet', 'commodity', 'enhancement', 'moscow']
+

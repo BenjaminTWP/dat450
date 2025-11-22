@@ -1,0 +1,143 @@
+[nltk_data] Downloading package reuters to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package reuters is already up-to-date!
+[nltk_data] Downloading package stopwords to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data] Downloading package punkt to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package punkt_tab to
+[nltk_data]     /data/users/erngard/nltk_data...
+[nltk_data]   Package punkt_tab is already up-to-date!
+Starting iterations
+For iteration 0 the mean umass score was: -339.6531412882806
+For iteration 1 the mean umass score was: -351.63600127488843
+For iteration 2 the mean umass score was: -329.89088699837146
+For iteration 3 the mean umass score was: -318.34444792144683
+For iteration 4 the mean umass score was: -332.2714086434077
+For iteration 5 the mean umass score was: -325.0206200295133
+For iteration 6 the mean umass score was: -323.7607346648359
+For iteration 7 the mean umass score was: -317.7626784309005
+For iteration 8 the mean umass score was: -315.0239165235831
+For iteration 9 the mean umass score was: -319.5404273616095
+For iteration 10 the mean umass score was: -313.11705888331824
+For iteration 11 the mean umass score was: -316.81424484467885
+For iteration 12 the mean umass score was: -316.9186416681597
+For iteration 13 the mean umass score was: -309.7152781986928
+For iteration 14 the mean umass score was: -312.5672156311838
+For iteration 15 the mean umass score was: -297.92005456872545
+For iteration 16 the mean umass score was: -298.006026035436
+For iteration 17 the mean umass score was: -290.2640899947205
+For iteration 18 the mean umass score was: -292.8720246568496
+For iteration 19 the mean umass score was: -292.80823098933604
+For iteration 20 the mean umass score was: -298.3770864450033
+For iteration 21 the mean umass score was: -303.04512905493397
+For iteration 22 the mean umass score was: -301.6477874558783
+For iteration 23 the mean umass score was: -298.6068591404023
+For iteration 24 the mean umass score was: -302.0440983471418
+For iteration 25 the mean umass score was: -294.4861109819547
+For iteration 26 the mean umass score was: -306.6241095631764
+For iteration 27 the mean umass score was: -297.08115273046894
+For iteration 28 the mean umass score was: -301.12760819758375
+For iteration 29 the mean umass score was: -296.1058635592452
+For iteration 30 the mean umass score was: -302.8381601089504
+For iteration 31 the mean umass score was: -295.9112446431277
+For iteration 32 the mean umass score was: -300.89350304217385
+For iteration 33 the mean umass score was: -302.4782417821256
+For iteration 34 the mean umass score was: -304.3623328166151
+For iteration 35 the mean umass score was: -300.6176615061894
+For iteration 36 the mean umass score was: -298.8155636346154
+For iteration 37 the mean umass score was: -300.03451104784955
+For iteration 38 the mean umass score was: -294.31309990192887
+For iteration 39 the mean umass score was: -297.62499173816786
+For iteration 40 the mean umass score was: -301.85405026566457
+For iteration 41 the mean umass score was: -297.5266555257744
+For iteration 42 the mean umass score was: -296.98495346458685
+For iteration 43 the mean umass score was: -298.4830635443488
+For iteration 44 the mean umass score was: -302.77575826453847
+For iteration 45 the mean umass score was: -304.18231210084576
+For iteration 46 the mean umass score was: -295.9690811281591
+For iteration 47 the mean umass score was: -297.63395239909903
+For iteration 48 the mean umass score was: -295.20808496042497
+For iteration 49 the mean umass score was: -297.69186944700203
+For iteration 50 the mean umass score was: -291.84468174056866
+For iteration 51 the mean umass score was: -296.2430865803418
+For iteration 52 the mean umass score was: -293.639935015253
+For iteration 53 the mean umass score was: -298.1944790378943
+For iteration 54 the mean umass score was: -294.7376663733618
+For iteration 55 the mean umass score was: -298.70047929411396
+For iteration 56 the mean umass score was: -293.48822287356415
+For iteration 57 the mean umass score was: -291.60180179565504
+For iteration 58 the mean umass score was: -299.2990780736755
+For iteration 59 the mean umass score was: -296.04419907957265
+For iteration 60 the mean umass score was: -294.70541011313514
+For iteration 61 the mean umass score was: -291.0062021475853
+For iteration 62 the mean umass score was: -297.532711809911
+For iteration 63 the mean umass score was: -291.4987011632264
+For iteration 64 the mean umass score was: -294.7108120484183
+For iteration 65 the mean umass score was: -300.15014725159153
+For iteration 66 the mean umass score was: -298.3902830917212
+For iteration 67 the mean umass score was: -291.5366511579282
+For iteration 68 the mean umass score was: -290.5645144955225
+For iteration 69 the mean umass score was: -291.28066692584855
+For iteration 70 the mean umass score was: -294.2689517701273
+For iteration 71 the mean umass score was: -296.4852609173134
+For iteration 72 the mean umass score was: -289.97109482609255
+For iteration 73 the mean umass score was: -289.45391579584486
+For iteration 74 the mean umass score was: -287.5143729257195
+For iteration 75 the mean umass score was: -288.2223396408552
+For iteration 76 the mean umass score was: -289.53014579768717
+For iteration 77 the mean umass score was: -288.292908167836
+For iteration 78 the mean umass score was: -288.79574673578463
+For iteration 79 the mean umass score was: -290.26975337696297
+For iteration 80 the mean umass score was: -295.01110223302913
+For iteration 81 the mean umass score was: -293.1879050631439
+For iteration 82 the mean umass score was: -294.43347433010223
+For iteration 83 the mean umass score was: -299.34780617677376
+For iteration 84 the mean umass score was: -300.968377395762
+For iteration 85 the mean umass score was: -294.292273101788
+For iteration 86 the mean umass score was: -289.67483133259486
+For iteration 87 the mean umass score was: -295.2500623974379
+For iteration 88 the mean umass score was: -298.70018925005985
+For iteration 89 the mean umass score was: -300.2661422793436
+For iteration 90 the mean umass score was: -294.6855185032043
+For iteration 91 the mean umass score was: -292.75497687181615
+For iteration 92 the mean umass score was: -298.0862344688613
+For iteration 93 the mean umass score was: -303.0673547169791
+For iteration 94 the mean umass score was: -291.03673437393576
+For iteration 95 the mean umass score was: -299.9409161922546
+For iteration 96 the mean umass score was: -293.5960395178758
+For iteration 97 the mean umass score was: -293.79193077399816
+For iteration 98 the mean umass score was: -285.8008164185867
+For iteration 99 the mean umass score was: -289.36524947665345
+
+The 20 most common words for topic 0 are (score=-276.4756828845161):
+['bank', 'rates', 'week', 'rate', 'banks', 'fed', 'u.s.', 'billion', 'new', 'dollar', 'market', 'money', 'one', 'exchange', 'reserves', 'reserve', 'federal', 'says', 'interest', 'today']
+
+The 20 most common words for topic 1 are (score=-388.71890422399156):
+['oil', 'would', 'wheat', 'production', 'union', 'prices', 'farmers', 'program', 'agriculture', 'soviet', 'crude', 'barrels', 'farm', 'national', 'government', 'u.s.', 'grain', 'corn', 'gas', 'bill']
+
+The 20 most common words for topic 2 are (score=-320.56081030269655):
+['company', 'shares', 'inc', 'corp', 'stock', 'stake', 'group', 'ltd', 'common', 'unit', 'co', 'sale', 'agreement', 'american', 'capital', 'investment', 'acquisition', 'also', 'buy', 'exchange']
+
+The 20 most common words for topic 3 are (score=-219.22958524706465):
+['vs', 'net', 'loss', 'shr', 'qtr', 'profit', 'revs', 'year', 'oper', '4th', 'note', 'inc', '1986', 'avg', 'shrs', 'sales', 'includes', 'share', '31', 'mths']
+
+The 20 most common words for topic 4 are (score=-271.733012224224):
+['year', '1986', 'quarter', 'company', 'earnings', 'share', 'sales', '1987', '1985', 'billion', 'reported', 'profit', 'per', 'net', 'operating', 'results', 'fourth', 'loss', 'profits', 'also']
+
+The 20 most common words for topic 5 are (score=-285.54280291131505):
+['billion', 'january', 'bank', 'year', 'rose', 'december', 'february', 'stg', '1986', 'growth', 'rise', 'government', 'fell', 'rate', 'money', 'deficit', '1985', 'foreign', 'last', 'market']
+
+The 20 most common words for topic 6 are (score=-308.04159551503903):
+['tonnes', 'coffee', 'export', 'year', 'exports', 'wheat', 'brazil', 'quota', 'sugar', 'production', 'u.s.', 'output', 'last', 'week', 'total', 'february', 'quotas', 'stocks', 'prices', 'ico']
+
+The 20 most common words for topic 7 are (score=-271.43762729036183):
+['trade', 'would', 'u.s.', 'market', 'opec', '--', 'prices', 'talks', 'told', 'could', 'countries', 'one', 'official', 'also', 'last', 'agreement', 'officials', 'japan', 'meeting', 'states']
+
+The 20 most common words for topic 8 are (score=-286.04246313156125):
+['offer', 'share', 'company', 'usair', 'merger', 'would', 'stock', 'inc', 'bid', 'twa', 'per', 'viacom', 'piedmont', 'management', 'group', 'tender', 'one', 'takeover', 'cash', 'corp']
+
+The 20 most common words for topic 9 are (score=-265.8700110357642):
+['march', 'record', 'dividend', 'april', 'div', 'pay', 'vs', 'prior', 'qtly', 'stock', 'split', 'sets', 'quarterly', 'inc', 'share', 'payable', 'payout', '31', 'corp', '13']
