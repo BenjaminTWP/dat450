@@ -42,8 +42,9 @@ related_words = get_related_document_words(docs, topic_map)
 common_words_topic = get_top_words_per_topic(related_words)
 
 for k_i in range(args.num_topics):
-    print(f"\n The 20 most common words for topic {k_i} are:")
-    print(common_words_topic[k_i])
+    print(f"\nThe 20 most common words for topic {k_i} are (score={scores[-1, k_i]}):", flush=True)
+    common_words = [word for word,_ in common_words_topic[k_i]]
+    print(common_words)
 
 plt.plot(scores.mean(axis=1))
 print(scores.mean(axis=1))

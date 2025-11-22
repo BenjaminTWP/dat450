@@ -22,7 +22,7 @@ def lowercase_tokenizer(text):
 def get_stopwords():
     stop = set(stopwords.words("english"))
     stop = stop.union(set(string.punctuation))
-    stop = stop.union({'``', "''", "'s", "dlrs", "pct", "cts", 'lt', 'mln'})
+    stop = stop.union({'``', "''", "'s", "dlrs", "pct", "cts", 'lt', 'mln', 'said'})
     return stop
 
 
@@ -206,6 +206,7 @@ def train(nr_iterations, nr_words, docs, str_to_int,
         k, topic_map, alpha, beta, m_k, n_d_k, m_k_v,
         co_occurance, occurance
     ):
+    print("Starting iterations", flush=True)
     d = len(docs)
     scores = np.zeros((nr_iterations, k))
     for iteration in range(nr_iterations):
@@ -254,7 +255,7 @@ def train(nr_iterations, nr_words, docs, str_to_int,
         for k_i in range(k):
             scores[iteration,k_i] = umass(co_occurance, occurance, common_words_topic[k_i])    
 
-        print(f"For iteration {iteration} the mean umass score was: {scores[iteration].mean()}")
+        print(f"For iteration {iteration} the mean umass score was: {scores[iteration].mean()}", flush=True)
 
     return topic_map, scores
 
