@@ -1,3 +1,4 @@
+'''
 [nltk_data] Downloading package reuters to
 [nltk_data]     /data/users/erngard/nltk_data...
 [nltk_data]   Package reuters is already up-to-date!
@@ -261,4 +262,4 @@ The 20 most common words for topic 48 are (score=-289.6872653944362):
 
 The 20 most common words for topic 49 are (score=-396.16126509388414):
 ['u.s.', 'department', 'usda', 'wheat', 'program', 'administration', '--', 'price', 'credit', 'export', 'u.s', 'bonus', 'security', 'agriculture', 'rmj', 'cotton', 'soviet', 'commodity', 'enhancement', 'moscow']
-
+'''

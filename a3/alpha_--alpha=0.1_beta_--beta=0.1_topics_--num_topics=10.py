@@ -1,3 +1,4 @@
+'''
 [nltk_data] Downloading package reuters to
 [nltk_data]     /data/users/erngard/nltk_data...
 [nltk_data]   Package reuters is already up-to-date!
@@ -141,3 +142,4 @@ The 20 most common words for topic 8 are (score=-286.04246313156125):
 
 The 20 most common words for topic 9 are (score=-265.8700110357642):
 ['march', 'record', 'dividend', 'april', 'div', 'pay', 'vs', 'prior', 'qtly', 'stock', 'split', 'sets', 'quarterly', 'inc', 'share', 'payable', 'payout', '31', 'corp', '13']
+'''

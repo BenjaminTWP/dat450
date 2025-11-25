@@ -1,3 +1,4 @@
+'''
 [nltk_data] Downloading package reuters to
 [nltk_data]     /data/users/erngard/nltk_data...
 [nltk_data]   Package reuters is already up-to-date!
@@ -261,4 +262,4 @@ The 20 most common words for topic 48 are (score=-313.56094916304585):
 
 The 20 most common words for topic 49 are (score=-336.76469765091474):
 ['billion', 'deficit', 'foreign', 'year', 'surplus', 'reserves', 'francs', 'trade', '1986', '1985', 'current', 'account', 'official', 'taiwan', 'exchange', 'french', 'last', 'end', 'dlr', 'show']
-
+'''

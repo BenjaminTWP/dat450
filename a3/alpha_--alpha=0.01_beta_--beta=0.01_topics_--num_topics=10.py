@@ -1,3 +1,4 @@
+'''
 [nltk_data] Downloading package reuters to
 [nltk_data]     /data/users/erngard/nltk_data...
 [nltk_data]   Package reuters is already up-to-date!
@@ -141,4 +142,4 @@ The 20 most common words for topic 8 are (score=-306.7316245637059):
 
 The 20 most common words for topic 9 are (score=-273.50624064371306):
 ['year', 'company', '1986', 'quarter', 'earnings', 'sales', 'share', 'billion', '1987', '1985', 'reported', 'per', 'co', 'first', 'ltd', 'business', 'loss', 'profit', 'net', 'results']
-
+'''
