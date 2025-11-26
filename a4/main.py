@@ -170,7 +170,7 @@ def main():
     pretrained_eval_args = TrainingArguments(
         output_dir=os.path.join(args.output_dir, "pretrained"),
         eval_strategy="no",
-        per_device_eval_batch_size=1,
+        per_device_eval_batch_size=2,
         fp16=torch.cuda.is_available(),
         report_to="none",
         batch_eval_metrics=True,

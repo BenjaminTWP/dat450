@@ -102,9 +102,7 @@ def tokenize_helper(batch, tokenizer, max_length):
         "labels" : prompt_labels
     }
 
-    diff = max_length - prompt_token_length 
-
-    if diff <= 0:
+    if  prompt_token_length >= max_length:
         for key, value in x.items():
             x[key] = value[:max_length] 
 
@@ -155,17 +153,28 @@ def create_data_collator(tokenizer):
         labels_list = [torch.tensor(example["labels"], dtype=torch.long) for example in batch]
 
         # Find max length in this batch
-        max_len = "NotImplementedError"
+        max_len = max(len(input_list) for input_list in input_ids_list) 
+        print(max_len)
 
         # Helper pad function: right-pad to max_len
         def pad_to_max(x_list, pad_value):
-            # ...
-            pass
+            for i, x_tensor in enumerate(x_list):
+                diff = max_len - len(x_tensor)
+                if diff > 0:
+                    fill_tensor = torch.full(size=(diff,), fill_value=pad_value)
+                    print(x_tensor.size())
+                    print(fill_tensor.size())
+                    x_list[i] = torch.cat((x_tensor, fill_tensor), dim=0)
 
+            x_tensor == 100277 
+            return x_list
         # Use tokenizer.pad_token_id for inputs, 0 for attention_mask, -100 for labels
-        pad_id = "NotImplementedError"
+        pad_id = tokenizer.pad_token_id
 
         batch_input_ids = pad_to_max(input_ids_list, pad_value=pad_id)
+        print(batch_input_ids)
+        raise Exception("Heeaf")
+
         batch_attention_mask = pad_to_max(attention_masks_list, pad_value=0)
         batch_labels = pad_to_max(labels_list, pad_value=-100)
 
@@ -175,5 +184,7 @@ def create_data_collator(tokenizer):
             "labels": batch_labels,
         }
         return batch
+
+    return data_collator
 
     raise NotImplementedError("Implement the causal-LM data collator.")
