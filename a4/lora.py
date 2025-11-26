@@ -33,6 +33,12 @@ class LoRA(nn.Module):
 
         # Always keep a reference to the frozen pretrained weight matrix.
         self.pretrained = pretrained
+        (in_dim, out_dim) = pretrained.weight.shape
+        self.A = nn.Linear(in_features=in_dim, out_features=rank, bias=False)
+        nn.init.normal_(self.A.weight)
+        self.B = nn.Linear(in_features=rank, out_features=out_dim, bias=False)
+        nn.init.zeros_(self.B.weight)
+        self.scaling = alpha / rank
 
         # TODO[student]: Initialize the low-rank adapter matrices A and B.
         #   * Inspect `pretrained.weight.shape` to find the input and output dims.
@@ -40,15 +46,20 @@ class LoRA(nn.Module):
         #   * Initialize A with a small normal distribution and B with zeros.
         #   * Store the scaling factor alpha / rank in `self.scaling`.
         # Remove the line below once your implementation is ready.
-        raise NotImplementedError("Initialize LoRA adapter weights (A, B) and scaling.")
+
+        #raise NotImplementedError("Initialize LoRA adapter weights (A, B) and scaling.")
 
     def forward(self, x):
         # TODO[student]: Implement the LoRA forward pass.
         #   * Compute the frozen projection using `self.pretrained(x)`.
         #   * Add the low-rank update `self.B(self.A(x)) * self.scaling`.
         #   * Return the combined result.
-        raise NotImplementedError("Implement the LoRA forward pass.")
 
+        # raise NotImplementedError("Implement the LoRA forward pass.")
+
+        frozen = self.pretrained(x)
+        combined = self.B(self.A(x)) * self.scaling
+        return frozen + combined
 
 def extract_lora_targets(model):
     """
@@ -62,7 +73,14 @@ def extract_lora_targets(model):
       * Return a dict {qualified_name: module}.
     """
     # TODO[student]: populate the dictionary with eligible layers.
-    raise NotImplementedError("Select and return the target Linear layers.")
+    #raise NotImplementedError("Select and return the target Linear layers.")
+
+    name_module = {}
+    for name, module in model.named_modules():
+        if isinstance(module, nn.Linear):
+            if any(x in name for x in ['q_proj', 'k_proj', 'v_proj', 'o_proj']):
+                name_module[name] = module
+    return name_module
 
 
 def replace_layers(model, named_layers):
