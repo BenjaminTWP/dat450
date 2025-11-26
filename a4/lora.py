@@ -8,7 +8,7 @@ from transformers import (
     TrainingArguments,
 )
 
-from .utils import make_trainer, num_trainable_parameters
+from utils import make_trainer, num_trainable_parameters
 
 # -----------------------------------------------------------------------------
 # STUDENT TODOs

@@ -12,9 +12,9 @@ from transformers import (
     TrainingArguments,
 )
 
-from .data_utils import build_prompt, create_data_collator, tokenize_helper
-from .lora import make_lora_model
-from .utils import (
+from data_utils import build_prompt, create_data_collator, tokenize_helper
+from lora import make_lora_model
+from utils import (
     RougeMetricComputer,
     compare_models_on_examples,
     create_stratification_label,
