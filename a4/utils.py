@@ -2,7 +2,7 @@ import evaluate
 import torch
 from transformers import Trainer
 
-from .data_utils import build_prompt
+from data_utils import build_prompt
 
 
 def print_results_table(results):

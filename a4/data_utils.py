@@ -41,7 +41,21 @@ def build_prompt(example, prompt_no_input, prompt_with_input):
     #   1. Read out instruction/input/output from the example (be robust to empty input).
     #   2. Pick the correct template depending on whether "input" contains text.
     #   3. Format the template and return {"prompt": prompt_text, "answer": output_text}.
-    raise NotImplementedError("Implement prompt construction for Alpaca examples.")
+    
+    #print(example)
+    #print(f"This is inp {inp}, adadwda")
+    #response_prompt = 
+    x = prompt_no_input.replace("{instruction}", instruction)
+    if inp:
+        x = prompt_with_input.replace("{instruction}", instruction)
+        x = x.replace("{input}", inp)
+
+    tmp = {
+        "prompt" : x,
+        "answer" : output,
+    } 
+    
+    return dict(tmp)
 
 
 def tokenize_helper(batch, tokenizer, max_length):
@@ -69,7 +83,38 @@ def tokenize_helper(batch, tokenizer, max_length):
     #   2. Concatenate, truncate, and create an attention mask of 1s.
     #   3. Build labels using -100 for the prompt span and answer token IDs afterward.
     #      (Hint: copy answer IDs so truncation does not mutate the tokenizer output.)
-    raise NotImplementedError("Implement tokenization + label masking for SFT.")
+
+
+
+    prompt_tokenized = tokenizer(batch.get("prompt"))
+    answer_tokenized = tokenizer(batch.get("answer"))
+
+    prompt_token_length = len(prompt_tokenized.get("input_ids"))
+    prompt_labels = [-100] * prompt_token_length
+    prompt_labels.extend(answer_tokenized.get("input_ids"))
+
+    new_input_ids = prompt_tokenized.get("input_ids", []) + answer_tokenized.get("input_ids", [])
+    new_attention_mask = prompt_tokenized.get("attention_mask", []) + answer_tokenized.get("attention_mask", [])
+
+    x = {
+        "input_ids": new_input_ids,
+        "attention_mask" : new_attention_mask,
+        "labels" : prompt_labels
+    }
+
+    diff = max_length - prompt_token_length 
+
+    if diff <= 0:
+        for key, value in x.items():
+            x[key] = value[:max_length] 
+
+    #else:
+    #    x["input_ids"] = x.get("input_ids") + [tokenizer.pad_token_id] * diff
+    #    x["attention_mask"] = x.get("attention_mask") + [0] * diff
+    #    x["labels"] = x.get("labels") + [tokenizer.pad_token_id] * diff
+
+    
+    return x
 
 
 def create_data_collator(tokenizer):

@@ -12,9 +12,9 @@ from transformers import (
     TrainingArguments,
 )
 
-from .data_utils import build_prompt, create_data_collator, tokenize_helper
-from .lora import make_lora_model
-from .utils import (
+from data_utils import build_prompt, create_data_collator, tokenize_helper
+from lora import make_lora_model
+from utils import (
     RougeMetricComputer,
     compare_models_on_examples,
     create_stratification_label,
@@ -33,7 +33,7 @@ DEFAULT_MODEL_NAME_OR_PATH = "/data/courses/2025_dat450_dit247/models/OLMo-2-042
 DEFAULT_NUM_EPOCHS = 2
 DEFAULT_SEED = 101
 DEFAULT_MAX_TRAIN_SAMPLES = 2000
-DEFAULT_MAX_TEST_SAMPLES = 200
+DEFAULT_MAX_TEST_SAMPLES = 400
 DEFAULT_MAX_LENGTH = 512
 DEFAULT_MAX_NEW_TOKENS = 128
 
