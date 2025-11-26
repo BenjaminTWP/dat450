@@ -41,7 +41,15 @@ def build_prompt(example, prompt_no_input, prompt_with_input):
     #   1. Read out instruction/input/output from the example (be robust to empty input).
     #   2. Pick the correct template depending on whether "input" contains text.
     #   3. Format the template and return {"prompt": prompt_text, "answer": output_text}.
-    raise NotImplementedError("Implement prompt construction for Alpaca examples.")
+
+    #raise NotImplementedError("Implement prompt construction for Alpaca examples.")
+
+    if inp: 
+        prompt = prompt_with_input.replace("{instruction}", instruction)
+        prompt = prompt.replace("{input}", inp)
+        return {"prompt": prompt, "answer": output}
+    else:
+        return {"prompt": prompt_no_input.replace("{instruction}", instruction), "answer": output}
 
 
 def tokenize_helper(batch, tokenizer, max_length):
@@ -69,7 +77,20 @@ def tokenize_helper(batch, tokenizer, max_length):
     #   2. Concatenate, truncate, and create an attention mask of 1s.
     #   3. Build labels using -100 for the prompt span and answer token IDs afterward.
     #      (Hint: copy answer IDs so truncation does not mutate the tokenizer output.)
-    raise NotImplementedError("Implement tokenization + label masking for SFT.")
+
+    #raise NotImplementedError("Implement tokenization + label masking for SFT.")
+    
+    tokens_prompt = tokenizer(batch['prompt'])
+    tokens_answer = tokenizer(" " + batch["answer"])
+
+    input_ids = tokens_prompt["input_ids"] + tokens_answer["input_ids"]
+    attention_mask = tokens_prompt["attention_mask"] + tokens_answer["attention_mask"]
+    input_ids = input_ids[:max_length]
+    attention_mask = attention_mask[:max_length]
+    labels = [-100 for _ in range(len(tokens_prompt["input_ids"]))] + tokens_answer["input_ids"]
+    labels = labels[:max_length]
+
+    return {"input_ids": input_ids, "attention_mask": attention_mask, "labels": labels}
 
 
 def create_data_collator(tokenizer):
