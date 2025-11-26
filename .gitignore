@@ -4,7 +4,7 @@ a2/vocab
 */trained_model/*
 a3/keep.txt
 a4/outputs
-*.out*
+*.err*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
