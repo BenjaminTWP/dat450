@@ -2,7 +2,7 @@
 #SBATCH --output=logs/fine_tuning_%j.out
 #SBATCH --error=logs/fine_tuning_%j.err
 #SBATCH --cpus-per-task=2
-#SBATCH --gres=gpu:L40s:1
+#SBATCH --gres=gpu:L40s:1 --exclude=callisto
 
 mkdir -p logs
 set -euo pipefail
