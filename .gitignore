@@ -3,7 +3,8 @@ a1/training
 a2/vocab
 */trained_model/*
 a3/keep.txt
-
+a4/outputs
+*.out*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
