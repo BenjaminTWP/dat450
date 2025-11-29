@@ -85,9 +85,9 @@ def tokenize_helper(batch, tokenizer, max_length):
     #      (Hint: copy answer IDs so truncation does not mutate the tokenizer output.)
 
 
+    prompt_tokenized = tokenizer(batch.get("prompt"), add_special_tokens=False)
+    answer_tokenized = tokenizer(" " + batch.get("answer"), add_special_tokens=False)
 
-    prompt_tokenized = tokenizer(batch.get("prompt"))
-    answer_tokenized = tokenizer(batch.get("answer"))
 
     prompt_token_length = len(prompt_tokenized.get("input_ids"))
     prompt_labels = [-100] * prompt_token_length
@@ -106,10 +106,11 @@ def tokenize_helper(batch, tokenizer, max_length):
         for key, value in x.items():
             x[key] = value[:max_length] 
 
-    #else:
-    #    x["input_ids"] = x.get("input_ids") + [tokenizer.pad_token_id] * diff
-    #    x["attention_mask"] = x.get("attention_mask") + [0] * diff
-    #    x["labels"] = x.get("labels") + [tokenizer.pad_token_id] * diff
+    else:
+        diff = max_length - prompt_token_length
+        x["input_ids"] = x.get("input_ids") + [tokenizer.pad_token_id] * diff
+        x["attention_mask"] = x.get("attention_mask") + [0] * diff
+        x["labels"] = x.get("labels") + [-100] * diff
 
     
     return x
@@ -154,7 +155,7 @@ def create_data_collator(tokenizer):
 
         # Find max length in this batch
         max_len = max(len(input_list) for input_list in input_ids_list) 
-        print(max_len)
+        # print(max_len)
 
         # Helper pad function: right-pad to max_len
         def pad_to_max(x_list, pad_value):
@@ -162,26 +163,29 @@ def create_data_collator(tokenizer):
                 diff = max_len - len(x_tensor)
                 if diff > 0:
                     fill_tensor = torch.full(size=(diff,), fill_value=pad_value)
-                    print(x_tensor.size())
-                    print(fill_tensor.size())
+                    # print(x_tensor.size())
+                    # print(fill_tensor.size())
                     x_list[i] = torch.cat((x_tensor, fill_tensor), dim=0)
 
-            x_tensor == 100277 
+            #x_tensor == 100277 
             return x_list
         # Use tokenizer.pad_token_id for inputs, 0 for attention_mask, -100 for labels
         pad_id = tokenizer.pad_token_id
 
         batch_input_ids = pad_to_max(input_ids_list, pad_value=pad_id)
-        print(batch_input_ids)
-        raise Exception("Heeaf")
-
         batch_attention_mask = pad_to_max(attention_masks_list, pad_value=0)
         batch_labels = pad_to_max(labels_list, pad_value=-100)
 
+        # print(batch_input_ids)
+        # print(batch_attention_mask)
+        # print(batch_labels)
+
+        # raise Exception("Heeaf")
+
         batch = {
-            "input_ids": batch_input_ids,
-            "attention_mask": batch_attention_mask,
-            "labels": batch_labels,
+            "input_ids": torch.stack(batch_input_ids, dim=0) ,
+            "attention_mask": torch.stack(batch_attention_mask, dim=0),
+            "labels": torch.stack(batch_labels, dim=0),
         }
         return batch
 
