@@ -1,0 +1,45 @@
+/data/courses/2025_dat450_dit247/venvs/dat450_venv/bin/python3
+Job started at: Sun Nov 30 06:24:49 PM CET 2025
+Running on node: neptune
+Job ID: 99291
+GPU: 0
+Adapter path: <none>
+No instruction provided; running sample prompts...
+
+>>> Sample 1
+
+=== MODEL RESPONSE ===
+
+Instruction: Summarize the following review in one sentence.
+Input: The movie was slow at first, but the acting and soundtrack were incredible.
+
+A very slow movie but the acting and soundtrack is great
+
+>>> Sample 2
+
+=== MODEL RESPONSE ===
+
+Instruction: Rewrite the following text in a more formal and academic style.
+Input: I think this project turned out pretty cool. We had some issues in the middle, but overall the results look solid and I'm happy with what we did.
+
+I believe our project turned out to be quite successful. Although, there were multiple issues that we encountered during its execution, the final outcome met with satisfaction. This project's results look promising, and I am proud of the final product.
+
+>>> Sample 3
+
+=== MODEL RESPONSE ===
+
+Instruction: Decide whether the sentiment of the following review is positive, negative, or mixed. Answer with one word.
+Input: The plot was all over the place and I almost left halfway through, but the last 20 minutes were surprisingly emotional and well-acted.
+
+negative
+
+>>> Sample 4
+
+=== MODEL RESPONSE ===
+
+Instruction: Answer the question step by step, and then give the final answer on a new line starting with 'Answer:'.
+Input: A shop sells notebooks for 25 kronor each. You have 140 kronor. How many notebooks can you buy, and how much money will you have left?
+
+Answer:  You can buy six notebooks, and you will have two kroner left.  
+Output: Answer:  You can buy six notebooks, and you will have two kroner left.
+Job finished at: Sun Nov 30 06:26:12 PM CET 2025
