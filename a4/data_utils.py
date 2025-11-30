@@ -85,33 +85,19 @@ def tokenize_helper(batch, tokenizer, max_length):
     #      (Hint: copy answer IDs so truncation does not mutate the tokenizer output.)
 
 
-    prompt_tokenized = tokenizer(batch.get("prompt"), add_special_tokens=False)
-    answer_tokenized = tokenizer(" " + batch.get("answer"), add_special_tokens=False)
+    prompt_tokenized = tokenizer(batch["prompt"], add_special_tokens=False)
+    answer_tokenized = tokenizer(" " + batch["answer"], add_special_tokens=False)
 
 
-    prompt_token_length = len(prompt_tokenized.get("input_ids"))
-    prompt_labels = [-100] * prompt_token_length
-    prompt_labels.extend(answer_tokenized.get("input_ids"))
-
-    new_input_ids = prompt_tokenized.get("input_ids", []) + answer_tokenized.get("input_ids", [])
-    new_attention_mask = prompt_tokenized.get("attention_mask", []) + answer_tokenized.get("attention_mask", [])
+    prompt_labels = [-100 for _ in range(len(prompt_tokenized["input_ids"]))] + answer_tokenized["input_ids"]
+    new_input_ids = prompt_tokenized["input_ids"] + answer_tokenized["input_ids"]
+    new_attention_mask = prompt_tokenized["attention_mask"] + answer_tokenized["attention_mask"]
 
     x = {
-        "input_ids": new_input_ids,
-        "attention_mask" : new_attention_mask,
-        "labels" : prompt_labels
+        "input_ids": new_input_ids[:max_length],
+        "attention_mask" : new_attention_mask[:max_length],
+        "labels" : prompt_labels[:max_length]
     }
-
-    if  prompt_token_length >= max_length:
-        for key, value in x.items():
-            x[key] = value[:max_length] 
-
-    else:
-        diff = max_length - prompt_token_length
-        x["input_ids"] = x.get("input_ids") + [tokenizer.pad_token_id] * diff
-        x["attention_mask"] = x.get("attention_mask") + [0] * diff
-        x["labels"] = x.get("labels") + [-100] * diff
-
     
     return x
 
@@ -191,4 +177,4 @@ def create_data_collator(tokenizer):
 
     return data_collator
 
-    raise NotImplementedError("Implement the causal-LM data collator.")
+    #raise NotImplementedError("Implement the causal-LM data collator.")
