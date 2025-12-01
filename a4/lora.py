@@ -50,7 +50,7 @@ class LoRA(nn.Module):
         self.A = nn.Linear(in_features=in_dimension, out_features=rank, bias=False)  
         self.B = nn.Linear(in_features=rank, out_features=out_dimension, bias=False)
 
-        nn.init.normal_(self.A.weight)
+        nn.init.normal_(self.A.weight, mean=0, std=0.1)
         nn.init.zeros_(self.B.weight)
 
         self.scaling = alpha / rank

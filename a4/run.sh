@@ -3,6 +3,7 @@
 #SBATCH --error=logs/fine_tuning_%j.err
 #SBATCH --cpus-per-task=2
 #SBATCH --gres=gpu:L40s:1
+#SBATCH -t 00:59:00
 
 mkdir -p logs
 set -euo pipefail
