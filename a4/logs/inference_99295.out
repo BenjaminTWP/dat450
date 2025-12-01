@@ -1,0 +1,14 @@
+/data/courses/2025_dat450_dit247/venvs/dat450_venv/bin/python3
+Job started at: Sun Nov 30 07:15:42 PM CET 2025
+Running on node: neptune
+Job ID: 99295
+GPU: 0
+Adapter path: <none>
+
+=== MODEL RESPONSE ===
+
+Instruction: Summarize ...
+Input: King Gustavus Adolphus founded Gothenburg by royal charter in 1621 as a heavily fortified, primarily Dutch, trading colony. In addition to the generous privileges given to his Dutch allies during the ongoing Thirty Years' War, e.g. tax relaxation, he also attracted significant numbers of his German and Scottish allies to populate his only town on the western coast; this trading status was furthered by the founding of the Swedish East India Company. At a key strategic location at the mouth of the Göta älv, where Scandinavia's largest drainage basin enters the sea, the Port of Gothenburg is now the largest port in the Nordic countries.[7] The presence of the University of Gothenburg and Chalmers University of Technology has led Gothenburg to become home to many students. Volvo was founded in Gothenburg in 1927,[8] with both Volvo Cars, and its original parent Volvo Group (today makers of trucks, buses and marine engines) still headquartered on the island of Hisingen in the city. Other key companies in the area are AstraZeneca, Ericsson, and SKF.
+
+King Gustavus Adolphus founded Gothenburg in 1621 by royal charter as a heavily fortified, primarily Dutch, trading colony on the west coast of Scandinavia as he hoped to facilitate trade with his allies, primarily the Dutch. By 1686, the city had a population of 13,000 and was expanding to the river's estuary, where the Port of Gothenburg is today the largest port in the Nordic countries. The city's status as a trading hub has been strengthened by the founding of the Swedish East India Company and the University of Gothenburg in the 19th century. Volvo was founded
+Job finished at: Sun Nov 30 07:16:19 PM CET 2025

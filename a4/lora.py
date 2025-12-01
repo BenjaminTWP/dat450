@@ -34,20 +34,43 @@ class LoRA(nn.Module):
         # Always keep a reference to the frozen pretrained weight matrix.
         self.pretrained = pretrained
 
+        for p in self.pretrained.parameters():
+            p.requires_grad = False # freezes the pretrainied weights
+
+        in_dim = pretrained.weight.shape[1]
+        out_dim = pretrained.weight.shape[0]
+
+
+    
+        device = pretrained.weight.device
+        self.A = nn.Linear(in_dim, rank, bias=False).to(device)
+        nn.init.normal_(self.A.weight, mean=0.0, std=0.1)
+
+        self.B = nn.Linear(rank, out_dim, bias=False).to(device)
+        nn.init.zeros_(self.B.weight)
+
+        # scaling constant
+        self.scaling = alpha / rank
+
         # TODO[student]: Initialize the low-rank adapter matrices A and B.
         #   * Inspect `pretrained.weight.shape` to find the input and output dims.
         #   * Create `self.A` (shape: in_dim -> rank) and `self.B` (rank -> out_dim).
         #   * Initialize A with a small normal distribution and B with zeros.
         #   * Store the scaling factor alpha / rank in `self.scaling`.
         # Remove the line below once your implementation is ready.
-        raise NotImplementedError("Initialize LoRA adapter weights (A, B) and scaling.")
+        #raise NotImplementedError("Initialize LoRA adapter weights (A, B) and scaling.")
 
     def forward(self, x):
         # TODO[student]: Implement the LoRA forward pass.
         #   * Compute the frozen projection using `self.pretrained(x)`.
         #   * Add the low-rank update `self.B(self.A(x)) * self.scaling`.
         #   * Return the combined result.
-        raise NotImplementedError("Implement the LoRA forward pass.")
+        #raise NotImplementedError("Implement the LoRA forward pass.")
+        
+        old_layer = self.pretrained(x)
+        lora_component = self.scaling * self.B(self.A(x)) 
+
+        return old_layer + lora_component
 
 
 def extract_lora_targets(model):
@@ -62,7 +85,17 @@ def extract_lora_targets(model):
       * Return a dict {qualified_name: module}.
     """
     # TODO[student]: populate the dictionary with eligible layers.
-    raise NotImplementedError("Select and return the target Linear layers.")
+    #raise NotImplementedError("Select and return the target Linear layers.")
+
+    return_dict = {}
+    attention_names = ["q_proj", "k_proj", "v_proj", "o_proj"]
+
+    for name, module in model.named_modules():
+        if isinstance(module, nn.Linear):
+            if any(att_name in name for att_name in attention_names):
+                return_dict[name] = module
+
+    return return_dict
 
 
 def replace_layers(model, named_layers):
