@@ -15,9 +15,11 @@ def prepare_data():
                 "gold_context": tmp_data.LONG_ANSWER,
                 "gold_document_id": documents.index})
 
-    sanity_check()
+    sanity_check(documents, questions)
     
     return documents, questions
 
-def sanity_check():
-    pass
+def sanity_check(documents, questions):
+    print("Example data:\n")
+    print("Question:\n", questions.iloc[6].question)
+    print("Abstract:\n", documents.iloc[6].abstract)
