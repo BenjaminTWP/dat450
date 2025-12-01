@@ -34,14 +34,23 @@ def build_prompt(example, prompt_no_input, prompt_with_input):
         Dict with the text prompt under "prompt" and the gold answer under "answer".
     """
     instruction = example["instruction"]
-    inp = example.get("input", "") or ""
+    inp = example.get("input", "") or "" 
     output = example["output"]
 
     # TODO[student]:
     #   1. Read out instruction/input/output from the example (be robust to empty input).
     #   2. Pick the correct template depending on whether "input" contains text.
     #   3. Format the template and return {"prompt": prompt_text, "answer": output_text}.
-    raise NotImplementedError("Implement prompt construction for Alpaca examples.")
+    if inp == "":
+        prompt_text = prompt_no_input.replace("{instruction}", instruction)
+        return {"prompt":prompt_text, "answer":output}
+    
+    else:
+        prompt_text = prompt_with_input.replace("{instruction}", instruction)
+        prompt_text = prompt_text.replace("{input}", inp)
+        return {"prompt":prompt_text, "answer":output}
+    
+    
 
 
 def tokenize_helper(batch, tokenizer, max_length):
@@ -69,8 +78,22 @@ def tokenize_helper(batch, tokenizer, max_length):
     #   2. Concatenate, truncate, and create an attention mask of 1s.
     #   3. Build labels using -100 for the prompt span and answer token IDs afterward.
     #      (Hint: copy answer IDs so truncation does not mutate the tokenizer output.)
-    raise NotImplementedError("Implement tokenization + label masking for SFT.")
+    prompt = batch["prompt"]
+    answer = batch["answer"]
 
+    prompt_dict = tokenizer(prompt, add_special_tokens=False)
+    answer_dict = tokenizer(" " +  answer, add_special_tokens=False)
+
+    input_ids = prompt_dict["input_ids"] + answer_dict["input_ids"]
+    input_ids = input_ids[:max_length]
+
+    att_m = prompt_dict["attention_mask"] + answer_dict["attention_mask"]
+    att_m = att_m[:max_length]
+
+    labels = [-100] * len(prompt_dict["input_ids"]) + answer_dict["input_ids"]
+    labels = labels[:max_length]
+
+    return {"input_ids": input_ids, "attention_mask": att_m, "labels": labels}
 
 def create_data_collator(tokenizer):
     """
@@ -103,6 +126,7 @@ def create_data_collator(tokenizer):
     #           "labels": ...,
     #       }
     #   return data_collator
+    
 
     def data_collator(batch):
         input_ids_list = [torch.tensor(example["input_ids"], dtype=torch.long) for example in batch]
@@ -110,25 +134,32 @@ def create_data_collator(tokenizer):
         labels_list = [torch.tensor(example["labels"], dtype=torch.long) for example in batch]
 
         # Find max length in this batch
-        max_len = "NotImplementedError"
+        max_len = max(len(ids) for ids in input_ids_list)
 
         # Helper pad function: right-pad to max_len
         def pad_to_max(x_list, pad_value):
-            # ...
-            pass
+            padded_tensors = []
+            for x in x_list:
+                diff = max_len - len(x)
+                padding_tensor = torch.full((diff,), pad_value, dtype=torch.long)
+                padded_tensor = torch.cat([x, padding_tensor])
+                padded_tensors.append(padded_tensor)
+
+            return padded_tensors
+            
 
         # Use tokenizer.pad_token_id for inputs, 0 for attention_mask, -100 for labels
-        pad_id = "NotImplementedError"
+        pad_id = tokenizer.pad_token_id
 
         batch_input_ids = pad_to_max(input_ids_list, pad_value=pad_id)
         batch_attention_mask = pad_to_max(attention_masks_list, pad_value=0)
         batch_labels = pad_to_max(labels_list, pad_value=-100)
 
         batch = {
-            "input_ids": batch_input_ids,
-            "attention_mask": batch_attention_mask,
-            "labels": batch_labels,
+            "input_ids": torch.stack(batch_input_ids, dim=0),
+            "attention_mask": torch.stack(batch_attention_mask, dim=0),
+            "labels": torch.stack(batch_labels, dim=0),
         }
         return batch
 
-    raise NotImplementedError("Implement the causal-LM data collator.")
+    return data_collator

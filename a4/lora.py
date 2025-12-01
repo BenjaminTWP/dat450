@@ -8,7 +8,7 @@ from transformers import (
     TrainingArguments,
 )
 
-from .utils import make_trainer, num_trainable_parameters
+from utils import make_trainer, num_trainable_parameters
 
 # -----------------------------------------------------------------------------
 # STUDENT TODOs
@@ -40,14 +40,30 @@ class LoRA(nn.Module):
         #   * Initialize A with a small normal distribution and B with zeros.
         #   * Store the scaling factor alpha / rank in `self.scaling`.
         # Remove the line below once your implementation is ready.
-        raise NotImplementedError("Initialize LoRA adapter weights (A, B) and scaling.")
+
+        (out_dim, in_dim) = pretrained.weight.shape
+        self.pretrained.weight.requires_grad = False
+        if self.pretrained.bias:
+            self.pretrained.bias.requires_grad = False
+
+        
+        self.A = nn.Linear(in_features=in_dim, out_features=rank, bias=False)
+        self.B = nn.Linear(in_features=rank, out_features=out_dim, bias=False)
+
+        nn.init.normal_(self.A.weight, 0, 0.01)
+        nn.init.zeros_(self.B.weight)
+
+        self.scaling = alpha / rank
+        
 
     def forward(self, x):
         # TODO[student]: Implement the LoRA forward pass.
         #   * Compute the frozen projection using `self.pretrained(x)`.
         #   * Add the low-rank update `self.B(self.A(x)) * self.scaling`.
         #   * Return the combined result.
-        raise NotImplementedError("Implement the LoRA forward pass.")
+        frozen_projection = self.pretrained(x)
+        lora_update = self.B(self.A(x)) * self.scaling
+        return torch.add(frozen_projection, lora_update)
 
 
 def extract_lora_targets(model):
@@ -62,7 +78,14 @@ def extract_lora_targets(model):
       * Return a dict {qualified_name: module}.
     """
     # TODO[student]: populate the dictionary with eligible layers.
-    raise NotImplementedError("Select and return the target Linear layers.")
+    attention_clues = ['q_proj', 'k_proj', 'v_proj', 'o_proj']
+    qualified_modules = {}
+    for name, module in model.named_modules():
+        if any(clue in name for clue in attention_clues):
+            qualified_modules[name] = module
+
+    return qualified_modules
+
 
 
 def replace_layers(model, named_layers):
