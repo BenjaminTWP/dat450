@@ -1,5 +1,7 @@
-from langchain_huggingface.llms import HuggingFacePipeline
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from langchain_huggingface.llms import HuggingFacePipeline
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableParallel
 from langchain_core.prompts import PromptTemplate
 
 
@@ -8,7 +10,7 @@ def create_pipeline(model_id):
     model = AutoModelForCausalLM.from_pretrained(model_id)
     pipe = pipeline("text-generation", model=model,
                     device=0, tokenizer=tokenizer,
-                    return_full_text=False, max_new_tokens=128)
+                    return_full_text=False, max_new_tokens=32)
 
     hf = HuggingFacePipeline(pipeline=pipe)
     return hf
@@ -23,3 +25,32 @@ def prompt(question, hf):
 
     for chunk in chain.stream({"question": question}):
         print(chunk, end="", flush=True)
+
+
+def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
+    template = """Answer the following qustion with only one token, that is either yes or no. The first and only token must be yes or no. 
+                  Question: {question}
+                  Context:
+                  {context}"""
+    
+    prompt_template = PromptTemplate.from_template(template)
+    
+    docs = retriever.invoke(question)
+    context = "\n".join([doc.page_content for doc in docs])
+    
+    prompt_text = prompt_template.format(question=question, context=context)
+
+    if sanity:
+        print("\nPrompt with context: \n", prompt_text)
+    
+    chain = ( prompt_template | hf_pipeline | StrOutputParser() )
+    
+    runnable_parallel_object = RunnableParallel({"answer": chain})
+    
+    results = runnable_parallel_object.invoke({
+        "question": question,
+        "context": context
+    })
+
+    if sanity:
+        print("\nThe answer: \n", results["answer"])
