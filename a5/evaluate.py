@@ -15,16 +15,17 @@ class Evaluator:
         self.metadata = metadata
 
     def run_evaluation(self):
+        random_examples = np.random.randint(0, high=len(self.questions), size=3)
+
         lm_answers = []
         rag_answers = []
         true_label = []
         gold_doc_freq = 0
 
         for index in range(len(self.questions)):
-
             lm_answer = prompt(self.questions.iloc[index].question, self.hf_pipeline)
             lm_label = self.label_answer(lm_answer)
-            rag_answer, doc_ids = rag_chain_prompt(self.questions.iloc[index].question, self.hf_pipeline, self.retriever)
+            rag_answer, doc_ids, context = rag_chain_prompt(self.questions.iloc[index].question, self.hf_pipeline, self.retriever)
             rag_label = self.label_answer(rag_answer)
 
             if not lm_label == -1 and not rag_label == -1:
@@ -35,6 +36,9 @@ class Evaluator:
             gold_doc_id = int(self.questions.iloc[index].gold_document_id)
             if gold_doc_id in doc_ids:
                 gold_doc_freq += 1
+            
+            if index in random_examples:
+                self.print_example(self.questions.iloc[index].question, context, lm_answer, rag_answer)            
         
         self.print_statistics(lm_answers, rag_answers, true_label)
         print(f"\nThe gold document is retrieved with a frequency of {gold_doc_freq/len(self.questions)}")
@@ -86,10 +90,19 @@ class Evaluator:
         rag_pre = precision_score(true_label, rag_pred)
         rag_f1  = f1_score(true_label, rag_pred)
 
-        print(
-            f"\nFor the LM-model:  Acc={lm_acc:.2f}, Recall={lm_rec:.2f}, "
-            f"Precision={lm_pre:.2f}, F1={lm_f1:.2f}")
+        print(f"\nFor the LM-model:  Acc={lm_acc:.2f}, Recall={lm_rec:.2f}, "
+              f"Precision={lm_pre:.2f}, F1={lm_f1:.2f}")
 
-        print(
-            f"\nFor the RAG-model: Acc={rag_acc:.2f}, Recall={rag_rec:.2f}, "
-            f"Precision={rag_pre:.2f}, F1={rag_f1:.2f}")
+        print(f"\nFor the RAG-model: Acc={rag_acc:.2f}, Recall={rag_rec:.2f}, "
+              f"Precision={rag_pre:.2f}, F1={rag_f1:.2f}")
+
+    def print_example(self, question, context, lm_answer, rag_answer):
+        print("\n=== Example ===")
+        print("Question:", question)
+
+        print("\nRetrieved documents (context):", context)
+
+        print("\nLM Answer:", lm_answer)
+
+        print("\nRAG Answer:", rag_answer)
+        print("================\n")

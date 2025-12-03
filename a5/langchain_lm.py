@@ -24,6 +24,7 @@ def prompt(question, hf, sanity=False):
 
     if sanity:
         print("\nThe question: \n", question)
+        print("\nAnswer:\n")
 
     answer = ""
     for chunk in chain.stream({"question": question}):
@@ -46,7 +47,7 @@ def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
     doc_ids = [doc.metadata["id"] for doc in docs]
 
     if sanity:
-        print("\n Retrieved IDs:", doc_ids)
+        print("Retrieved IDs:", doc_ids)
     
     prompt_text = prompt_template.format(question=question, context=context)
 
@@ -65,4 +66,4 @@ def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
     if sanity:
         print("\nThe answer: \n", results["answer"])
 
-    return results["answer"], doc_ids
+    return results["answer"], doc_ids, context

@@ -8,7 +8,6 @@ import numpy as np
 
 ############################ Some settings ############################
 
-#MODEL_NAME = "Qwen/Qwen2.5-0.5B-Instruct"
 MODEL_NAME = "Qwen/Qwen3-4B-Instruct-2507"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
@@ -20,7 +19,7 @@ def section(title):
 
 def test_embedding_size(abstract, result):
     result = np.array(result)
-    print(f"\nThe embedding is of size is {result.shape}")
+    print(f"The embedding is of size is {result.shape}")
 
 def example_text_chunks(texts):
     print("\nOne example text chunk is:\n", texts[4])
@@ -63,7 +62,7 @@ if __name__ == "__main__":
     section("Step 4: Define the full RAG pipeline (OPTION B)")
 
     retriever = vector_store.as_retriever(search_kwargs={'k':2})
-    _, _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
+    _, _, _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
 
     section("Step 5: Evaluate RAG on the dataset")
 
