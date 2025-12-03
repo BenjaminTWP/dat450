@@ -2,6 +2,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_lm import create_pipeline, prompt, rag_chain_prompt
 from langchain_chroma import Chroma
+from evaluate import Evaluator
 from data import prepare_data
 import numpy as np
 
@@ -33,7 +34,7 @@ if __name__ == "__main__":
     section("Step 2: Configure your LangChain LM")
 
     hf_pipeline = create_pipeline(MODEL_NAME)
-    _ = prompt("What is electroencephalography?", hf_pipeline)
+    _ = prompt("What is electroencephalography?", hf_pipeline, sanity=True)
 
     section("Step 3: Set up the document database")
 
@@ -63,4 +64,9 @@ if __name__ == "__main__":
     section("Step 4: Define the full RAG pipeline (OPTION B)")
 
     retriever = vector_store.as_retriever()
-    _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
+    _, _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
+
+    section("Step 5: Evaluate RAG on the dataset")
+
+    evaluator = Evaluator(hf_pipeline, documents, questions, retriever, metadatas)
+    evaluator.run_evaluation(num_samples=10)
