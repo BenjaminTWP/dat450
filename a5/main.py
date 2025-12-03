@@ -20,12 +20,11 @@ def section(title):
 
 def test_embedding_size(abstract, result):
     result = np.array(result)
-    print(f"\nWe embedd this '{abstract}', it has a length of {len(abstract.split())}")
-    print(f"\n the embedding is of size is {result.shape}")
+    print(f"\nThe embedding is of size is {result.shape}")
 
 def example_text_chunks(texts):
-    print("\nOne example text:\n", texts[4])
-    print("\nAnother example text:\n", texts[5])
+    print("\nOne example text chunk is:\n", texts[4])
+    print("\nAnother example text chunk is:\n", texts[5])
 
 
 if __name__ == "__main__": 

@@ -37,8 +37,7 @@ def prompt(question, hf, sanity=False):
 def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
     template = """Answer the following question with a yes or no. The answer must contain either "Answer: yes" or "Answer: no", not both. \n
                   Question: {question}
-                  Context:
-                  {context}
+                  Context: {context}
                   """
     prompt_template = PromptTemplate.from_template(template)
     
