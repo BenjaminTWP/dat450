@@ -15,19 +15,20 @@ def create_pipeline(model_id):
     hf = HuggingFacePipeline(pipeline=pipe)
     return hf
 
-def prompt(question, hf):
+def prompt(question, hf, sanity=False):
     template = """Answer the following question with a yes or no. The answer must contain either "Answer: yes" or "Answer: no", not both. \n 
                   Question: {question}
                   """
     prompt = PromptTemplate.from_template(template)
-
     chain = prompt | hf
 
-    print("\nThe question: \n", question)
+    if sanity:
+        print("\nThe question: \n", question)
 
     answer = ""
     for chunk in chain.stream({"question": question}):
-        print(chunk, end="", flush=True)
+        if sanity:
+            print(chunk, end="", flush=True)
         answer += chunk 
 
     return answer.strip() 
@@ -43,6 +44,10 @@ def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
     
     docs = retriever.invoke(question)
     context = "\n".join([doc.page_content for doc in docs])
+    doc_ids = [doc.metadata["id"] for doc in docs]
+
+    if sanity:
+        print("\n Retrieved IDs:", doc_ids)
     
     prompt_text = prompt_template.format(question=question, context=context)
 
@@ -61,4 +66,4 @@ def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
     if sanity:
         print("\nThe answer: \n", results["answer"])
 
-    return results["answer"]
+    return results["answer"], doc_ids
