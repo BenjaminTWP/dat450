@@ -33,7 +33,7 @@ if __name__ == "__main__":
     section("Step 2: Configure your LangChain LM")
 
     hf_pipeline = create_pipeline(MODEL_NAME)
-    prompt("What is electroencephalography?", hf_pipeline)
+    _ = prompt("What is electroencephalography?", hf_pipeline)
 
     section("Step 3: Set up the document database")
 
@@ -63,4 +63,4 @@ if __name__ == "__main__":
     section("Step 4: Define the full RAG pipeline (OPTION B)")
 
     retriever = vector_store.as_retriever()
-    rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
+    _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)

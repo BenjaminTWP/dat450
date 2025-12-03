@@ -16,23 +16,29 @@ def create_pipeline(model_id):
     return hf
 
 def prompt(question, hf):
-    template = """Question: {question}"""
+    template = """Answer the following question with a yes or no. The answer must contain either "Answer: yes" or "Answer: no", not both. \n 
+                  Question: {question}
+                  """
     prompt = PromptTemplate.from_template(template)
 
     chain = prompt | hf
 
     print("\nThe question: \n", question)
 
+    answer = ""
     for chunk in chain.stream({"question": question}):
         print(chunk, end="", flush=True)
+        answer += chunk 
+
+    return answer.strip() 
 
 
 def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
-    template = """Answer the following qustion with only one token, that is either yes or no. The first and only token must be yes or no. 
+    template = """Answer the following question with a yes or no. The answer must contain either "Answer: yes" or "Answer: no", not both. \n
                   Question: {question}
                   Context:
-                  {context}"""
-    
+                  {context}
+                  """
     prompt_template = PromptTemplate.from_template(template)
     
     docs = retriever.invoke(question)
@@ -54,3 +60,5 @@ def rag_chain_prompt(question, hf_pipeline, retriever, sanity=False):
 
     if sanity:
         print("\nThe answer: \n", results["answer"])
+
+    return results["answer"]
