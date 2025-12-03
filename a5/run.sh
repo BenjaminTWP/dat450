@@ -5,6 +5,7 @@
 #SBATCH -J DAT450_Assignment_5
 #SBATCH -t 00:30:00
 #SBATCH -o a5_out.txt
+#SBATCH --error=a5_out.err
 
 source /data/courses/2025_dat450_dit247/venvs/dat450_venv/bin/activate
 
