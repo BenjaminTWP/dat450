@@ -1,0 +1,19 @@
+Device has 2 GPUs available. Provide device={deviceId} to `from_model_id` to use availableGPUs for execution. deviceId is -1 (default) for CPU and can be a positive integer associated with CUDA device id.
+Device set to use cpu
+Question: What is electroencephalography?
+
+Answer: Let's think step by step. First, we need to define the word "elect
+[-0.04895174130797386, -0.03986189886927605, -0.021562783047556877]
+['1d9a70ca-49db-448a-b584-0cad54a1f808', '4e38d2ea-3109-430c-82fc-c8444cd76184', '3f194adf-f975-419b-a366-28316f529112', '8ba828ea-748a-452d-a4b0-4c6e00c2a6fd', 'f9b60538-70db-4ed7-9d02-36ad1ee99c77', 'da7ec037-68f3-4e9e-add2-3345162aff23', '18d223be-80c1-4a51-8e48-a2318886f046', '08e6290b-9440-47dc-9793-eae93da0ad83', 'a46359a7-7434-4a09-a610-b9da206006f7', 'ce9d485c-deae-467c-b9a1-ecc667fa7da5']
+* [SIM=0.551042] Programmed cell death (PCD) is the regulated death of cells within an organism. The lace plant (Aponogeton madagascariensis) produces perforations in its leaves through PCD. The leaves of the plant consist of a latticework of longitudinal and transverse veins enclosing areoles. PCD occurs in the cells at the center of these areoles and progresses outwards, stopping approximately five cells from [{'id': 21645374}]
+* [SIM=1.197590] be informative in prediction of biological behavior of EGC as well as prognosis and survival. [{'id': 24298614}]
+* [SIM=1.283440] Cox regression analysis were used in the statistical analysis. We enrolled 190 patients (157 men and 33 women) with a mean (SD) age of 61.75 (10.85) years (range, 33-85 years). Of these patients, 144 received cytostatic treatment and 46 palliative treatment. The median survival was 31 weeks and was related to absence of weight loss (hazard ratio [HR], 1.73; 95% confidence interval [CI], [{'id': 16827975}]
+_____________RAG_PIPELINE_____________
+Traceback (most recent call last):
+  File "/data/users/carlodq/dat450/a5/main.py", line 140, in <module>
+    agent = create_agent(model, tools=[], middleware=[RetrieveDocumentsMiddleware])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/courses/2025_dat450_dit247/venvs/dat450_venv/lib/python3.12/site-packages/langchain/agents/factory.py", line 738, in create_agent
+    if m.__class__.wrap_tool_call is not AgentMiddleware.wrap_tool_call
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'type' has no attribute 'wrap_tool_call'
