@@ -14,16 +14,16 @@ class Evaluator:
         self.retriever = retriever
         self.metadata = metadata
 
-    def run_evaluation(self, num_samples=10):
-        chosen_questions = np.random.randint(0, len(self.docs), num_samples)
-        print("IDs of ten first randomly chosen questions", chosen_questions[0:10])
+    def run_evaluation(self):
+        #chosen_questions = np.random.randint(0, len(self.docs), num_samples)
+        #print("IDs of ten first randomly chosen questions", chosen_questions[0:10])
 
         lm_answers = []
         rag_answers = []
         true_label = []
         gold_doc_freq = 0
 
-        for index in chosen_questions:
+        for index in range(len(self.questions)):
 
             lm_answer = prompt(self.questions.iloc[index].question, self.hf_pipeline)
             lm_label = self.label_answer(lm_answer)
@@ -40,7 +40,7 @@ class Evaluator:
                 gold_doc_freq += 1
         
         self.print_statistics(lm_answers, rag_answers, true_label)
-        print(f"\nThe gold document is retrieved with a frequency of {gold_doc_freq/num_samples}")
+        print(f"\nThe gold document is retrieved with a frequency of {gold_doc_freq/len(self.questions)}")
 
     def label_answer(self, answer):
         '''

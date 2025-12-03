@@ -69,4 +69,4 @@ if __name__ == "__main__":
     section("Step 5: Evaluate RAG on the dataset")
 
     evaluator = Evaluator(hf_pipeline, documents, questions, retriever, metadatas)
-    evaluator.run_evaluation(num_samples=10)
+    evaluator.run_evaluation()
