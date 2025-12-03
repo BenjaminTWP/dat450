@@ -15,9 +15,6 @@ class Evaluator:
         self.metadata = metadata
 
     def run_evaluation(self):
-        #chosen_questions = np.random.randint(0, len(self.docs), num_samples)
-        #print("IDs of ten first randomly chosen questions", chosen_questions[0:10])
-
         lm_answers = []
         rag_answers = []
         true_label = []
@@ -60,13 +57,13 @@ class Evaluator:
         else:
             for position in positions:
                 start = position + to_find_len
-                end = start + 6
+                end = start + 8
                 search = answer[start: end]
                 
-                if "no" in search:
-                    return 0
-                elif "yes" in search:
+                if "yes" in search:
                     return 1
+                elif "no" in search:
+                    return 0
 
         return -1
 
