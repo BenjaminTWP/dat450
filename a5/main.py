@@ -8,7 +8,8 @@ import numpy as np
 
 ############################ Some settings ############################
 
-MODEL_NAME = "Qwen/Qwen2.5-0.5B-Instruct"
+#MODEL_NAME = "Qwen/Qwen2.5-0.5B-Instruct"
+MODEL_NAME = "Qwen/Qwen3-4B-Instruct-2507"
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 #######################################################################
@@ -42,7 +43,7 @@ if __name__ == "__main__":
     query_result = embedding_func.embed_query("This seems to be a test")
     test_embedding_size("This seems to be a test", query_result)
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=280, chunk_overlap=40)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=50)
 
     metadatas = [{"id": idx} for idx in documents.index]
     texts = text_splitter.create_documents(texts=documents.abstract.tolist(), metadatas=metadatas)
@@ -53,7 +54,6 @@ if __name__ == "__main__":
     batch_size = 5000 
     for i in range(0, len(texts), batch_size):
         vector_store.add_documents(texts[i:i+batch_size])
-    #vector_store.add_documents(texts)
 
     results = vector_store.similarity_search_with_score("What is programmed cell death?", k=3)
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     section("Step 4: Define the full RAG pipeline (OPTION B)")
 
-    retriever = vector_store.as_retriever()
+    retriever = vector_store.as_retriever(search_kwargs={'k':2})
     _, _ = rag_chain_prompt(questions.iloc[6].question, hf_pipeline, retriever, sanity=True)
 
     section("Step 5: Evaluate RAG on the dataset")
