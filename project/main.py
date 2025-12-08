@@ -49,7 +49,7 @@ if __name__ == "__main__":
         examples = [
             "Hej jag heter Bertil. Kan du säga mig vem som är tomten?",
             "I have a fat cat",
-            "Che una birra grande, me piace"
+            "Che una birra grande, mi piace"
         ]
 
         for example in examples:
