@@ -10,6 +10,7 @@ a3/reuters/*
 a3/keep.txt
 a4/outputs
 *.err*
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
