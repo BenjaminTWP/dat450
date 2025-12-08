@@ -1,2 +1,0 @@
-Device has 2 GPUs available. Provide device={deviceId} to `from_model_id` to use availableGPUs for execution. deviceId is -1 (default) for CPU and can be a positive integer associated with CUDA device id.
-Device set to use cpu

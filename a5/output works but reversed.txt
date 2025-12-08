@@ -1,0 +1,50 @@
+Question: What is electroencephalography?
+
+Answer: Let's think step by step. E
+[-0.04895174130797386, -0.03986189886927605, -0.021562783047556877]
+['0e039c2a-265d-40d2-b28d-28779d876c77', 'ba7ef555-5826-442c-a622-ad93208d258a', '94bf8336-df8b-4429-8cbc-2ffbca08baa9', 'b6fe80ca-01c7-4639-b163-01773309ce0d', '091a6805-5ea9-4566-b212-baad9ae6393d', '97fc1090-b68e-44b0-8425-9dd5e0011ad5', '3d647c82-427f-4a45-9fe1-741f48ca383c', '55113f3a-e10d-477b-be6e-738d1f1d6df9', '02185a0e-910a-48c4-9b30-32d6c5baf604', 'f1a260a9-eba5-4b0e-b84a-652cb486ea6a']
+* [SIM=0.551042] Programmed cell death (PCD) is the regulated death of cells within an organism. The lace plant (Aponogeton madagascariensis) produces perforations in its leaves through PCD. The leaves of the plant consist of a latticework of longitudinal and transverse veins enclosing areoles. PCD occurs in the cells at the center of these areoles and progresses outwards, stopping approximately five cells from [{'id': 21645374}]
+* [SIM=1.197590] be informative in prediction of biological behavior of EGC as well as prognosis and survival. [{'id': 24298614}]
+* [SIM=1.283440] Cox regression analysis were used in the statistical analysis. We enrolled 190 patients (157 men and 33 women) with a mean (SD) age of 61.75 (10.85) years (range, 33-85 years). Of these patients, 144 received cytostatic treatment and 46 palliative treatment. The median survival was 31 weeks and was related to absence of weight loss (hazard ratio [HR], 1.73; 95% confidence interval [CI], [{'id': 16827975}]
+_____________RAG_PIPELINE_____________
+================================ Human Message =================================
+
+Does glomerular hyperfiltration in pregnancy damage the kidney in women with more parities?
+================================ Human Message =================================
+
+You are an expert assistant. Use the following context in your response:
+
+effects on kidney in women with more parities. Pregnancy may have possible protective mechanisms for kidney against adverse effects of glomerular hyperfiltration.
+
+higher GFR values compared to groups 1 and 2 (109.44 +/- 30.99, 110.76 +/- 30.22 and 121.92 +/- 34.73 mL/min/1.73 m(2) for groups 1, 2 and 3, respectively; P = 0.008 for group 1 vs group 3; P = 0.002 for group 2 vs group 3). In our study, we suggest that glomerular hyperfiltration due to pregnancy does not have adverse effects on kidney in women with more parities. Pregnancy may have possible
+
+We aimed to investigate the glomerular hyperfiltration due to pregnancy in women with more parities. Five hundred women aged 52.57 +/- 8.08 years, without a history of hypertension, diabetes mellitus or complicated pregnancy were involved in the study. They were divided into three groups. Group 1: women with no or one parity (n = 76); group 2: women with two or three parities (n = 333); group 3:
+
+parity (n = 76); group 2: women with two or three parities (n = 333); group 3: women with four or more parities (n = 91). Laboratory parameters and demographical data were compared between the three groups. Mean age, serum urea and serum creatinine were similar between three groups. Patients in group 3 had significantly higher GFR values compared to groups 1 and 2 (109.44 +/- 30.99, 110.76 +/-
+Awnser the question by writing Awnser=Yes if the question is true and write Awnser=No if the question is false.
+Now awnser the question, Answer=
+================================ Human Message =================================
+
+Human: You are an expert assistant. Use the following context in your response:
+
+effects on kidney in women with more parities. Pregnancy may have possible protective mechanisms for kidney against adverse effects of glomerular hyperfiltration.
+
+higher GFR values compared to groups 1 and 2 (109.44 +/- 30.99, 110.76 +/- 30.22 and 121.92 +/- 34.73 mL/min/1.73 m(2) for groups 1, 2 and 3, respectively; P = 0.008 for group 1 vs group 3; P = 0.002 for group 2 vs group 3). In our study, we suggest that glomerular hyperfiltration due to pregnancy does not have adverse effects on kidney in women with more parities. Pregnancy may have possible
+
+We aimed to investigate the glomerular hyperfiltration due to pregnancy in women with more parities. Five hundred women aged 52.57 +/- 8.08 years, without a history of hypertension, diabetes mellitus or complicated pregnancy were involved in the study. They were divided into three groups. Group 1: women with no or one parity (n = 76); group 2: women with two or three parities (n = 333); group 3:
+
+parity (n = 76); group 2: women with two or three parities (n = 333); group 3: women with four or more parities (n = 91). Laboratory parameters and demographical data were compared between the three groups. Mean age, serum urea and serum creatinine were similar between three groups. Patients in group 3 had significantly higher GFR values compared to groups 1 and 2 (109.44 +/- 30.99, 110.76 +/-
+Awnser the question by writing Awnser=Yes if the question is true and write Awnser=No if the question is false.
+Now awnser the question, Answer=No
+answer: no
+True!
+generated:answer:  True
+
+------------ evaluation -----------
+
+Results (with RAG)
+Accuracy: 0.5089887640449439
+F1 score: 0.5385427666314677
+Results (without RAG)
+Accuracy: 0.601123595505618
+F1 score: 0.7469707769066286

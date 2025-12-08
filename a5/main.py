@@ -22,7 +22,7 @@ from langchain.agents.middleware import AgentMiddleware, AgentState
 from langchain.agents import create_agent
 
 
-login(token="YOUR TOKEN")
+login(token="insert your token here")
 
 
 def get_docs_quest():
@@ -46,7 +46,7 @@ documents, questions = get_docs_quest()
 
 
 hf = HuggingFacePipeline.from_model_id(
-    model_id="meta-llama/Llama-3.2-1B-Instruct",
+    model_id="meta-llama/Llama-3.2-3B-Instruct",
     task="text-generation",
     pipeline_kwargs={"max_new_tokens": 1},
 )
@@ -117,14 +117,18 @@ class State(AgentState):
 class RetrieveDocumentsMiddleware(AgentMiddleware[State]):
     state_schema = State
 
-    def __init__(self, vector_store):
+    def __init__(self, vector_store, include_content=True):
         self.vector_store = vector_store
+        self.include_content = include_content
 
     def before_model(self, state: AgentState) -> dict[str, Any] | None:
         last_message = state["messages"][-1] # get the user input query
         retrieved_docs = self.vector_store.similarity_search(last_message.text)  # search for documents
 
-        docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)  
+        docs_content = "\n\n".join(doc.page_content for doc in retrieved_docs)
+
+        if self.include_content == False:
+            docs_content = "\n"
 
         augmented_message_content = (
             "You are an expert assistant. Use the following context in your response:"
@@ -139,14 +143,107 @@ class RetrieveDocumentsMiddleware(AgentMiddleware[State]):
 
 
 model = hf
-agent = create_agent(model, tools=[], middleware=[RetrieveDocumentsMiddleware(vector_store)])
+agent1 = create_agent(model, tools=[], middleware=[RetrieveDocumentsMiddleware(vector_store)])
 
-your_query = "Can people die due to cancer?"
+your_query = "Does glomerular hyperfiltration in pregnancy damage the kidney in women with more parities?"
 
-for step in agent.stream(
-    {"messages": [{"role": "user", "content": your_query}]},
-    stream_mode="values",
-):
-    step["messages"][-1].pretty_print()
+
+def generate_answer(agent, query, correct_answer, pprint=True):
+
+    content = ""
+
+    for step in agent.stream(
+        {"messages": [{"role": "user", "content": query}]},
+        stream_mode="values",
+    ):
+        if pprint:
+            step["messages"][-1].pretty_print()
+        content = step["messages"][-1].content
+
+    answer = content.split("Answer=")[-1].lower()
+    if len(answer) > 5:
+        answer = answer[:5] # it will only generate one token, this is a protection agains answers containing both yes and no
+
+    if pprint:
+        print("answer:", answer)
+
+    if correct_answer in answer:
+        if pprint:
+            print("True!")
+        return True
+    else:
+        if pprint:
+            print("False!")
+        return False
+
+
+gen_answer = generate_answer(agent1, your_query, "no")
+print("generated:answer: ", gen_answer)
+
+
+
+print("\n------------ evaluation -----------\n")
+#print(questions)
+
+def evaluate_agent(agent, questions):
+
+    question_df = questions['question'].values
+    label_df = questions['gold_label'].values
+    results = {"TP": 0, "TN": 0, "FP": 0, "FN": 0}
+
+    count = 0
+
+    for question, label in zip(question_df, label_df):
+
+        #print(f"label: {label}, questions: {question}")
+        answer = generate_answer(agent, question, label, pprint=False)
+        #print(answer)
+
+        if answer==True:
+            if label=="yes":
+                results["TP"] += 1 # it correctly says yes
+            else:
+                results["TN"] += 1 # it correctly says no
+        else: # answer==False
+            if label=="yes":
+                results["FP"] += 1 # it falsely says yes
+            else:
+                results["FN"] += 1 # it falsely says no
+
+        count += 1
+
+        # if count >= 10:
+        #     break
+
+    return results
+
+
+results = evaluate_agent(agent1, questions)
+
+def print_results(results):
+    tp = results["TP"]
+    tn = results["TN"]
+    fp = results["FP"]
+    fn = results["FN"]
+
+    precision = tp / (tp + fp)
+    recall = tp / (tp + fn)
+    accuracy = (tp + tn) / (tp + tn + fp + fn)
+    f1_score = 2 * precision * recall / (precision + recall)
+
+    print("Precision:", precision)
+    print("Recall:", recall)
+    print("Accuracy:", accuracy)
+    print("F1 score:", f1_score)
+
+print("Results (with RAG)")
+print_results(results)
+
+
+# agent2 = create_agent(model, tools=[], middleware=[RetrieveDocumentsMiddleware(vector_store, include_content=False)])
+# results2 = evaluate_agent(agent2, questions)
+
+# print("Results (without RAG)")
+# print_results(results2)
 
 
