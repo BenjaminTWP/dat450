@@ -23,14 +23,30 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    first_dataset = load_data(args.l1, nr_rows=args.data_limit)
-    first_dataset_train_test_split = train_test_data_split(first_dataset, args.split_size)
-
-    second_dataset = load_data(args.l1, nr_rows=args.data_limit)
-    second_dataset_train_test_split = train_test_data_split(second_dataset, split_size=args.split_size)
+    
 
     if args.run == "tokenizer":
-        print("Creating tokenizer")
+        first_dataset = load_data(args.l1, nr_rows=args.data_limit)
+        first_dataset_train_test_split = train_test_data_split(first_dataset, args.split_size)
+        
+        print("-" * 80)
+        print(f"Dataset for en -> {args.l1}")
+        print(f"The total number of samples in the dataset is: {len(first_dataset_train_test_split["train"]) + len(first_dataset_train_test_split["test"])}\n")
+        print(first_dataset_train_test_split)
+        print("-" * 80)
+        
+        print("\n")
+        second_dataset = load_data(args.l2, nr_rows=args.data_limit)
+        second_dataset_train_test_split = train_test_data_split(second_dataset, split_size=args.split_size)
+        
+        print("-" * 80)
+        print(f"Dataset for en -> {args.l2}")
+        print(f"The total number of samples in the dataset is: {len(second_dataset_train_test_split["train"]) + len(second_dataset_train_test_split["test"])}\n")
+        print(second_dataset_train_test_split)
+        print("-" * 80)
+
+
+        print("\nCreating tokenizer")
         generator = get_training_corpus_generator(
             first_dataset_train_test_split["train"],
             second_dataset_train_test_split["train"]
@@ -44,6 +60,8 @@ if __name__ == "__main__":
         )
 
     elif args.run == "test tokenizer":
+        print("Testing tokenizer")
+
         tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
 
         examples = [

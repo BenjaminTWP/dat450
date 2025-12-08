@@ -2,6 +2,7 @@ from datasets import load_dataset
 
 
 def load_data(target_language="sv", nr_rows=None):
+    print(f"Loading dataset en -> {target_language}")
     url = f"https://huggingface.co/datasets/sentence-transformers/parallel-sentences-jw300/resolve/main/en-{target_language}"
     data_files = {"train": f"{url}/train-00000-of-00001.parquet"}
     dataset = load_dataset("parquet", data_files=data_files, split="train")
