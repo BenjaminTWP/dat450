@@ -14,18 +14,25 @@ def train_test_data_split(data, split_size=0.2, seed=42):
     return shuffled_data.train_test_split(split_size)
 
 
-def get_training_corpus_generator(dataset_1, dataset_2, use_english_from_ds1=True, load_size=1000):
-    dataset = dataset_1["train"]
-    for index in range(0, len(dataset)):
-        samples = dataset[index : index + load_size]
-        if use_english_from_ds1:
-            yield samples["english"]
-        yield samples["non_english"]
+def get_training_corpus_generator(dataset_1, dataset_2, load_size=1000):
+    d1_len = len(dataset_1)
+    d2_len = len(dataset_2)    
+    use_english_from_ds1 = True if d1_len > d2_len else False
 
-    dataset = dataset_2["train"]
-    for index in range(0, len(dataset)):
-        samples = dataset[index : index + load_size]
-        if not use_english_from_ds1:
-            yield samples["english"]
-        yield samples["non_english"]
+    for index in range(0, max(d1_len, d2_len), load_size):
+        upper_slice_idx = index + load_size
+
+        if upper_slice_idx < d1_len:
+            samples = dataset_1[index : upper_slice_idx]
+            yield samples["non_english"]
+
+            if use_english_from_ds1:
+                yield samples["english"]
+
+        if upper_slice_idx < d2_len:
+            samples = dataset_2[index : upper_slice_idx]
+            yield samples["non_english"]
+
+            if not use_english_from_ds1:
+                yield samples["english"]            
 
