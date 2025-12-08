@@ -7,6 +7,9 @@ a1/trained_model/
 a2/vocab
 */trained_model/*
 a3/reuters/*
+a3/keep.txt
+a4/outputs
+*.err*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

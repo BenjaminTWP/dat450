@@ -1,0 +1,110 @@
+
+################################ Step 1: Get the dataset ###############################
+
+Example data:
+
+Question:
+ Is adjustment for reporting heterogeneity necessary in sleep disorders?
+Abstract:
+ Anchoring vignettes are brief texts describing a hypothetical character who illustrates a certain fixed level of a trait under evaluation. This research uses vignettes to elucidate factors associated with sleep disorders in adult Japanese before and after adjustment for reporting heterogeneity in self-reports. This study also evaluates the need for adjusting for reporting heterogeneity in the management of sleep and energy related problems in Japan. We investigated a dataset of 1002 respondents aged 18 years and over from the Japanese World Health Survey, which collected information through face-to-face interview from 2002 to 2003. The ordered probit model and the Compound Hierarchical Ordered Probit (CHOPIT) model, which incorporated anchoring vignettes, were employed to estimate and compare associations of sleep and energy with socio-demographic and life-style factors before and after adjustment for differences in response category cut-points for each individual. The prevalence of self-reported problems with sleep and energy was 53 %. Without correction of cut-point shifts, age, sex, and the number of comorbidities were significantly associated with a greater severity of sleep-related problems. After correction, age, the number of comorbidities, and regular exercise were significantly associated with a greater severity of sleep-related problems; sex was no longer a significant factor. Compared to the ordered probit model, the CHOPIT model provided two changes with a subtle difference in the magnitude of regression coefficients after correction for reporting heterogeneity. Sleep disorders are common in the general adult population of Japan. Correction for reporting heterogeneity using anchoring vignettes is not a necessary tool for proper management of sleep and energy related problems among Japanese adults. Older age, gender differences in communicating sleep-related problems, the presence of multiple morbidities, and regular exercise should be the focus of policies and clinical practice to improve sleep and energy management in Japan.
+
+################################ Step 2: Configure your LangChain LM ###############################
+
+
+The question: 
+ What is electroencephalography?
+
+Answer:
+
+ Answer: Electroencephalography is a technique used to record the electrical activity of the brain using electrodes placed on the scalp.
+
+Answer: yes
+################################ Step 3: Set up the document database ###############################
+
+The embedding is of size is (384,)
+
+One example text chunk is:
+ page_content='mitochondria as playing a critical and early role in developmentally regulated PCD in the lace plant.' metadata={'id': 21645374}
+
+Another example text chunk is:
+ page_content='Assessment of visual acuity depends on the optotypes used for measurement. The ability to recognize different optotypes differs even if their critical details appear under the same visual angle. Since optotypes are evaluated on individuals with good visual acuity and without eye disorders, differences in the lower visual acuity range cannot be excluded. In this study, visual acuity measured with the Snellen E was compared to the Landolt C acuity. 100 patients (age 8 - 90 years, median 60.5 years) with various eye disorders, among them 39 with amblyopia due to strabismus, and 13 healthy' metadata={'id': 16418930}
+
+Example question and some retrievals (question = 'What is programmed cell death?'):
+
+* [SIM=1.007796] Programmed cell death (PCD) is the regulated death of cells within an organism. The lace plant (Aponogeton madagascariensis) produces perforations in its leaves through PCD. The leaves of the plant consist of a latticework of longitudinal and transverse veins enclosing areoles. PCD occurs in the cells at the center of these areoles and progresses outwards, stopping approximately five cells from the vasculature. The role of mitochondria during PCD has been recognized in animals; however, it has been less studied during PCD in plants. The following paper elucidates the role of mitochondrial [{'id': 21645374}]
+* [SIM=1.221575] may represent a novel, physiologically relevant, easily modified, independent, and graded risk factor for death from CHD that could have significant clinical utility. [{'id': 15208005}]
+* [SIM=1.226907] survival, suggesting that early treatment might increase survival. [{'id': 21850494}]
+
+################################ Step 4: Define the full RAG pipeline (OPTION B) ###############################
+
+Retrieved IDs: [26852225, 26852225]
+
+Prompt with context: 
+ Answer the following question with a yes or no. The answer must contain either "Answer: yes" or "Answer: no", not both. 
+
+                  Question: Is adjustment for reporting heterogeneity necessary in sleep disorders?
+                  Context: the number of comorbidities were significantly associated with a greater severity of sleep-related problems. After correction, age, the number of comorbidities, and regular exercise were significantly associated with a greater severity of sleep-related problems; sex was no longer a significant factor. Compared to the ordered probit model, the CHOPIT model provided two changes with a subtle difference in the magnitude of regression coefficients after correction for reporting heterogeneity. Sleep disorders are common in the general adult population of Japan. Correction for reporting
+Anchoring vignettes are brief texts describing a hypothetical character who illustrates a certain fixed level of a trait under evaluation. This research uses vignettes to elucidate factors associated with sleep disorders in adult Japanese before and after adjustment for reporting heterogeneity in self-reports. This study also evaluates the need for adjusting for reporting heterogeneity in the management of sleep and energy related problems in Japan. We investigated a dataset of 1002 respondents aged 18 years and over from the Japanese World Health Survey, which collected information through
+                  
+
+The answer: 
+ 
+
+Based on the context, is adjustment for reporting heterogeneity necessary in sleep disorders?
+
+Answer: yes
+
+################################ Step 5: Evaluate RAG on the dataset ###############################
+
+
+=== Example ===
+Question: Would corrected QT dispersion predict left ventricular hypertrophy in hypertensive patients?
+
+Retrieved documents (context): We explored whether QT corrected dispersion (QTcD) can identify left ventricular hypertrophy (LVH) in hypertensives. We enrolled 100 hypertensive patients (study group) and 30 normotensive subjects (control group). Echocardiography was performed to measure left ventricular mass and left ventricular mass index. Electrocardiogram was performed to measure QTcD. LVH was present in 42 patients (42%) of the study group, none among controls. Hypertensive patients had significantly greater indices of LVH and QTcD compared with controls (p<0.001 for all). Similarly, among hypertensive patients, those
+in hypertensive patients with LVH compared with those without, being strongly correlated with the indices of LVH. A QTcD cut-off value of 60 ms predicted LVH in hypertensive patients with a high sensitivity and specificity.
+
+LM Answer: Answer: no
+
+Answer: no
+
+RAG Answer: 
+
+Answer: yes. The context states that QTcD was strongly correlated with indices of LVH and that a QTcD cut-off value of 6
+================
+
+
+=== Example ===
+Question: Preoperative locoregional staging of gastric cancer: is there a place for magnetic resonance imaging?
+
+Retrieved documents (context): The aim of this study was to prospectively compare the diagnostic performance of magnetic resonance imaging (MRI), multidetector computed tomography (MDCT) and endoscopic ultrasonography (EUS) in the preoperative locoregional staging of gastric cancer. This study had Institutional Review Board approval, and informed consent was obtained from all patients. Fifty-two patients with biopsy-proven gastric cancer underwent preoperative 1.5-T MRI, 64-channel MDCT and EUS. All images were analysed blind, and the results were compared with histopathological findings according to the seventh edition of
+To compare the characteristics and prognoses of gastric cancers by tumor location in Korean and U.S. subjects after curative-intent (R0) resection for gastric cancer (GC). Data were collected for all patients who had undergone R0 resection at one U.S. institution (n = 567) and one South Korean institution (n = 1,620). Patients with gastroesophageal junction tumors or neoadjuvant therapy were excluded. Patient, surgical, and pathologic variables were compared by tumor location. Factors associated with disease-specific survival (DSS) were determined via multivariate analysis. In the Korean
+
+LM Answer: Answer: Yes, there is a place for magnetic resonance imaging in preoperative locoregional staging of gastric cancer, as it can provide detailed soft tissue contrast
+
+RAG Answer: 
+
+Answer: yes. The context indicates that a study was conducted to prospectively compare the diagnostic performance of magnetic resonance imaging (MRI), multidetector computed tom
+================
+
+
+=== Example ===
+Question: Reporting and interpreting red blood cell morphology: is there discordance between clinical pathologists and clinicians?
+
+Retrieved documents (context): e.g., eccentrocytes. Responses revealed that CPs often do not report RBC-M they consider insignificant, when present in low numbers. Twenty-eight percent of clinicians think CPs review all blood smears while only 19% of CPs report reviewing all smears. Important differences about the clinical relevance of certain RBC-M terms exist between clinicians and CPs. Inclusion of interpretive comments on CBC reports is the clearest way to ensure that RBC-M changes are interpreted as intended by the CP. Reporting practices should be examined critically to improve communication, transparency, and
+Clinical pathologists (CPs) report RBC morphologic (RBC-M) changes to assist clinicians in prioritizing differential diagnoses. However, reporting is subjective, semiquantitative, and potentially biased. Reporting decisions vary among CPs, and reports may not be interpreted by clinicians as intended. The aims of this study were to survey clinicians and CPs about RBC-M terms and their clinical value, and identify areas of agreement and discordance. Online surveys were distributed to small animal clinicians via the Veterinary Information Network and to CPs via the ASVCP listserv. A quiz assessed
+
+LM Answer: Answer: Yes
+
+Answer: yes
+
+RAG Answer:  Answer: yes
+
+Answer: yes
+================
+
+
+For the LM-model:  Acc=0.58, Recall=0.66, Precision=0.66, F1=0.66
+
+For the RAG-model: Acc=0.82, Recall=0.85, Precision=0.86, F1=0.86
+
+The gold document is retrieved with a frequency of 0.9842696629213483
