@@ -94,7 +94,6 @@ def encode_dataset(
             "attention_mask_non_en": non_english["attention_mask"],
         }
 
-    print(os.cpu_count())
     tokenized_dataset = dataset.map(
         encode,
         batched=True,
