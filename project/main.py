@@ -1,7 +1,9 @@
-from data_preprocessing import load_data, train_test_data_split, get_training_corpus_generator
+from data_preprocessing import get_dataset, get_training_corpus_generator
 from argparse import ArgumentParser
-from tokenizer import train_trilingual_tokenizer
-from transformers import AutoTokenizer
+from tokenizer import train_trilingual_tokenizer, encode_dataset
+from datasets import load_from_disk
+from transformers import AutoTokenizer, TrainingArguments
+
 
 
 if __name__ == "__main__":
@@ -20,36 +22,20 @@ if __name__ == "__main__":
     parser.add_argument("--split-size", help="Percentage of test data", default=0.2)
     parser.add_argument("--vocab-size", default=500000)
     parser.add_argument("--model-max-length", default=1028)
+    parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
 
     args = parser.parse_args()
-
     
 
     if args.run == "tokenizer":
-        first_dataset = load_data(args.l1, nr_rows=args.data_limit)
-        first_dataset_train_test_split = train_test_data_split(first_dataset, args.split_size)
         
-        print("-" * 80)
-        print(f"Dataset for en -> {args.l1}")
-        print(f"The total number of samples in the dataset is: {len(first_dataset_train_test_split["train"]) + len(first_dataset_train_test_split["test"])}\n")
-        print(first_dataset_train_test_split)
-        print("-" * 80)
-        
-        print("\n")
-        second_dataset = load_data(args.l2, nr_rows=args.data_limit)
-        second_dataset_train_test_split = train_test_data_split(second_dataset, split_size=args.split_size)
-        
-        print("-" * 80)
-        print(f"Dataset for en -> {args.l2}")
-        print(f"The total number of samples in the dataset is: {len(second_dataset_train_test_split["train"]) + len(second_dataset_train_test_split["test"])}\n")
-        print(second_dataset_train_test_split)
-        print("-" * 80)
-
+        first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
+        second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
 
         print("\nCreating tokenizer")
         generator = get_training_corpus_generator(
-            first_dataset_train_test_split["train"],
-            second_dataset_train_test_split["train"]
+            first_dataset["train"],
+            second_dataset["train"]
         )
 
         train_trilingual_tokenizer(
@@ -74,3 +60,39 @@ if __name__ == "__main__":
             encoding = tokenizer(example)
             print(tokenizer.decode(encoding['input_ids']))
 
+    elif args.run == "encode dataset": 
+        tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
+
+        first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
+        second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
+
+        print("\nStarting data tokenization")
+        first_dataset["train"] = encode_dataset(first_dataset["train"], tokenizer)
+        first_dataset["test"] = encode_dataset(first_dataset["test"], tokenizer)
+
+        second_dataset["train"] = encode_dataset(second_dataset["train"], tokenizer)
+        second_dataset["test"] = encode_dataset(second_dataset["test"], tokenizer)
+
+        print(f"\nSaving the tokenized data under the folder {args.token_ds_out_path}")
+        first_dataset.save_to_disk(args.token_ds_out_path + "first_dataset_tokenized")
+        second_dataset.save_to_disk(args.token_ds_out_path + "second_dataset_tokenized")
+
+
+        
+    elif args.run == "train":
+        print("Loading tokenized datasets")
+        first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
+        second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
+        print("Finished Loading tokenized datasets")
+        
+        print(first_dataset)
+
+        tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
+
+        print(tokenizer.decode(first_dataset["train"][0]["input_ids_en"]))
+        print(tokenizer.decode(first_dataset["train"][0]["input_ids_non_en"]))
+
+        #TODO: Add code for training the model
+
+    else: 
+        raise Exception("The method you tried to call is not implemented")

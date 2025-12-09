@@ -11,6 +11,8 @@ a3/keep.txt
 a4/outputs
 *.err*
 *.json
+*/hf_compatible_trilingual_tokenizer
+*/tokenized_datasets
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
