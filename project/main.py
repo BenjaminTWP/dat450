@@ -2,7 +2,7 @@ from data_preprocessing import get_dataset, get_training_corpus_generator
 from argparse import ArgumentParser
 from tokenizer import train_trilingual_tokenizer, encode_dataset
 from datasets import load_from_disk
-from transformers import AutoTokenizer, TrainingArguments
+from transformers import PreTrainedTokenizerFast, TrainingArguments
 
 
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     elif args.run == "test tokenizer":
         print("Testing tokenizer")
 
-        tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         examples = [
             "Hej jag heter Bertil. Kan du säga mig vem som är tomten?",
@@ -58,10 +58,11 @@ if __name__ == "__main__":
 
         for example in examples:
             encoding = tokenizer(example)
-            print(tokenizer.decode(encoding['input_ids']))
+            decoded_text = tokenizer.decode(encoding["input_ids"])
+            print(decoded_text)
 
     elif args.run == "encode dataset": 
-        tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
         second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
@@ -87,7 +88,7 @@ if __name__ == "__main__":
         
         print(first_dataset)
 
-        tokenizer = AutoTokenizer.from_pretrained(args.token_output_dir)
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         print(tokenizer.decode(first_dataset["train"][0]["input_ids_en"]))
         print(tokenizer.decode(first_dataset["train"][0]["input_ids_non_en"]))

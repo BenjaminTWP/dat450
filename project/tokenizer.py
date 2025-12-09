@@ -2,9 +2,10 @@ from tokenizers import Tokenizer
 from tokenizers.models import BPE
 from tokenizers.trainers import BpeTrainer
 from transformers import PreTrainedTokenizerFast
+from tokenizers.pre_tokenizers import ByteLevel
+from tokenizers.decoders import ByteLevel as ByteLevelDecoder
 
 from tokenizers import(
-    pre_tokenizers,
     normalizers,
     processors
 )
@@ -19,28 +20,32 @@ def train_trilingual_tokenizer(data_generator, save_dir, model_max_length, vocab
 
     tokenizer.normalizer = normalizers.Sequence([
         normalizers.NFD(), 
-        normalizers.Lowercase(), 
     ])
 
-    tokenizer.pre_tokenizer = pre_tokenizers.Sequence([
-        pre_tokenizers.WhitespaceSplit(), 
-        pre_tokenizers.Punctuation()
-    ])
+    tokenizer.pre_tokenizer = ByteLevel(
+        add_prefix_space=True, 
+        trim_offsets=True,
+        use_regex=True
+    )
 
     trainer = BpeTrainer(
         vocab_size=vocab_size,
         special_tokens=[BOS_TOKEN, EOS_TOKEN, UNK_TOKEN, PAD_TOKEN],
     )
 
-    tokenizer.train_from_iterator(data_generator, trainer=trainer)
+    
+    
+    tokenizer.train_from_iterator(data_generator, trainer=trainer)    
 
     bos_token_id = tokenizer.token_to_id(BOS_TOKEN)
     eos_token_id = tokenizer.token_to_id(EOS_TOKEN)
 
     tokenizer.post_processor = processors.TemplateProcessing(
         single=f"{BOS_TOKEN}:0 $A:0 {EOS_TOKEN}:0",
-        special_tokens=[(BOS_TOKEN, bos_token_id), (EOS_TOKEN, eos_token_id)],
+        special_tokens=[(BOS_TOKEN, bos_token_id), (EOS_TOKEN, eos_token_id)]
     )
+
+    tokenizer.decoder = ByteLevelDecoder()
 
     hf_tokenizer = PreTrainedTokenizerFast(
         tokenizer_object=tokenizer,
@@ -76,7 +81,7 @@ def encode_dataset(dataset, tokenizer, padding="longest", truncation="longest_fi
 
         english = english[0]
         non_english = non_english[0]
-        
+
         return {
             "input_ids_en": english["input_ids"],
             "attention_mask_en": english["attention_mask"],
