@@ -23,6 +23,7 @@ if __name__ == "__main__":
     parser.add_argument("--vocab-size", default=500000)
     parser.add_argument("--model-max-length", default=1028)
     parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
+    parser.add_argument("--batch-size", default=32)
 
     args = parser.parse_args()
     
@@ -68,11 +69,11 @@ if __name__ == "__main__":
         second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
 
         print("\nStarting data tokenization")
-        first_dataset["train"] = encode_dataset(first_dataset["train"], tokenizer)
-        first_dataset["test"] = encode_dataset(first_dataset["test"], tokenizer)
+        first_dataset["train"] = encode_dataset(first_dataset["train"], tokenizer, args.batch_size)
+        first_dataset["test"] = encode_dataset(first_dataset["test"], tokenizer, args.batch_size)
 
-        second_dataset["train"] = encode_dataset(second_dataset["train"], tokenizer)
-        second_dataset["test"] = encode_dataset(second_dataset["test"], tokenizer)
+        second_dataset["train"] = encode_dataset(second_dataset["train"], tokenizer, args.batch_size)
+        second_dataset["test"] = encode_dataset(second_dataset["test"], tokenizer, args.batch_size)
 
         print(f"\nSaving the tokenized data under the folder {args.token_ds_out_path}")
         first_dataset.save_to_disk(args.token_ds_out_path + "first_dataset_tokenized")

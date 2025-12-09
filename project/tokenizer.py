@@ -4,6 +4,7 @@ from tokenizers.trainers import BpeTrainer
 from transformers import PreTrainedTokenizerFast
 from tokenizers.pre_tokenizers import ByteLevel
 from tokenizers.decoders import ByteLevel as ByteLevelDecoder
+import os
 
 from tokenizers import(
     normalizers,
@@ -18,9 +19,7 @@ PAD_TOKEN = "<PAD>"
 def train_trilingual_tokenizer(data_generator, save_dir, model_max_length, vocab_size):
     tokenizer = Tokenizer(BPE(unk_token=UNK_TOKEN))
 
-    tokenizer.normalizer = normalizers.Sequence([
-        normalizers.NFD(), 
-    ])
+    tokenizer.normalizer = normalizers.NFD() 
 
     tokenizer.pre_tokenizer = ByteLevel(
         add_prefix_space=True, 
@@ -32,8 +31,6 @@ def train_trilingual_tokenizer(data_generator, save_dir, model_max_length, vocab
         vocab_size=vocab_size,
         special_tokens=[BOS_TOKEN, EOS_TOKEN, UNK_TOKEN, PAD_TOKEN],
     )
-
-    
     
     tokenizer.train_from_iterator(data_generator, trainer=trainer)    
 
@@ -60,7 +57,15 @@ def train_trilingual_tokenizer(data_generator, save_dir, model_max_length, vocab
     hf_tokenizer.save_pretrained(save_dir)
 
 
-def encode_dataset(dataset, tokenizer, padding="longest", truncation="longest_first", max_length=256, return_tensor="pt"):
+def encode_dataset(
+        dataset, 
+        tokenizer,
+        batch_size, 
+        padding="longest", 
+        truncation="longest_first",
+        max_length=256, 
+        return_tensor="pt"
+    ):
 
     def encode(batch):
         english = tokenizer(
@@ -89,11 +94,13 @@ def encode_dataset(dataset, tokenizer, padding="longest", truncation="longest_fi
             "attention_mask_non_en": non_english["attention_mask"],
         }
 
-    
+    print(os.cpu_count())
     tokenized_dataset = dataset.map(
         encode,
         batched=True,
+        batch_size=batch_size,
         remove_columns=["english", "non_english"],
+        num_proc=os.cpu_count()
     )
 
     return tokenized_dataset
