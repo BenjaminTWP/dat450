@@ -3,7 +3,9 @@ from argparse import ArgumentParser
 from tokenizer import train_trilingual_tokenizer, encode_dataset
 from datasets import load_from_disk
 from transformers import PreTrainedTokenizerFast, TrainingArguments
-
+from model import LanguageTransformer
+from model import ModelConfig
+import torch
 
 
 if __name__ == "__main__":
@@ -82,19 +84,43 @@ if __name__ == "__main__":
 
         
     elif args.run == "train":
-        print("Loading tokenized datasets")
+        # print("Loading tokenized datasets")
         first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
         second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
-        print("Finished Loading tokenized datasets")
+        # print("Finished Loading tokenized datasets")
         
-        print(first_dataset)
+        # print(first_dataset)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
-        print(tokenizer.decode(first_dataset["train"][0]["input_ids_en"]))
-        print(tokenizer.decode(first_dataset["train"][0]["input_ids_non_en"]))
+        # print(tokenizer.decode(first_dataset["train"][0]["input_ids_en"]))
+        # print(tokenizer.decode(first_dataset["train"][0]["input_ids_non_en"]))
 
         #TODO: Add code for training the model
+
+        config = ModelConfig(
+                vocab_size=args.vocab_size, 
+                hidden_size=128, 
+                intermediate_size=256, 
+                num_attention_heads=4, 
+                num_hidden_layers=5,
+                rope_theta=2, 
+                hidden_act='silu', 
+                max_position_embeddings=1000, 
+                rms_norm_eps=0.001)
+        language_transformer = LanguageTransformer(config)
+
+        en_test = torch.tensor(first_dataset["train"][0]["input_ids_en"]).unsqueeze(0)
+        non_en_test = torch.tensor(first_dataset["train"][0]["input_ids_non_en"]).unsqueeze(0)
+
+        print(type(en_test))
+        print(en_test.shape)
+        print(en_test)
+
+
+        result = language_transformer(en_test, non_en_test)
+
+
 
     else: 
         raise Exception("The method you tried to call is not implemented")

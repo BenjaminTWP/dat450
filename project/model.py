@@ -144,7 +144,7 @@ class DecoderLayer(nn.Module):
         return post_mlp_norm + pre_mlp
 
 
-class Transformer(PreTrainedModel):
+class LanguageTransformer(PreTrainedModel):
     """A language model based on the Transformer architecture."""
     
     config_class = ModelConfig

@@ -1,6 +1,5 @@
 from datasets import load_dataset
 
-
 def _load_data(target_language="sv", nr_rows=None):
     print(f"Loading dataset en -> {target_language}")
     url = f"https://huggingface.co/datasets/sentence-transformers/parallel-sentences-jw300/resolve/main/en-{target_language}"
