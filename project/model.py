@@ -132,7 +132,7 @@ class DecoderLayer(nn.Module):
         self.norm3 = nn.RMSNorm(normalized_shape=config.hidden_size, 
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
-    def forward(self, hidden_states, encoder_hidden_states, rope_rotations):
+    def forward(self, encoder_hidden_states, hidden_states, rope_rotations):
         self_attention_out_norm = self.norm1(self.self_attention(hidden_states, rope_rotations))
         pre_cross_attention = self_attention_out_norm + hidden_states
 
@@ -173,15 +173,22 @@ class Transformer(PreTrainedModel):
         self.post_init()
 
 
-    def forward(self, input_ids):
-        rope_rotations = self.rotary_emb(input_ids) # pass this to all the transformer decoder layers
+    def forward(self, source_lang_ids, target_lang_ids):
+        encoder_rope_rotations = self.rotary_emb(source_lang_ids) # pass this to all the transformer decoder layers
+        decoder_rope_rotations = self.rotary_emb(target_lang_ids)
 
         # TODO: Call embedding, transformer decoder layers, last normalizer, and unembedding.
-        embedded_out = self.embedding(input_ids)
+
+        encoder_embedding = self.encoder_embedding(source_lang_ids)
+        decoder_embedding = self.decoder_embedding(target_lang_ids)
+
+        for encoder in self.encoder_layers:
+            encoder_embedding = encoder(encoder_embedding, encoder_rope_rotations)
+
         for decoder in self.decoder_layers:
-            embedded_out = decoder(embedded_out, rope_rotations)
-        normalized_out = self.normalizer(embedded_out)
-        return self.unembedding(normalized_out)
+            decoder_embedding = decoder(encoder_embedding, decoder_embedding, decoder_rope_rotations)
+        decoder_out_norm = self.normalizer(decoder_embedding)
+        return self.unembedding(decoder_out_norm)
         
 
 #### RoPE implementation (copied and simplified from HuggingFace). ####
