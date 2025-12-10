@@ -27,7 +27,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     
-
+ 
     if args.run == "tokenizer":
         
         first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
