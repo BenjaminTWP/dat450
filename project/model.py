@@ -50,7 +50,7 @@ class Attention(nn.Module):
         super().__init__()
         assert(config.hidden_size % config.num_attention_heads == 0)
         self.config = config
-        self.maked = masked
+        self.masked = masked
         
         self.W_q = nn.Linear(config.hidden_size,config.hidden_size, bias=False)
         self.W_k = nn.Linear(config.hidden_size,config.hidden_size, bias=False)
@@ -62,15 +62,25 @@ class Attention(nn.Module):
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
 
-    def forward(self, hidden_states_encoder, hidden_states_decoder, rope_rotations=None, sanity=False): # forwards cross attention
-        queries = self.W_q(hidden_states_decoder)
+    def forward(self, hidden_states_encoder, hidden_states_decoder=None, rope_rotations=None, sanity=False): # forwards cross attention
+        
+        if hidden_states_decoder is not None:
+            queries = self.W_q(hidden_states_decoder)
+        else:
+            queries = self.W_q(hidden_states_encoder)
+
         keys = self.W_k(hidden_states_encoder)
         values = self.W_v(hidden_states_encoder)
 
         queries = self.norm_queries(queries)
         keys = self.norm_keys(keys)
 
-        b, m = hidden_states.shape[:2]
+        b_q, m_q = queries.shape[:2]
+        b_k, m_k = keys.shape[:2]
+        b_v, m_v = values.shape[:2]
+
+        b, m = queries.shape[:2]
+        
         n_h = self.config.num_attention_heads
         d_h = self.config.hidden_size // n_h
 
@@ -79,22 +89,17 @@ class Attention(nn.Module):
             print(f"#\nShape of key vector is {keys.shape}")
             print(f"#\nShape of query vector is {queries.shape}")
 
-        queries = queries.view(b, m, n_h, d_h).transpose(1, 2)
-        keys = keys.view(b, m, n_h, d_h).transpose(1, 2)
-        values = values.view(b, m, n_h, d_h).transpose(1, 2)
+        queries = queries.view(b_q, m_q, n_h, d_h).transpose(1, 2)
+        keys = keys.view(b_k, m_k, n_h, d_h).transpose(1, 2)
+        values = values.view(b_v, m_v, n_h, d_h).transpose(1, 2)
 
         if rope_rotations is not None:
             queries, keys = apply_rotary_pos_emb(queries, keys, rope_rotations)
 
-        attn_out = nn.functional.scaled_dot_product_attention(queries, keys, values, is_causal=self.Masked)
-        attn_out= attn_out.transpose(1, 2).reshape(b, m, hidden_states.shape[2])
+        attn_out = nn.functional.scaled_dot_product_attention(queries, keys, values, is_causal=self.masked)
+        attn_out= attn_out.transpose(1, 2).reshape(b_q, m_q, hidden_states_encoder.shape[2])
 
         return self.W_o(attn_out)
-
-
-    def forward(self, hidden_states, rope_rotations, sanity=False): # forwards self attention
-        return self.forward(hidden_states, hidden_states, rope_rotations, sanity)
-
 
 
 class EncoderLayer(nn.Module):
@@ -110,7 +115,7 @@ class EncoderLayer(nn.Module):
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
     def forward(self, hidden_states, rope_rotations):
-        attention_out_norm = self.norm1(self.attention(hidden_states, rope_rotations))
+        attention_out_norm = self.norm1(self.attention(hidden_states, rope_rotations=rope_rotations))
         activation_norm = self.norm2(self.mlp(attention_out_norm + hidden_states))
         return attention_out_norm + activation_norm
 
@@ -133,10 +138,10 @@ class DecoderLayer(nn.Module):
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
     def forward(self, encoder_hidden_states, hidden_states, rope_rotations):
-        self_attention_out_norm = self.norm1(self.self_attention(hidden_states, rope_rotations))
+        self_attention_out_norm = self.norm1(self.self_attention(hidden_states, rope_rotations=rope_rotations))
         pre_cross_attention = self_attention_out_norm + hidden_states
 
-        cross_attention_out_norm = self.norm2(self.cross_attention(encoder_hidden_states, pre_cross_attention))
+        cross_attention_out_norm = self.norm2(self.cross_attention(encoder_hidden_states, hidden_states_decoder=pre_cross_attention))
         pre_mlp = cross_attention_out_norm + pre_cross_attention
         
         post_mlp_norm = self.norm3(self.mlp(pre_mlp))
