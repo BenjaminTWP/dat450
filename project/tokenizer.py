@@ -61,41 +61,20 @@ def encode_dataset(
         dataset, 
         tokenizer,
         batch_size, 
-        padding="longest", 
         truncation="longest_first",
         max_length=256, 
-        return_tensor="pt"
     ):
 
-    def encode(batch):
-        english = tokenizer(
+    def encode_batch(batch):
+        return tokenizer(
             batch["english"],
-            padding=padding,
+            text_target=batch["non_english"],
             truncation=truncation,
             max_length=max_length,
-            return_tensors=return_tensor,
-        ), 
-
-        non_english = tokenizer(
-            batch["non_english"],
-            padding=padding,
-            truncation=truncation,
-            max_length=max_length,
-            return_tensors=return_tensor,
-        ), 
-
-        english = english[0]
-        non_english = non_english[0]
-
-        return {
-            "input_ids_en": english["input_ids"],
-            "attention_mask_en": english["attention_mask"],
-            "input_ids_non_en": non_english["input_ids"],
-            "attention_mask_non_en": non_english["attention_mask"],
-        }
+        )
 
     tokenized_dataset = dataset.map(
-        encode,
+        encode_batch,
         batched=True,
         batch_size=batch_size,
         remove_columns=["english", "non_english"],
