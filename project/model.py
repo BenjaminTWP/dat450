@@ -2,12 +2,8 @@
 
 import torch
 from torch import nn
-from transformers import (
-    PreTrainedModel, 
-    PretrainedConfig,
-)
-from transformers.modeling_outputs import Seq2SeqLMOutput
-from transformers.generation import GenerationMixin
+from transformers import PreTrainedModel, PretrainedConfig
+
 
 class ModelConfig(PretrainedConfig):
     """Configuration object that stores hyperparameters that define the Transformer language model."""
@@ -82,6 +78,8 @@ class Attention(nn.Module):
         b_q, m_q = queries.shape[:2]
         b_k, m_k = keys.shape[:2]
         b_v, m_v = values.shape[:2]
+
+        b, m = queries.shape[:2]
         
         n_h = self.config.num_attention_heads
         d_h = self.config.hidden_size // n_h
@@ -108,6 +106,7 @@ class EncoderLayer(nn.Module):
     """A complete Transformer encoder layer."""
     def __init__(self, config):
         super().__init__()
+        # TODO: set up attention, MLP, and normalizers here.
         self.attention = Attention(config, False) # unmasked self attention
         self.mlp = MLP(config)
         self.norm1 = nn.RMSNorm(normalized_shape=config.hidden_size, 
@@ -126,6 +125,7 @@ class DecoderLayer(nn.Module):
     """A complete Transformer decoder layer."""
     def __init__(self, config):
         super().__init__()
+        # TODO: set up attention, MLP, and normalizers here.
         self.self_attention = Attention(config, True) # masked self attention
         self.cross_attention = Attention(config, False) # unmasked cross attention
 
@@ -148,15 +148,8 @@ class DecoderLayer(nn.Module):
 
         return post_mlp_norm + pre_mlp
 
-def shift_right(input_ids, decoder_start_token_id, pad_token_id):
-    shifted = input_ids.new_zeros(input_ids.shape)
-    shifted[:, 1:] = input_ids[:, :-1]
-    shifted[:, 0] = decoder_start_token_id
-    shifted.masked_fill_(shifted == -100, pad_token_id)
-    return shifted
 
-
-class LanguageTransformerForCausalLM(PreTrainedModel, GenerationMixin):
+class LanguageTransformer(PreTrainedModel):
     """A language model based on the Transformer architecture."""
     
     config_class = ModelConfig
@@ -165,7 +158,7 @@ class LanguageTransformerForCausalLM(PreTrainedModel, GenerationMixin):
         super().__init__(config)
 
         self.rotary_emb = RotaryEmbedding(config)
-
+        # TODO: Set up the other components here.
         self.encoder_embedding = nn.Embedding(num_embeddings=config.vocab_size,
                                             embedding_dim=config.hidden_size)
         self.decoder_embedding = nn.Embedding(num_embeddings=config.vocab_size,
@@ -174,54 +167,33 @@ class LanguageTransformerForCausalLM(PreTrainedModel, GenerationMixin):
                                      eps=config.rms_norm_eps,
                                      elementwise_affine=True)
         self.unembedding = nn.Linear(in_features=config.hidden_size, out_features=config.vocab_size)
-
+        # TODO: put all transformer decoder layers in a ModuleList.
         self.encoder_layers = nn.ModuleList([
             EncoderLayer(config) for i in range(config.num_hidden_layers)
         ])
         self.decoder_layers = nn.ModuleList([
             DecoderLayer(config) for i in range(config.num_hidden_layers)
         ])
-
+        # This line should be called after you have set up all components.
         self.post_init()
 
 
-    def forward(
-        self,
-        input_ids=None,
-        decoder_input_ids=None,
-        labels=None,
-        past_key_values=None,
-        use_cache=None,
-        **kwargs
-    ):
-        # If decoder_input_ids are used then this means that we are in generation
-        if decoder_input_ids is None:
-            if labels is not None:
-                decoder_input_ids = shift_right(
-                    labels,
-                    self.config.decoder_start_token_id,
-                    self.config.pad_token_id,
-                )
-            else:
-                raise ValueError("Need decoder_input_ids or labels")
+    def forward(self, source_lang_ids, target_lang_ids):
+        encoder_rope_rotations = self.rotary_emb(source_lang_ids) # pass this to all the transformer decoder layers
+        decoder_rope_rotations = self.rotary_emb(target_lang_ids)
 
+        # TODO: Call embedding, transformer decoder layers, last normalizer, and unembedding.
 
-        encoder_rope_rotations = self.rotary_emb(input_ids) # pass this to all the transformer decoder layers
-        decoder_rope_rotations = self.rotary_emb(decoder_input_ids)
-
-        encoder_embedding = self.encoder_embedding(input_ids)
-        decoder_embedding = self.decoder_embedding(decoder_input_ids)
+        encoder_embedding = self.encoder_embedding(source_lang_ids)
+        decoder_embedding = self.decoder_embedding(target_lang_ids)
 
         for encoder in self.encoder_layers:
             encoder_embedding = encoder(encoder_embedding, encoder_rope_rotations)
 
         for decoder in self.decoder_layers:
             decoder_embedding = decoder(encoder_embedding, decoder_embedding, decoder_rope_rotations)
-       
         decoder_out_norm = self.normalizer(decoder_embedding)
-        logits = self.unembedding(decoder_out_norm)
-       
-        return Seq2SeqLMOutput(logits=logits)
+        return self.unembedding(decoder_out_norm)
         
 
 #### RoPE implementation (copied and simplified from HuggingFace). ####
@@ -270,3 +242,4 @@ class RotaryEmbedding(nn.Module):
             cos = emb.cos()
             sin = emb.sin()
             return cos, sin
+

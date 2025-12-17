@@ -2,6 +2,7 @@ from data_preprocessing import get_dataset, get_training_corpus_generator
 from argparse import ArgumentParser
 from tokenizer import train_trilingual_tokenizer, encode_dataset
 from datasets import load_from_disk
+from trainer import TrainingArguments, ProjectTrainer
 from transformers import (
     PreTrainedTokenizerFast, 
     GenerationConfig, 
@@ -10,7 +11,7 @@ from transformers import (
     Seq2SeqTrainingArguments,
 )
 
-from model import LanguageTransformerForCausalLM
+from model import LanguageTransformer
 from model import ModelConfig
 import torch
 
@@ -29,7 +30,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--data-limit", default=None)
     parser.add_argument("--split-size", help="Percentage of test data", default=0.2)
-    parser.add_argument("--vocab-size", default=500000)
+    parser.add_argument("--vocab-size", default=50000)
     parser.add_argument("--model-max-length", default=1028)
     parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
     parser.add_argument("--batch-size", default=32)
@@ -96,7 +97,7 @@ if __name__ == "__main__":
         second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
         print("Finished Loading tokenized datasets")
         
-
+       
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         #TODO: Add code for training the model
@@ -105,8 +106,8 @@ if __name__ == "__main__":
 
         config = ModelConfig(
                 vocab_size=args.vocab_size, 
-                hidden_size=128, 
-                intermediate_size=256, 
+                hidden_size=256, 
+                intermediate_size=512, 
                 num_attention_heads=4, 
                 num_hidden_layers=5,
                 rope_theta=2, 
@@ -114,68 +115,32 @@ if __name__ == "__main__":
                 max_position_embeddings=1000, 
                 rms_norm_eps=0.001)
         
-        model = LanguageTransformerForCausalLM(config).to(device)
+        model = LanguageTransformer(config)
+
+        training_args = TrainingArguments(lr=0.001, epochs=3, batch_size=32)
+
+        project_trainer = ProjectTrainer(model=model, args=training_args, dataset=first_dataset, tokenizer=tokenizer)
+
+        project_trainer.train()
 
 
-        data_collator = DataCollatorForSeq2Seq(tokenizer, model=model)
-        #batch = data_collator([first_dataset["train"][i] for i in range(1, 3)])
-        batch = data_collator([first_dataset["train"][0]])
+    elif args.run == "params":
 
-        # Show the prompt in the source language
-        print("\nThe following is the source language")
-        print(tokenizer.decode(batch["input_ids"].squeeze(0)))
-
-        # Show the prompt in the target language
-        print("\nThe following is the target language")
-        print(tokenizer.decode(batch["labels"].squeeze(0)))
-
-
-        generation_config = GenerationConfig(
-            max_new_tokens=30
-        )
-
-        training_config = Seq2SeqTrainingArguments(
-            output_dir="model_checkpoints",
-            eval_strategy="epoch",
-            per_device_train_batch_size=16,
-            per_device_eval_batch_size=16,
-            learning_rate=0.01,
-            num_train_epochs=1,
-            logging_strategy="steps",
-            sortish_sampler=True,
-            predict_with_generate=True,
-            dataloader_num_workers=4,
-            generation_config=generation_config,
-            save_strategy="best",
-            metric_for_best_model="loss",
-            greater_is_better=False,
-            neftune_noise_alpha=0.1
-        )
-
-        trainer = Seq2SeqTrainer(
-            model=model, 
-            args=training_config,
-            data_collator=data_collator,
-            train_dataset=first_dataset["train"],
-            eval_dataset=first_dataset["test"]
-        )
-
-
-        en_tokens = torch.tensor(first_dataset["train"][0]["input_ids"]).unsqueeze(0).to(device)
-        non_en_tokens = torch.tensor(first_dataset["train"][0]["labels"]).unsqueeze(0).to(device)
-        bos_decoder_tensor = torch.tensor(tokenizer.encode("Detta är ett test för att kolla om...")).unsqueeze(0).to(device)
+        config = ModelConfig(
+                vocab_size=args.vocab_size, 
+                hidden_size=256, 
+                intermediate_size=512, 
+                num_attention_heads=4, 
+                num_hidden_layers=5,
+                rope_theta=2, 
+                hidden_act='silu', 
+                max_position_embeddings=1000, 
+                rms_norm_eps=0.001)
         
-        # TODO: The generate method does not generate for the target language, rather it generates 
-        # for the source language. Has to be updated before we train the model
+        model = LanguageTransformer(config)
+        total_params = sum(p.numel() for p in model.parameters())
+        print("Total number of parameters in the model: ", total_params)
 
-        print("\nGenerating output")
-        output_ids = model.generate(
-            input_ids=en_tokens,
-            decoder_input_ids=non_en_tokens[:, :5],
-            generation_config=generation_config
-        )
-        
-        print(tokenizer.decode(output_ids.squeeze(0)))
 
     else: 
         raise Exception("The method you tried to call is not implemented")
