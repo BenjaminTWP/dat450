@@ -11,8 +11,7 @@ from transformers import (
     Seq2SeqTrainingArguments,
 )
 
-from model import LanguageTransformer
-from model import ModelConfig
+from model import LanguageTransformer, ModelConfig, translate_sentence
 import torch
 
 
@@ -101,8 +100,8 @@ if __name__ == "__main__":
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         #TODO: Add code for training the model
-        device = "cuda" if torch.cuda.is_available() else "cpu",
-        device = device[0]
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
 
         config = ModelConfig(
                 vocab_size=args.vocab_size, 
@@ -140,6 +139,21 @@ if __name__ == "__main__":
         model = LanguageTransformer(config)
         total_params = sum(p.numel() for p in model.parameters())
         print("Total number of parameters in the model: ", total_params)
+
+
+    
+    elif args.run == "gen":
+        source_sentence = input("Welcome to ChatGBG, what do you want to translate? \n - ")
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        model = LanguageTransformer.from_pretrained("trained_model").to(device)
+
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+
+        translation = translate_sentence(model, source_sentence, tokenizer, device, max_length=50)
+
+        print(translation)
 
 
     else: 
