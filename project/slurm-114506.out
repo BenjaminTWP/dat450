@@ -1,0 +1,27 @@
+Loading tokenized datasets
+Finished Loading tokenized datasets
+Initialized new model
+Device: cuda
+At epoch 0, batch 0, loss = 10.835
+At epoch 0, batch 1500, loss = 4.584
+At epoch 0, batch 3000, loss = 4.080
+At epoch 0, batch 4500, loss = 3.831
+At epoch 0, batch 6000, loss = 4.190
+At epoch 0, batch 7500, loss = 4.059
+At epoch 0, batch 9000, loss = 4.068
+At epoch 0, batch 10500, loss = 3.801
+At epoch 0, batch 12000, loss = 3.582
+At epoch 0, batch 13500, loss = 3.721
+At epoch 0, batch 15000, loss = 3.710
+At epoch 0, batch 16500, loss = 3.603
+At epoch 0, batch 18000, loss = 3.739
+At epoch 0, batch 19500, loss = 3.439
+At epoch 0, batch 21000, loss = 3.698
+At epoch 0, batch 22500, loss = 3.497
+At epoch 0, batch 24000, loss = 3.772
+#
+Perplexity for the epoch is: 36.639 and the loss is 4646.474
+#
+
+#Saving to ..
+#

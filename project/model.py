@@ -244,12 +244,10 @@ class RotaryEmbedding(nn.Module):
             return cos, sin
 
 
-
-def translate_sentence(model, prompt, tokenizer, device, max_length=50):
+def translate_tokens(model, encoding, tokenizer, device, max_length=50):
 
     target_lang_ids = torch.tensor([tokenizer.bos_token_id]).unsqueeze(0).to(device)
-
-    encoding = tokenizer(prompt)
+    
     source_lang_ids = torch.tensor(encoding['input_ids']).unsqueeze(0).to(device)
     
     for _ in range(max_length):
@@ -265,5 +263,12 @@ def translate_sentence(model, prompt, tokenizer, device, max_length=50):
 
 
     return tokenizer.decode(target_lang_ids.squeeze(0), skip_special_tokens=True)
+
+
+def translate_sentence(model, prompt, tokenizer, device, max_length=50):
+
+    encoding = tokenizer(prompt)
+
+    return translate_tokens(model, encoding, tokenizer, device, max_length=max_length)
 
 

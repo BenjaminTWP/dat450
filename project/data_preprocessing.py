@@ -1,4 +1,4 @@
-from datasets import load_dataset
+from datasets import load_dataset, concatenate_datasets
 
 def mapping(sample):
     tmp = sample["translation"]
@@ -14,11 +14,16 @@ def mapping(sample):
 
 
 def _load_data(target_language="sv", nr_rows=None):
-    print(f"Loading dataset en -> {target_language}")
-    url = f"https://huggingface.co/datasets/Helsinki-NLP/opus-100/resolve/main/en-it"
-    data_files = {"train": f"{url}/train-00000-of-00001.parquet"}
-    dataset = load_dataset("parquet", data_files=data_files, split="train")
+    url = f"https://huggingface.co/datasets/Helsinki-NLP/europarl/resolve/main/en-{target_language}"
+    data_files_p1 = {"train": f"{url}/train-00000-of-00002.parquet"}
+    dataset_p1 = load_dataset("parquet", data_files=data_files_p1, split="train")
+
+    data_files_p2 = {"train": f"{url}/train-00001-of-00002.parquet"}
+    dataset_p2 = load_dataset("parquet", data_files=data_files_p2, split="train")
+
+    dataset = concatenate_datasets([dataset_p1, dataset_p2])
     dataset = dataset.map(mapping, remove_columns=["translation"])
+    
     if nr_rows:
         return dataset.select(range(int(nr_rows)))
     return dataset

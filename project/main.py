@@ -12,8 +12,9 @@ from transformers import (
 )
 import evaluate
 
-from model import LanguageTransformer, ModelConfig, translate_sentence
+from model import LanguageTransformer, ModelConfig, translate_sentence, translate_tokens
 import torch
+from tqdm import tqdm
 
 
 if __name__ == "__main__":
@@ -123,7 +124,7 @@ if __name__ == "__main__":
             model = LanguageTransformer(config)
             print("Initialized new model")
 
-        training_args = TrainingArguments(lr=0.001, epochs=4, batch_size=32)
+        training_args = TrainingArguments(lr=0.001, epochs=10, batch_size=32)
 
         project_trainer = ProjectTrainer(model=model, args=training_args, dataset=first_dataset, tokenizer=tokenizer)
 
@@ -175,23 +176,28 @@ if __name__ == "__main__":
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        model = LanguageTransformer.from_pretrained("trained_model_6ep_sv").to(device)
+        model = LanguageTransformer.from_pretrained("trained_model_e1_sv").to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         sacrebleu = evaluate.load("sacrebleu")
+        chrf = evaluate.load("chrf")
 
-        for data_pair in eval_dataset:
 
-            print(data_pair)
+        count = 0
+        for data_pair in tqdm(eval_dataset):
 
-            true_eng = data_pair["english"]
-            non_eng = data_pair["non_english"]
+            true_tokens = data_pair["labels"]
+            true_tokens = true_tokens[1:] # removes BOS
+            if true_tokens[-1] == tokenizer.eos_token_id: # removes potential EOS
+                true_tokens = true_tokens[:-1]
 
-            gen_eng = translate_sentence(model, non_eng, tokenizer, device, max_length=50)
+            true_eng = tokenizer.decode(true_tokens, skip_speical_tokens=True)
 
-            print("true: ", true_eng)
-            print("pred: ", gen_eng)
+            gen_eng = translate_tokens(model, data_pair, tokenizer, device, max_length=50)
+
+            # print("true: ", true_eng)
+            # print("pred: ", gen_eng)
 
 
             sacrebleu.add_batch(
@@ -199,11 +205,22 @@ if __name__ == "__main__":
                 references=[[true_eng]]
             )
 
-            break
+            chrf.add_batch(
+                predictions=[gen_eng],
+                references=[[true_eng]]
+            )
+
+            count += 1
+            if count >10:
+                break
 
         sacrebleu_result = sacrebleu.compute()
+        chrf_result = chrf.compute()
 
-        print(sacrebleu_result["score"])
+        print("sacrebleu: ", sacrebleu_result["score"])
+        print("CHRF: ", chrf_result["score"])
+
+
 
 
 
