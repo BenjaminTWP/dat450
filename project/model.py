@@ -247,21 +247,20 @@ class RotaryEmbedding(nn.Module):
 
 def translate_sentence(model, prompt, tokenizer, device, max_length=50):
 
-    target_lang_ids = torch.tensor(tokenizer.bos_token_id).unsqueeze(0).to(device)
+    target_lang_ids = torch.tensor([tokenizer.bos_token_id]).unsqueeze(0).to(device)
 
-    print(target_lang_ids)
-
+    encoding = tokenizer(prompt)
+    source_lang_ids = torch.tensor(encoding['input_ids']).unsqueeze(0).to(device)
+    
     for _ in range(max_length):
-        encoding = tokenizer(prompt)
-        source_lang_ids = encoding['input_ids'].to(device)
 
         logits = model(source_lang_ids, target_lang_ids).squeeze(0)
 
-        next_token = torch.argmax(logits, dim=1).iloc[-1, 0]
+        next_token = torch.argmax(logits, dim=1)[-1].unsqueeze(0).unsqueeze(0)
 
-        target_lang_ids = torch.cat((target_lang_ids, next_token))
+        target_lang_ids = torch.cat((target_lang_ids, next_token), dim=1)
        
-        if next_token == tokenizer.tokenizer.eos_token_id:
+        if next_token == tokenizer.eos_token_id:
             break
 
 
