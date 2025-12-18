@@ -67,8 +67,8 @@ def encode_dataset(
 
     def encode_batch(batch):
         return tokenizer(
-            batch["english"],
-            text_target=batch["non_english"],
+            batch["non_english"],
+            text_target=batch["english"],
             truncation=truncation,
             max_length=max_length,
         )

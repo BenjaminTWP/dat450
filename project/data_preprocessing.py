@@ -1,10 +1,24 @@
 from datasets import load_dataset
 
+def mapping(sample):
+    tmp = sample["translation"]
+    return_dict = {}
+
+    for key, value in tmp.items():
+        if key != "en":
+            return_dict["non_english"] = value
+        else:
+            return_dict["english"] = value
+
+    return return_dict
+
+
 def _load_data(target_language="sv", nr_rows=None):
     print(f"Loading dataset en -> {target_language}")
-    url = f"https://huggingface.co/datasets/sentence-transformers/parallel-sentences-jw300/resolve/main/en-{target_language}"
+    url = f"https://huggingface.co/datasets/Helsinki-NLP/opus-100/resolve/main/en-it"
     data_files = {"train": f"{url}/train-00000-of-00001.parquet"}
     dataset = load_dataset("parquet", data_files=data_files, split="train")
+    dataset = dataset.map(mapping, remove_columns=["translation"])
     if nr_rows:
         return dataset.select(range(int(nr_rows)))
     return dataset
