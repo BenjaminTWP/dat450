@@ -10,6 +10,7 @@ from transformers import (
     Seq2SeqTrainer,
     Seq2SeqTrainingArguments,
 )
+import evaluate
 
 from model import LanguageTransformer, ModelConfig, translate_sentence
 import torch
@@ -33,6 +34,7 @@ if __name__ == "__main__":
     parser.add_argument("--model-max-length", default=1028)
     parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
     parser.add_argument("--batch-size", default=32)
+    parser.add_argument("--load-model-dir", default=None)
 
     args = parser.parse_args()
     
@@ -102,21 +104,26 @@ if __name__ == "__main__":
         #TODO: Add code for training the model
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-
-        config = ModelConfig(
-                vocab_size=args.vocab_size, 
-                hidden_size=256, 
-                intermediate_size=512, 
-                num_attention_heads=4, 
-                num_hidden_layers=5,
-                rope_theta=2, 
-                hidden_act='silu', 
-                max_position_embeddings=1000, 
-                rms_norm_eps=0.001)
+        if args.load_model_dir:
+            model = LanguageTransformer.from_pretrained(args.load_model_dir)
+            print(f"Model loaded from {args.load_model_dir}")
         
-        model = LanguageTransformer(config)
+        else:   
+            config = ModelConfig(
+                    vocab_size=args.vocab_size, 
+                    hidden_size=256, 
+                    intermediate_size=512, 
+                    num_attention_heads=4, 
+                    num_hidden_layers=5,
+                    rope_theta=2, 
+                    hidden_act='silu', 
+                    max_position_embeddings=1000, 
+                    rms_norm_eps=0.001)
+            
+            model = LanguageTransformer(config)
+            print("Initialized new model")
 
-        training_args = TrainingArguments(lr=0.001, epochs=3, batch_size=32)
+        training_args = TrainingArguments(lr=0.001, epochs=4, batch_size=32)
 
         project_trainer = ProjectTrainer(model=model, args=training_args, dataset=first_dataset, tokenizer=tokenizer)
 
@@ -147,13 +154,60 @@ if __name__ == "__main__":
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        model = LanguageTransformer.from_pretrained("trained_model").to(device)
+        model = LanguageTransformer.from_pretrained("trained_model_6ep_sv").to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         translation = translate_sentence(model, source_sentence, tokenizer, device, max_length=50)
 
         print(translation)
+
+
+    elif args.run == "eval":
+
+        print("Loading tokenized datasets")
+        first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
+        second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
+    
+        eval_dataset = first_dataset["test"]
+
+        print("Finished Loading tokenized datasets")
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+
+        model = LanguageTransformer.from_pretrained("trained_model_6ep_sv").to(device)
+
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+
+        sacrebleu = evaluate.load("sacrebleu")
+
+        for data_pair in eval_dataset:
+
+            print(data_pair)
+
+            true_eng = data_pair["english"]
+            non_eng = data_pair["non_english"]
+
+            gen_eng = translate_sentence(model, non_eng, tokenizer, device, max_length=50)
+
+            print("true: ", true_eng)
+            print("pred: ", gen_eng)
+
+
+            sacrebleu.add_batch(
+                predictions=[gen_eng],
+                references=[[true_eng]]
+            )
+
+            break
+
+        sacrebleu_result = sacrebleu.compute()
+
+        print(sacrebleu_result["score"])
+
+
+
+
 
 
     else: 

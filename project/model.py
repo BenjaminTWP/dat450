@@ -264,6 +264,6 @@ def translate_sentence(model, prompt, tokenizer, device, max_length=50):
             break
 
 
-    return tokenizer.decode(target_lang_ids.squeeze(0))
+    return tokenizer.decode(target_lang_ids.squeeze(0), skip_special_tokens=True)
 
 
