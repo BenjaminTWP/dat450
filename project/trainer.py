@@ -23,7 +23,7 @@ class TrainingArguments:
 class ProjectTrainer:
     """A minimal implementation similar to a Trainer from the HuggingFace library."""
 
-    def __init__(self, model, args, dataset, tokenizer):
+    def __init__(self, model, args, dataset, tokenizer, output_dir):
         """Set up the trainer.
            
            Args:
@@ -39,6 +39,7 @@ class ProjectTrainer:
         self.train_dataset = dataset["train"]
         self.eval_dataset = dataset["test"]
         self.tokenizer = tokenizer
+        self.output_dir = output_dir
 
         assert(args.optim == 'adamw_torch')
         assert(args.eval_strategy == 'epoch')
@@ -105,8 +106,8 @@ class ProjectTrainer:
 
             self.compute_perplexity(val_loader, loss_func, device) # computes per epoch now
 
-        print(f'\n#Saving to {args.output_dir}.\n#')
-        self.model.save_pretrained("trained_model")
+        print(f'\n#Saving to {self.output_dir}.\n#')
+        self.model.save_pretrained(f"{self.output_dir}")
     
 
     def compute_perplexity(self, val_loader, loss_func, device):
