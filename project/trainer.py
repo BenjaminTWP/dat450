@@ -90,7 +90,13 @@ class ProjectTrainer:
                 decoder_input = decoder_input.masked_fill(decoder_input == -100, self.tokenizer.pad_token_id).to(device)
                 ground_truth = target_ids[:, 1:].to(device)
 
-                logit_results = self.model(source_lang_ids=encoder_input, target_lang_ids=decoder_input)
+                attention_mask = batch["attention_mask"].to(device)
+
+                logit_results = self.model(
+                    source_lang_ids=encoder_input, 
+                    attention_mask=attention_mask,
+                    target_lang_ids=decoder_input
+                )
 
                 #       compute the loss for the model output and Y
                 loss = loss_func(logit_results.reshape(-1, logit_results.size(-1)), ground_truth.reshape(-1))

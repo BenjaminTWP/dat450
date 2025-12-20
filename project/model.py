@@ -62,7 +62,7 @@ class Attention(nn.Module):
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
 
-    def forward(self, hidden_states_encoder, hidden_states_decoder=None, rope_rotations=None, sanity=False): # forwards cross attention
+    def forward(self, hidden_states_encoder, attention_mask=None, hidden_states_decoder=None, rope_rotations=None, sanity=False): # forwards cross attention
         
         if hidden_states_decoder is not None:
             queries = self.W_q(hidden_states_decoder)
@@ -78,8 +78,6 @@ class Attention(nn.Module):
         b_q, m_q = queries.shape[:2]
         b_k, m_k = keys.shape[:2]
         b_v, m_v = values.shape[:2]
-
-        b, m = queries.shape[:2]
         
         n_h = self.config.num_attention_heads
         d_h = self.config.hidden_size // n_h
@@ -96,7 +94,10 @@ class Attention(nn.Module):
         if rope_rotations is not None:
             queries, keys = apply_rotary_pos_emb(queries, keys, rope_rotations)
 
-        attn_out = nn.functional.scaled_dot_product_attention(queries, keys, values, is_causal=self.masked)
+        if attention_mask is not None:
+            attention_mask = attention_mask.bool().unsqueeze(1).unsqueeze(2)
+
+        attn_out = nn.functional.scaled_dot_product_attention(queries, keys, values, attn_mask=attention_mask, is_causal=self.masked)
         attn_out= attn_out.transpose(1, 2).reshape(b_q, m_q, hidden_states_encoder.shape[2])
 
         return self.W_o(attn_out)
@@ -106,7 +107,7 @@ class EncoderLayer(nn.Module):
     """A complete Transformer encoder layer."""
     def __init__(self, config):
         super().__init__()
-        # TODO: set up attention, MLP, and normalizers here.
+
         self.attention = Attention(config, False) # unmasked self attention
         self.mlp = MLP(config)
         self.norm1 = nn.RMSNorm(normalized_shape=config.hidden_size, 
@@ -114,9 +115,13 @@ class EncoderLayer(nn.Module):
         self.norm2 = nn.RMSNorm(normalized_shape=config.hidden_size, 
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
-    def forward(self, hidden_states, rope_rotations):
-        attention_out_norm = self.norm1(self.attention(hidden_states, rope_rotations=rope_rotations))
-        activation_norm = self.norm2(self.mlp(attention_out_norm + hidden_states))
+    def forward(self, hidden_states, attention_mask, rope_rotations):
+        attention_out_norm = self.norm1(
+            self.attention(hidden_states, attention_mask, rope_rotations=rope_rotations)
+        )
+        activation_norm = self.norm2(
+            self.mlp(attention_out_norm + hidden_states)
+        )
         return attention_out_norm + activation_norm
 
 
@@ -125,7 +130,7 @@ class DecoderLayer(nn.Module):
     """A complete Transformer decoder layer."""
     def __init__(self, config):
         super().__init__()
-        # TODO: set up attention, MLP, and normalizers here.
+
         self.self_attention = Attention(config, True) # masked self attention
         self.cross_attention = Attention(config, False) # unmasked cross attention
 
@@ -137,14 +142,22 @@ class DecoderLayer(nn.Module):
         self.norm3 = nn.RMSNorm(normalized_shape=config.hidden_size, 
                                eps=config.rms_norm_eps, elementwise_affine=True)
 
-    def forward(self, encoder_hidden_states, hidden_states, rope_rotations):
-        self_attention_out_norm = self.norm1(self.self_attention(hidden_states, rope_rotations=rope_rotations))
+    def forward(self, encoder_hidden_states, attention_mask, hidden_states, rope_rotations):
+        self_attention_out_norm = self.norm1(
+            self.self_attention(hidden_states, rope_rotations=rope_rotations)
+        )
+
         pre_cross_attention = self_attention_out_norm + hidden_states
 
-        cross_attention_out_norm = self.norm2(self.cross_attention(encoder_hidden_states, hidden_states_decoder=pre_cross_attention))
+        cross_attention_out_norm = self.norm2(
+            self.cross_attention(encoder_hidden_states, attention_mask=attention_mask, hidden_states_decoder=pre_cross_attention)
+        )
+
         pre_mlp = cross_attention_out_norm + pre_cross_attention
         
-        post_mlp_norm = self.norm3(self.mlp(pre_mlp))
+        post_mlp_norm = self.norm3(
+            self.mlp(pre_mlp)
+        )
 
         return post_mlp_norm + pre_mlp
 
@@ -158,7 +171,7 @@ class LanguageTransformer(PreTrainedModel):
         super().__init__(config)
 
         self.rotary_emb = RotaryEmbedding(config)
-        # TODO: Set up the other components here.
+
         self.encoder_embedding = nn.Embedding(num_embeddings=config.vocab_size,
                                             embedding_dim=config.hidden_size)
         self.decoder_embedding = nn.Embedding(num_embeddings=config.vocab_size,
@@ -167,31 +180,30 @@ class LanguageTransformer(PreTrainedModel):
                                      eps=config.rms_norm_eps,
                                      elementwise_affine=True)
         self.unembedding = nn.Linear(in_features=config.hidden_size, out_features=config.vocab_size)
-        # TODO: put all transformer decoder layers in a ModuleList.
+
         self.encoder_layers = nn.ModuleList([
             EncoderLayer(config) for i in range(config.num_hidden_layers)
         ])
         self.decoder_layers = nn.ModuleList([
             DecoderLayer(config) for i in range(config.num_hidden_layers)
         ])
-        # This line should be called after you have set up all components.
+
         self.post_init()
 
 
-    def forward(self, source_lang_ids, target_lang_ids):
-        encoder_rope_rotations = self.rotary_emb(source_lang_ids) # pass this to all the transformer decoder layers
+    def forward(self, source_lang_ids, attention_mask, target_lang_ids):
+        encoder_rope_rotations = self.rotary_emb(source_lang_ids)
         decoder_rope_rotations = self.rotary_emb(target_lang_ids)
-
-        # TODO: Call embedding, transformer decoder layers, last normalizer, and unembedding.
 
         encoder_embedding = self.encoder_embedding(source_lang_ids)
         decoder_embedding = self.decoder_embedding(target_lang_ids)
 
         for encoder in self.encoder_layers:
-            encoder_embedding = encoder(encoder_embedding, encoder_rope_rotations)
+            encoder_embedding = encoder(encoder_embedding, attention_mask, encoder_rope_rotations)
 
         for decoder in self.decoder_layers:
-            decoder_embedding = decoder(encoder_embedding, decoder_embedding, decoder_rope_rotations)
+            decoder_embedding = decoder(encoder_embedding, attention_mask, decoder_embedding, decoder_rope_rotations)
+
         decoder_out_norm = self.normalizer(decoder_embedding)
         return self.unembedding(decoder_out_norm)
         
@@ -267,6 +279,9 @@ def translate_tokens(model, encoding, tokenizer, device, max_length=50):
 def remove_from_batch(old_tensor, batch_ind):
     return torch.cat((old_tensor[:batch_ind, :], old_tensor[batch_ind+1:, :]), dim=0)
 
+def remove_from_batch(old_tensor, batch_ind):
+    return torch.cat((old_tensor[:batch_ind, :], old_tensor[batch_ind+1:, :]), dim=0)
+
 def translate_tokens_batch(model, source_lang_tokens, tokenizer, device, max_length=50):
 
     batch_size = len(source_lang_tokens)
@@ -312,8 +327,17 @@ def translate_tokens_batch(model, source_lang_tokens, tokenizer, device, max_len
         if len(target_lang_ids) == 0:
             break 
 
+    if len(target_lang_ids) != 0:
+        for i in range(batch_size):
+            if not finished[i]:
+                translated_tokens[i, :min(target_len, 50)] = target_lang_ids[0, :min(target_len, 50)]
+                target_lang_ids = remove_from_batch(target_lang_ids, 0)
+                source_lang_tokens = remove_from_batch(source_lang_tokens, 0)
+                
+
 
     return tokenizer.batch_decode(translated_tokens, skip_special_tokens=True)
+
 
 # def translate_tokens_batch(model, source_lang_tokens, tokenizer, device, max_length=50):
 #     batch_size = len(source_lang_tokens)
