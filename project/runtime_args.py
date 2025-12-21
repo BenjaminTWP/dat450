@@ -13,16 +13,16 @@ def get_args():
     # Dataset arguments
     parser.add_argument("--l1", help="the first language we want to use", default="sv")
     parser.add_argument("--l2", help="the second language we want to use", default="it")
-    parser.add_argument("--data-limit", default=None)
+    parser.add_argument("--data-limit", default=1000000)
     parser.add_argument("--split-size", help="Percentage of test data", default=0.2)
     parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
     
     # Training arguments
-    parser.add_argument("--epochs", default=5)
+    parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--lr", default=0.0001)
     parser.add_argument("--batch-size", default=32)
     parser.add_argument("--save-model-dir", default="trained_model")
-    parser.add_argument("--load-model-dir", default="trained_model_e5_sv_masking")
+    parser.add_argument("--load-model-dir", default=None)
     parser.add_argument("--dataset-load-name", default="sv_en_dataset_tokenized")
 
 

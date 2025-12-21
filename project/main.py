@@ -221,7 +221,7 @@ if __name__ == "__main__":
         model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
         
-        for i in range(len(text_to_translate), 2):
+        for i in range(0, len(text_to_translate), 2):
 
             translation_sv = translate_sentence(model, text_to_translate[i], tokenizer, device, max_length=200)
             translation_it = translate_sentence(model, text_to_translate[i+1], tokenizer, device, max_length=200)

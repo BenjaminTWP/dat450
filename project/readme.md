@@ -63,7 +63,7 @@ Creates a new BPE tokenizer. This is CPU-intensive and does not require a GPU.
 
 **Command:**
 ```bash
-python main.py --run="tokenizer"
+python main.py --run="tokenizer" --data-limit=1000000
 ```
 
 **Optional Arguments:**
@@ -84,7 +84,7 @@ Pre-tokenizes datasets to avoid repeated tokenization during training or evaluat
 
 **Command:**
 ```bash
-python main.py --run="encode dataset"
+python main.py --run="encode dataset" --data-limit=1000000 --token-ds-out-path="tokenized_datasets/"
 ```
 
 **Optional Arguments:**
@@ -104,7 +104,7 @@ Trains the translation model. This is GPU-intensive and recommended to run on a 
 
 **Command:**
 ```bash
-sbatch -p long run.sh --run="train"
+sbatch -p long run.sh --run="train" --dataset-load-name="sv_en_dataset_tokenized" --save-model-dir="my_sv_en_model"
 ```
 
 You can specify additional arguments after `--run="train"` to override defaults.
@@ -138,7 +138,7 @@ Interactive translation generation. **Note:** Cannot run on cluster environments
 
 **Command:**
 ```bash
-python main.py --run="gen"
+python main.py --run="gen" --load-model-dir="my_sv_en_model" --token-output-dir="my_tokenizer"
 ```
 
 **Required Arguments:**
@@ -156,7 +156,7 @@ Evaluates model performance using standard metrics: BLEU, chrF, and COMET.
 
 **Command:**
 ```bash
-sbatch -p long run.sh --run="eval"
+sbatch -p long run.sh --run="eval" --load-model-dir="my_sv_en_model" --dataset-load-name="sv_en_dataset_tokenized"
 ```
 
 **Required Arguments:**
