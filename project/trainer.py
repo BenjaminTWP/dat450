@@ -134,11 +134,10 @@ class ProjectTrainer:
                     attention_mask = batch["attention_mask"].to(device)
 
                     logit_results = self.model(
-                        source_lang_ids=encoder_input, 
+                        source_lang_ids=encoder_input,
                         attention_mask=attention_mask,
                         target_lang_ids=decoder_input
                     )
-
 
                     valid = attention_mask[:, 1:]  # mask for Y to exclude padding tokens
 

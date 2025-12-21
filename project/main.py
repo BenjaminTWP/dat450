@@ -12,7 +12,8 @@ from transformers import (
 )
 import evaluate
 from torch.utils.data import DataLoader
-from model import LanguageTransformer, ModelConfig, translate_sentence, translate_tokens, translate_tokens_batch
+from model import LanguageTransformer, ModelConfig
+from translate import translate_sentence, translate_tokens, translate_tokens_batch
 import torch
 from tqdm import tqdm
 
@@ -126,7 +127,7 @@ if __name__ == "__main__":
 
         training_args = TrainingArguments(lr=0.0001, epochs=5, batch_size=32)
 
-        project_trainer = ProjectTrainer(model=model, args=training_args, dataset=second_dataset, tokenizer=tokenizer, output_dir="trained_model_e5_it")
+        project_trainer = ProjectTrainer(model=model, args=training_args, dataset=second_dataset, tokenizer=tokenizer, output_dir="trained_model_e5_it_masking")
 
         project_trainer.train()
 
@@ -155,68 +156,13 @@ if __name__ == "__main__":
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        model = LanguageTransformer.from_pretrained("trained_model_e10_it").to(device)
+        model = LanguageTransformer.from_pretrained("trained_model_e5_sv_masking").to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         translation = translate_sentence(model, source_sentence, tokenizer, device, max_length=50)
 
         print(translation)
-
-
-    elif args.run == "eval":
-
-        print("Loading tokenized datasets")
-        first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
-        second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
-    
-        eval_dataset = first_dataset["test"]
-
-        print("Finished Loading tokenized datasets")
-
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-
-        model = LanguageTransformer.from_pretrained("trained_model_e10_sv").to(device)
-
-        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
-
-        sacrebleu = evaluate.load("sacrebleu")
-        chrf = evaluate.load("chrf")
-
-
-        count = 0
-        for data_pair in tqdm(eval_dataset):
-
-            true_tokens = data_pair["labels"]
-            
-            true_eng = tokenizer.decode(true_tokens, skip_special_tokens=True)
-
-            gen_eng = translate_tokens(model, data_pair, tokenizer, device, max_length=50)
-
-            # print("true: ", true_eng)
-            # print("pred: ", gen_eng)
-
-
-            sacrebleu.add_batch(
-                predictions=[gen_eng],
-                references=[[true_eng]]
-            )
-
-            chrf.add_batch(
-                predictions=[gen_eng],
-                references=[[true_eng]]
-            )
-
-            count += 1
-            if count >=5:
-                break
-
-        sacrebleu_result = sacrebleu.compute()
-        chrf_result = chrf.compute()
-
-        print("sacrebleu: ", sacrebleu_result["score"])
-        print("CHRF: ", chrf_result["score"])
-
 
 
     elif args.run == "eval_b":
@@ -229,14 +175,14 @@ if __name__ == "__main__":
     
         eval_dataset = first_dataset["test"]
 
-        model = LanguageTransformer.from_pretrained("trained_model_e10_sv").to(device)
+        model = LanguageTransformer.from_pretrained("trained_model_e5_sv_masking").to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         data_collator = DataCollatorForSeq2Seq(tokenizer, model=model)
 
         val_loader = DataLoader(eval_dataset, 
-                                batch_size=5,
+                                batch_size=50,
                                 shuffle=False,
                                 collate_fn=data_collator)
 
@@ -244,22 +190,21 @@ if __name__ == "__main__":
 
         sacrebleu = evaluate.load("sacrebleu")
         chrf = evaluate.load("chrf")
+        comet = evaluate.load('comet', model_name='wmt20-comet-da')
 
         count = 0
-        for batch in val_loader:
+        for batch in tqdm(val_loader):
             
             source_lang_tokens = batch["input_ids"].to(device)
             true_tokens = batch["labels"]
-
-            # true_tokens = true_tokens[:, 1:] # removes BOS
-            
-            #if true_tokens[-1] == tokenizer.eos_token_id: # removes potential EOS
-            #    true_tokens = true_tokens[:-1]
+            attention_mask = batch["attention_mask"].to(device)
 
             true_tokens = true_tokens.masked_fill(true_tokens == -100, tokenizer.pad_token_id).to(device)
+
+            source_sentences =  tokenizer.batch_decode(source_lang_tokens, skip_special_tokens=True)
             true_eng = tokenizer.batch_decode(true_tokens, skip_special_tokens=True)
 
-            gen_eng = translate_tokens_batch(model, source_lang_tokens, tokenizer, device, max_length=50)
+            gen_eng = translate_tokens_batch(model, source_lang_tokens, attention_mask, tokenizer, device, max_length=200)
 
             ref_format = [[sentence] for sentence in true_eng]
 
@@ -273,17 +218,25 @@ if __name__ == "__main__":
                 references=ref_format
             )
 
-            count += 1
-            if count >= 1:
-                break
+            comet.add_batch(
+                sources=source_sentences,
+                predictions=gen_eng,
+                references=true_eng,
+            )
+
+            del source_lang_tokens
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
         sacrebleu_result = sacrebleu.compute()
         chrf_result = chrf.compute()
 
         print("sacrebleu: ", sacrebleu_result["score"])
         print("CHRF: ", chrf_result["score"])
-
-
+        
+        print("Computing comet score. This may take a while")
+        comet_result = comet.compute()
+        print("Comet: ", comet_result["mean_score"])
 
 
     else: 
