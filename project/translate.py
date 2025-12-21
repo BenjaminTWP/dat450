@@ -81,6 +81,7 @@ def translate_tokens_batch(model, source_lang_tokens, attention_mask, tokenizer,
     if len(target_lang_ids) != 0:
         for i in range(batch_size):
             if not finished[i]:
+                target_len = len(target_lang_ids[0])
                 translated_tokens[i, :min(target_len, 50)] = target_lang_ids[0, :min(target_len, 50)]
                 target_lang_ids = remove_from_batch(target_lang_ids, 0)
                 source_lang_tokens = remove_from_batch(source_lang_tokens, 0)

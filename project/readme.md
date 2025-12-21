@@ -51,6 +51,8 @@ source <name_of_venv>/bin/activate
 pip install -r requirements.txt
 ```
 
+Note that you need to change the venv that gets activated in `run.sh` to the name of your venv
+
 ---
 
 ## Usage
@@ -141,7 +143,7 @@ Interactive translation generation. **Note:** Cannot run on cluster environments
 python main.py --run="gen" --load-model-dir="my_sv_en_model" --token-output-dir="my_tokenizer"
 ```
 
-**Required Arguments:**
+**Optional Arguments:**
 
 | Argument | Description |
 |----------|-------------|
@@ -156,10 +158,10 @@ Evaluates model performance using standard metrics: BLEU, chrF, and COMET.
 
 **Command:**
 ```bash
-sbatch -p long run.sh --run="eval" --load-model-dir="my_sv_en_model" --dataset-load-name="sv_en_dataset_tokenized"
+sbatch -p long run.sh --run="eval" --load-model-dir="my_sv_en_model" --dataset-load-name="sv_en_dataset_tokenized" --token-output-dir="my_tokenizer"
 ```
 
-**Required Arguments:**
+**Optional Arguments:**
 
 | Argument | Description |
 |----------|-------------|
@@ -177,13 +179,13 @@ Evaluates and displays sample translations for manual inspection.
 **Command:**
 ```bash
 # Using sbatch
-sbatch run.sh --run="translate examples"
+sbatch run.sh --run="translate examples" --load-model-dir="my_sv_en_model"  --token-output-dir="my_tokenizer"
 
 # Or directly with Python
-python main.py --run="translate examples"
+python main.py --run="translate examples" --load-model-dir="my_sv_en_model"  --token-output-dir="my_tokenizer"
 ```
 
-**Required Arguments:**
+**Optional Arguments:**
 
 | Argument | Description |
 |----------|-------------|
