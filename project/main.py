@@ -1,50 +1,25 @@
 from data_preprocessing import get_dataset, get_training_corpus_generator
-from argparse import ArgumentParser
 from tokenizer import train_trilingual_tokenizer, encode_dataset
 from datasets import load_from_disk
 from trainer import TrainingArguments, ProjectTrainer
-from transformers import (
-    PreTrainedTokenizerFast, 
-    GenerationConfig, 
-    DataCollatorForSeq2Seq, 
-    Seq2SeqTrainer,
-    Seq2SeqTrainingArguments,
-)
+from transformers import PreTrainedTokenizerFast, DataCollatorForSeq2Seq
 import evaluate
 from torch.utils.data import DataLoader
 from model import LanguageTransformer, ModelConfig
-from translate import translate_sentence, translate_tokens, translate_tokens_batch
+from translate import translate_sentence, translate_tokens_batch
 import torch
 from tqdm import tqdm
+from runtime_args import get_args
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-
-
-    parser.add_argument("--run", default="tokenizer")
-    parser.add_argument("--token-output-dir", default="hf_compatible_trilingual_tokenizer")
-
-    # Note that we assume that english is the language we translate from so these are just
-    # the languages we are translating to, i.e we have two datasets en -> sv and en -> it
-    parser.add_argument("--l1", help="the first language we want to use", default="sv")
-    parser.add_argument("--l2", help="the second language we want to use", default="it")
-
-    parser.add_argument("--data-limit", default=None)
-    parser.add_argument("--split-size", help="Percentage of test data", default=0.2)
-    parser.add_argument("--vocab-size", default=50000)
-    parser.add_argument("--model-max-length", default=1028)
-    parser.add_argument("--token-ds-out-path", default="tokenized_datasets/")
-    parser.add_argument("--batch-size", default=32)
-    parser.add_argument("--load-model-dir", default=None)
-
-    args = parser.parse_args()
     
+    args = get_args()
  
     if args.run == "tokenizer":
         
-        first_dataset = get_dataset(args.l1, args.data_limit, args.split_size) # Swedish
-        second_dataset = get_dataset(args.l2, args.data_limit, args.split_size) # Italian
+        first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
+        second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
 
         print("\nCreating tokenizer")
         generator = get_training_corpus_generator(
@@ -58,22 +33,6 @@ if __name__ == "__main__":
             args.model_max_length, 
             args.vocab_size
         )
-
-    elif args.run == "test tokenizer":
-        print("Testing tokenizer")
-
-        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
-
-        examples = [
-            "Hej jag heter Bertil. Kan du säga mig vem som är tomten?",
-            "I have a fat cat",
-            "Che una birra grande, mi piace"
-        ]
-
-        for example in examples:
-            encoding = tokenizer(example)
-            decoded_text = tokenizer.decode(encoding["input_ids"])
-            print(decoded_text)
 
     elif args.run == "encode dataset": 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
@@ -89,21 +48,17 @@ if __name__ == "__main__":
         second_dataset["test"] = encode_dataset(second_dataset["test"], tokenizer, args.batch_size)
 
         print(f"\nSaving the tokenized data under the folder {args.token_ds_out_path}")
-        first_dataset.save_to_disk(args.token_ds_out_path + "first_dataset_tokenized")
-        second_dataset.save_to_disk(args.token_ds_out_path + "second_dataset_tokenized")
-
+        first_dataset.save_to_disk(args.token_ds_out_path + f"{args.l1}_en_dataset_tokenized")
+        second_dataset.save_to_disk(args.token_ds_out_path + f"{args.l2}_en_dataset_tokenized")
 
         
     elif args.run == "train":
         print("Loading tokenized datasets")
-        first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
-        second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
+        dataset = load_from_disk(args.token_ds_out_path + args.dataset_load_name)
         print("Finished Loading tokenized datasets")
-
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
-        #TODO: Add code for training the model
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
         if args.load_model_dir:
@@ -112,22 +67,33 @@ if __name__ == "__main__":
         
         else:   
             config = ModelConfig(
-                    vocab_size=args.vocab_size, 
-                    hidden_size=256, 
-                    intermediate_size=512, 
-                    num_attention_heads=4, 
-                    num_hidden_layers=5,
-                    rope_theta=2, 
-                    hidden_act='silu', 
-                    max_position_embeddings=1000, 
-                    rms_norm_eps=0.001)
+                vocab_size=args.vocab_size, 
+                hidden_size=args.hidden_size, 
+                intermediate_size=args.intermediate_size, 
+                num_attention_heads=args.num_attention_heads, 
+                num_hidden_layers=args.num_hidden_layers,
+                rope_theta=2, 
+                hidden_act='silu', 
+                max_position_embeddings=1000, 
+                rms_norm_eps=args.rms_norm_eps
+            )
             
             model = LanguageTransformer(config)
             print("Initialized new model")
 
-        training_args = TrainingArguments(lr=0.0001, epochs=5, batch_size=32)
+        training_args = TrainingArguments(
+            lr=args.lr,
+            epochs=args.epochs, 
+            batch_size=args.batch_size
+        )
 
-        project_trainer = ProjectTrainer(model=model, args=training_args, dataset=second_dataset, tokenizer=tokenizer, output_dir="trained_model_e5_it_masking")
+        project_trainer = ProjectTrainer(
+            model=model, 
+            args=training_args, 
+            dataset=dataset, 
+            tokenizer=tokenizer, 
+            output_dir=args.save_model_dir
+        )
 
         project_trainer.train()
 
@@ -135,15 +101,16 @@ if __name__ == "__main__":
     elif args.run == "params":
 
         config = ModelConfig(
-                vocab_size=args.vocab_size, 
-                hidden_size=256, 
-                intermediate_size=512, 
-                num_attention_heads=4, 
-                num_hidden_layers=5,
-                rope_theta=2, 
-                hidden_act='silu', 
-                max_position_embeddings=1000, 
-                rms_norm_eps=0.001)
+            vocab_size=args.vocab_size, 
+            hidden_size=args.hidden_size, 
+            intermediate_size=args.intermediate_size, 
+            num_attention_heads=args.num_attention_heads, 
+            num_hidden_layers=args.num_hidden_layers,
+            rope_theta=2, 
+            hidden_act='silu', 
+            max_position_embeddings=1000, 
+            rms_norm_eps=args.rms_norm_eps
+        )
         
         model = LanguageTransformer(config)
         total_params = sum(p.numel() for p in model.parameters())
@@ -156,7 +123,7 @@ if __name__ == "__main__":
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        model = LanguageTransformer.from_pretrained("trained_model_e5_sv_masking").to(device)
+        model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
@@ -165,17 +132,16 @@ if __name__ == "__main__":
         print(translation)
 
 
-    elif args.run == "eval_b":
+    elif args.run == "eval":
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
         print("Loading tokenized datasets")
-        first_dataset = load_from_disk(args.token_ds_out_path + "first_dataset_tokenized")
-        second_dataset = load_from_disk(args.token_ds_out_path + "second_dataset_tokenized")
-    
-        eval_dataset = first_dataset["test"]
+        dataset = load_from_disk(args.token_ds_out_path + args.dataset_load_name)
 
-        model = LanguageTransformer.from_pretrained("trained_model_e5_sv_masking").to(device)
+        eval_dataset = dataset["test"]
+
+        model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
 
         tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
@@ -185,8 +151,6 @@ if __name__ == "__main__":
                                 batch_size=50,
                                 shuffle=False,
                                 collate_fn=data_collator)
-
-        print("Finished Loading tokenized datasets")
 
         sacrebleu = evaluate.load("sacrebleu")
         chrf = evaluate.load("chrf")
@@ -234,9 +198,34 @@ if __name__ == "__main__":
         print("sacrebleu: ", sacrebleu_result["score"])
         print("CHRF: ", chrf_result["score"])
         
-        print("Computing comet score. This may take a while")
+        print("Computing comet score. This may take a while (~20 min using L40s)")
         comet_result = comet.compute()
         print("Comet: ", comet_result["mean_score"])
+
+
+    if args.run == "translate examples":
+
+        text_to_translate = [
+            "Vi har ett möte klockan fem om de ökande kostnaderna for energiproduktionen.",
+            "Abbiamo una riunione alle cinque sull'aumento dei costi della produzione energetica.",
+            "Det kommande mötet kommer äga rum utanför Paris.",
+            "Il prossimo incontro si terrà fuori Parigi.", 
+            "Den punkt du nämnde är mycket relevant för frågan.",
+            "Il punto che hai menzionato è molto rilevante per la domanda"
+        ]
+
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+        
+        for i in range(len(text_to_translate), 2):
+
+            translation_sv = translate_sentence(model, text_to_translate[i], tokenizer, device, max_length=200)
+            translation_it = translate_sentence(model, text_to_translate[i+1], tokenizer, device, max_length=200)
+
+            print(f"Swedish translation: {translation_sv}")
+            print(f"Italian translation: {translation_it}")
+            print("-" * 200)
 
 
     else: 
