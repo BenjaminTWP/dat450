@@ -203,7 +203,10 @@ if __name__ == "__main__":
         print("Comet: ", comet_result["mean_score"])
 
 
-    if args.run == "translate examples":
+    elif args.run == "translate examples":
+        
+        # Note: The translation of these sentences will be incorrect for one language if
+        # the model has not been trained on both languages. Make sure to load such a model
 
         text_to_translate = [
             "Vi har ett möte klockan fem om de ökande kostnaderna for energiproduktionen.",

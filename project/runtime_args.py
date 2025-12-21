@@ -22,7 +22,7 @@ def get_args():
     parser.add_argument("--lr", default=0.0001)
     parser.add_argument("--batch-size", default=32)
     parser.add_argument("--save-model-dir", default="trained_model")
-    parser.add_argument("--load-model-dir", default=None)
+    parser.add_argument("--load-model-dir", default="trained_model_e5_sv_masking")
     parser.add_argument("--dataset-load-name", default="sv_en_dataset_tokenized")
 
 
@@ -32,7 +32,6 @@ def get_args():
     parser.add_argument("--num-attention-heads", default=4)
     parser.add_argument("--num-hidden-layers", default=5)
     parser.add_argument("--rms-norm-eps", default=0.001)
-    parser.add_argument("--hidden-size", default=256)
 
 
     return parser.parse_args()
