@@ -1,0 +1,107 @@
+Loading tokenized datasets
+Finished Loading tokenized datasets
+Model loaded from trained_model_e5_it_masking
+Device: cuda
+At epoch 0, batch 0, loss = 4.461
+At epoch 0, batch 1500, loss = 2.095
+At epoch 0, batch 3000, loss = 1.845
+At epoch 0, batch 4500, loss = 1.601
+At epoch 0, batch 6000, loss = 1.566
+At epoch 0, batch 7500, loss = 1.759
+At epoch 0, batch 9000, loss = 1.360
+At epoch 0, batch 10500, loss = 1.435
+At epoch 0, batch 12000, loss = 1.317
+At epoch 0, batch 13500, loss = 1.642
+At epoch 0, batch 15000, loss = 1.299
+At epoch 0, batch 16500, loss = 1.106
+At epoch 0, batch 18000, loss = 1.569
+At epoch 0, batch 19500, loss = 1.523
+At epoch 0, batch 21000, loss = 1.385
+At epoch 0, batch 22500, loss = 1.869
+At epoch 0, batch 24000, loss = 1.693
+#
+Perplexity for the epoch is: 4.347 and the loss is 1897.538
+#
+At epoch 1, batch 0, loss = 1.375
+At epoch 1, batch 1500, loss = 1.533
+At epoch 1, batch 3000, loss = 1.473
+At epoch 1, batch 4500, loss = 1.406
+At epoch 1, batch 6000, loss = 1.354
+At epoch 1, batch 7500, loss = 1.588
+At epoch 1, batch 9000, loss = 1.196
+At epoch 1, batch 10500, loss = 1.294
+At epoch 1, batch 12000, loss = 1.212
+At epoch 1, batch 13500, loss = 1.486
+At epoch 1, batch 15000, loss = 1.171
+At epoch 1, batch 16500, loss = 1.019
+At epoch 1, batch 18000, loss = 1.465
+At epoch 1, batch 19500, loss = 1.386
+At epoch 1, batch 21000, loss = 1.271
+At epoch 1, batch 22500, loss = 1.728
+At epoch 1, batch 24000, loss = 1.577
+#
+Perplexity for the epoch is: 4.172 and the loss is 1844.640
+#
+At epoch 2, batch 0, loss = 1.316
+At epoch 2, batch 1500, loss = 1.435
+At epoch 2, batch 3000, loss = 1.361
+At epoch 2, batch 4500, loss = 1.328
+At epoch 2, batch 6000, loss = 1.292
+At epoch 2, batch 7500, loss = 1.520
+At epoch 2, batch 9000, loss = 1.128
+At epoch 2, batch 10500, loss = 1.219
+At epoch 2, batch 12000, loss = 1.151
+At epoch 2, batch 13500, loss = 1.414
+At epoch 2, batch 15000, loss = 1.120
+At epoch 2, batch 16500, loss = 0.969
+At epoch 2, batch 18000, loss = 1.408
+At epoch 2, batch 19500, loss = 1.322
+At epoch 2, batch 21000, loss = 1.214
+At epoch 2, batch 22500, loss = 1.625
+At epoch 2, batch 24000, loss = 1.528
+#
+Perplexity for the epoch is: 4.139 and the loss is 1834.263
+#
+At epoch 3, batch 0, loss = 1.290
+At epoch 3, batch 1500, loss = 1.354
+At epoch 3, batch 3000, loss = 1.305
+At epoch 3, batch 4500, loss = 1.284
+At epoch 3, batch 6000, loss = 1.237
+At epoch 3, batch 7500, loss = 1.478
+At epoch 3, batch 9000, loss = 1.082
+At epoch 3, batch 10500, loss = 1.185
+At epoch 3, batch 12000, loss = 1.108
+At epoch 3, batch 13500, loss = 1.373
+At epoch 3, batch 15000, loss = 1.072
+At epoch 3, batch 16500, loss = 0.930
+At epoch 3, batch 18000, loss = 1.367
+At epoch 3, batch 19500, loss = 1.288
+At epoch 3, batch 21000, loss = 1.192
+At epoch 3, batch 22500, loss = 1.563
+At epoch 3, batch 24000, loss = 1.480
+#
+Perplexity for the epoch is: 4.108 and the loss is 1824.494
+#
+At epoch 4, batch 0, loss = 1.243
+At epoch 4, batch 1500, loss = 1.313
+At epoch 4, batch 3000, loss = 1.258
+At epoch 4, batch 4500, loss = 1.259
+At epoch 4, batch 6000, loss = 1.197
+At epoch 4, batch 7500, loss = 1.448
+At epoch 4, batch 9000, loss = 1.061
+At epoch 4, batch 10500, loss = 1.127
+At epoch 4, batch 12000, loss = 1.084
+At epoch 4, batch 13500, loss = 1.340
+At epoch 4, batch 15000, loss = 1.035
+At epoch 4, batch 16500, loss = 0.919
+At epoch 4, batch 18000, loss = 1.328
+At epoch 4, batch 19500, loss = 1.261
+At epoch 4, batch 21000, loss = 1.171
+At epoch 4, batch 22500, loss = 1.521
+At epoch 4, batch 24000, loss = 1.443
+#
+Perplexity for the epoch is: 4.109 and the loss is 1824.915
+#
+
+#Saving to trained_model_5ep_it_to_sv.
+#
