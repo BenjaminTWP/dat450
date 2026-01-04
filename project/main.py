@@ -42,25 +42,23 @@ if __name__ == "__main__":
     elif args.run == "encode dataset": 
 
         if args.is_helsinki:
-            print(f"Tokenize dataset using the following model from Helsinki research group {args.helsinki_model}")
-            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
-        else: 
+            print(f"Tokenize dataset using the following model from Helsinki research group Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+            tokenizer = AutoTokenizer.from_pretrained(f"Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+
+        else:
             print("Tokenize dataset using custom model")
             tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
-        first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
-        second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
+        print("\nLoading dataset")
+        dataset = get_dataset(args.l1, args.data_limit, args.split_size)
 
         print("\nStarting data tokenization")
-        first_dataset["train"] = encode_dataset(first_dataset["train"], tokenizer, args.batch_size)
-        first_dataset["test"] = encode_dataset(first_dataset["test"], tokenizer, args.batch_size)
-
-        second_dataset["train"] = encode_dataset(second_dataset["train"], tokenizer, args.batch_size)
-        second_dataset["test"] = encode_dataset(second_dataset["test"], tokenizer, args.batch_size)
+        dataset["train"] = encode_dataset(dataset["train"], tokenizer, args.batch_size)
+        dataset["test"] = encode_dataset(dataset["test"], tokenizer, args.batch_size)
 
         print(f"\nSaving the tokenized data under the folder {args.token_ds_out_path}")
-        first_dataset.save_to_disk(args.token_ds_out_path + f"{args.l1}_en_dataset_tokenized")
-        second_dataset.save_to_disk(args.token_ds_out_path + f"{args.l2}_en_dataset_tokenized")
+        dataset.save_to_disk(args.token_ds_out_path + f"{args.l1}_en_dataset_tokenized")
+        
 
         
     elif args.run == "train":
@@ -133,9 +131,9 @@ if __name__ == "__main__":
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
         if args.is_helsinki:
-            print(f"Loading the following model from Helsinki research group {args.helsinki_model}")
-            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
-            model = AutoModelForSeq2SeqLM.from_pretrained(args.helsinki_model)
+            print(f"Loading the following model from Helsinki research group Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+            tokenizer = AutoTokenizer.from_pretrained(f"Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+            model = AutoModelForSeq2SeqLM.from_pretrained(f"Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
         else: 
             print("Loading custom model")
             tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
@@ -165,9 +163,9 @@ if __name__ == "__main__":
         eval_dataset = dataset["test"]
 
         if args.is_helsinki:
-            print(f"Loading the following model from Helsinki research group {args.helsinki_model}")
-            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
-            model = AutoModelForSeq2SeqLM.from_pretrained(args.helsinki_model)
+            print(f"Loading the following model from Helsinki research group Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+            tokenizer = AutoTokenizer.from_pretrained(f"Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
+            model = AutoModelForSeq2SeqLM.from_pretrained(f"Helsinki-NLP/opus-mt-{args.helsinki_model_language}-en")
         else: 
             print("Loading custom model")
             tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)

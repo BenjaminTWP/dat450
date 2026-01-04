@@ -31,3 +31,4 @@ transformers==4.57.1
 unbabel-comet
 sacrebleu
 datasets
+sacremoses

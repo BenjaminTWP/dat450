@@ -35,7 +35,7 @@ def get_args():
 
     # Load Helsinki model
     parser.add_argument("--is-helsinki", action='store_true')
-    parser.add_argument("--helsinki-model", type=str, default="Helsinki-NLP/opus-mt-sv-en")
+    parser.add_argument("--helsinki-model-language", type=str, default="sv")
 
 
     # Generation arguments
