@@ -58,12 +58,8 @@ class ProjectTrainer:
         self.model.to(device)
         
         loss_func = torch.nn.CrossEntropyLoss(ignore_index=-100)
-
-        # TODO: Relevant arguments: at least args.learning_rate, but you can optionally also consider
-        # other Adam-related hyperparameters here.
         optimizer = torch.optim.AdamW(self.model.parameters(), lr=args.learning_rate)
 
-        # TODO: Relevant arguments: args.per_device_train_batch_size, args.per_device_eval_batch_size
         data_collator = DataCollatorForSeq2Seq(self.tokenizer, model=self.model)
 
         train_loader = DataLoader(self.train_dataset, 
@@ -75,12 +71,11 @@ class ProjectTrainer:
                                 shuffle=False,
                                 collate_fn=data_collator)
         
-        # TODO: Your work here is to implement the training loop.
+
         self.model.train()
         for epoch in range(args.num_train_epochs):
             step = 0
             for batch in train_loader:
-                #       FORWARD PASS:
                 
                 encoder_input = batch["input_ids"].to(device)
                 target_ids = batch["labels"]
@@ -97,14 +92,12 @@ class ProjectTrainer:
                     target_lang_ids=decoder_input
                 )
 
-                #       compute the loss for the model output and Y
                 loss = loss_func(logit_results.reshape(-1, logit_results.size(-1)), ground_truth.reshape(-1))
 
                 if step % 1500 == 0:
                     print(f"At epoch {epoch}, batch {step}, loss = {loss.item():.3f}", flush=True)
                 step +=1
 
-                #       BACKWARD PASS AND MODEL UPDATE:
                 optimizer.zero_grad()
                 loss.backward()
                 optimizer.step()

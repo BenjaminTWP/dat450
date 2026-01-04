@@ -2,7 +2,12 @@ from data_preprocessing import get_dataset, get_training_corpus_generator
 from tokenizer import train_trilingual_tokenizer, encode_dataset
 from datasets import load_from_disk
 from trainer import TrainingArguments, ProjectTrainer
-from transformers import PreTrainedTokenizerFast, DataCollatorForSeq2Seq
+from transformers import (
+    PreTrainedTokenizerFast,
+    DataCollatorForSeq2Seq,
+    AutoTokenizer,
+    AutoModelForSeq2SeqLM
+)
 import evaluate
 from torch.utils.data import DataLoader
 from model import LanguageTransformer, ModelConfig
@@ -35,7 +40,13 @@ if __name__ == "__main__":
         )
 
     elif args.run == "encode dataset": 
-        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+
+        if args.is_helsinki:
+            print(f"Tokenize dataset using the following model from Helsinki research group {args.helsinki_model}")
+            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
+        else: 
+            print("Tokenize dataset using custom model")
+            tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
 
         first_dataset = get_dataset(args.l1, args.data_limit, args.split_size)
         second_dataset = get_dataset(args.l2, args.data_limit, args.split_size)
@@ -115,19 +126,31 @@ if __name__ == "__main__":
         model = LanguageTransformer(config)
         total_params = sum(p.numel() for p in model.parameters())
         print("Total number of parameters in the model: ", total_params)
-
-
+        
     
     elif args.run == "gen":
-        source_sentence = input("Welcome to ChatGBG, what do you want to translate? \n - ")
 
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
+        if args.is_helsinki:
+            print(f"Loading the following model from Helsinki research group {args.helsinki_model}")
+            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
+            model = AutoModelForSeq2SeqLM.from_pretrained(args.helsinki_model)
+        else: 
+            print("Loading custom model")
+            tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+            model = LanguageTransformer.from_pretrained(args.load_model_dir)
+        
+        source_sentence = input("Welcome to ChatGBG, what do you want to translate? \n - ")
 
-        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
-
-        translation = translate_sentence(model, source_sentence, tokenizer, device, max_length=50)
+        translation = translate_sentence(
+            model.to(device), 
+            source_sentence, 
+            tokenizer, 
+            device, 
+            args.gen_len,
+            args.is_helsinki
+        )
 
         print(translation)
 
@@ -141,9 +164,16 @@ if __name__ == "__main__":
 
         eval_dataset = dataset["test"]
 
-        model = LanguageTransformer.from_pretrained(args.load_model_dir).to(device)
+        if args.is_helsinki:
+            print(f"Loading the following model from Helsinki research group {args.helsinki_model}")
+            tokenizer = AutoTokenizer.from_pretrained(args.helsinki_model)
+            model = AutoModelForSeq2SeqLM.from_pretrained(args.helsinki_model)
+        else: 
+            print("Loading custom model")
+            tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+            model = LanguageTransformer.from_pretrained(args.load_model_dir)
 
-        tokenizer = PreTrainedTokenizerFast.from_pretrained(args.token_output_dir)
+        model = model.to(device)
 
         data_collator = DataCollatorForSeq2Seq(tokenizer, model=model)
 
@@ -168,7 +198,15 @@ if __name__ == "__main__":
             source_sentences =  tokenizer.batch_decode(source_lang_tokens, skip_special_tokens=True)
             true_eng = tokenizer.batch_decode(true_tokens, skip_special_tokens=True)
 
-            gen_eng = translate_tokens_batch(model, source_lang_tokens, attention_mask, tokenizer, device, max_length=200)
+            gen_eng = translate_tokens_batch(
+                model, 
+                source_lang_tokens, 
+                attention_mask, 
+                tokenizer,
+                device,
+                args.gen_len,
+                args.is_helsinki
+            )
 
             ref_format = [[sentence] for sentence in true_eng]
 

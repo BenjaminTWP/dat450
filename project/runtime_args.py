@@ -33,5 +33,12 @@ def get_args():
     parser.add_argument("--num-hidden-layers", type=int, default=5)
     parser.add_argument("--rms-norm-eps", type=float, default=0.001)
 
+    # Load Helsinki model
+    parser.add_argument("--is-helsinki", action='store_true')
+    parser.add_argument("--helsinki-model", type=str, default="Helsinki-NLP/opus-mt-sv-en")
+
+
+    # Generation arguments
+    parser.add_argument("--gen-len", type=int, default=200)
 
     return parser.parse_args()

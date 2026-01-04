@@ -1,8 +1,14 @@
 import torch
 
-def translate_tokens(model, encoding, tokenizer, device, max_length=50):
+def translate_tokens(model, encoding, tokenizer, device, max_length, is_helsinki):
 
-    target_lang_ids = torch.tensor([tokenizer.bos_token_id]).unsqueeze(0).to(device)
+    if is_helsinki:
+        start_token = model.config.decoder_start_token_id
+    
+    else: 
+        start_token = tokenizer.bos_token_id
+
+    target_lang_ids = torch.tensor([start_token]).unsqueeze(0).to(device)
     
     source_lang_ids = torch.tensor(encoding['input_ids']).unsqueeze(0).to(device)
 
@@ -10,9 +16,13 @@ def translate_tokens(model, encoding, tokenizer, device, max_length=50):
     
     for _ in range(max_length):
 
-        logits = model(source_lang_ids, attention_mask, target_lang_ids).squeeze(0)
+        logits = model(source_lang_ids, attention_mask, target_lang_ids)
+        
+        if is_helsinki:
+            logits = logits.logits
 
-        next_token = torch.argmax(logits, dim=1)[-1].unsqueeze(0).unsqueeze(0)
+
+        next_token = torch.argmax(logits.squeeze(0), dim=1)[-1].unsqueeze(0).unsqueeze(0)
 
         target_lang_ids = torch.cat((target_lang_ids, next_token), dim=1)
        
@@ -23,28 +33,37 @@ def translate_tokens(model, encoding, tokenizer, device, max_length=50):
     return tokenizer.decode(target_lang_ids.squeeze(0), skip_special_tokens=True)
 
 
-def translate_sentence(model, prompt, tokenizer, device, max_length=50):
+def translate_sentence(model, prompt, tokenizer, device, max_length, is_helsinki):
 
     encoding = tokenizer(prompt)
 
-    return translate_tokens(model, encoding, tokenizer, device, max_length=max_length)
+    return translate_tokens(model, encoding, tokenizer, device, max_length, is_helsinki)
 
 def remove_from_batch(old_tensor, batch_ind):
     return torch.cat((old_tensor[:batch_ind, :], old_tensor[batch_ind+1:, :]), dim=0)
 
-def translate_tokens_batch(model, source_lang_tokens, attention_mask, tokenizer, device, max_length=50):
+def translate_tokens_batch(model, source_lang_tokens, attention_mask, tokenizer, device, max_length, is_helsinki):
 
     batch_size = len(source_lang_tokens)
+
+    if is_helsinki:
+        start_token = model.config.decoder_start_token_id
+
+    else: 
+        start_token = tokenizer.bos_token_id
     
     translated_tokens = torch.full((batch_size, max_length), tokenizer.pad_token_id)
 
     finished = [False] * batch_size
 
-    target_lang_ids = torch.full((batch_size, 1), tokenizer.bos_token_id).to(device)
+    target_lang_ids = torch.full((batch_size, 1), start_token).to(device)
     
     for _ in range(max_length):
 
         logits = model(source_lang_tokens, attention_mask, target_lang_ids)
+
+        if is_helsinki:
+            logits = logits.logits
 
         next_token = torch.argmax(logits, dim=2)[:, -1].unsqueeze(1)
 
