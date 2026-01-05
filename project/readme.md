@@ -136,11 +136,16 @@ You can specify additional arguments after `--run="train"` to override defaults.
 
 ### Generating Translations
 
-Interactive translation generation. **Note:** Cannot run on cluster environments as it uses `input()`.
+Interactive translation generation. **Note:** Cannot run on cluster environments as it uses `input()`. Note that if 
+you use `--use-helsinki` the language of the model to load also has to be specified.
 
 **Command:**
 ```bash
+# Using a custom model
 python main.py --run="gen" --load-model-dir="my_sv_en_model" --token-output-dir="my_tokenizer"
+
+#Using a model from Helsinki University
+python main.py --run="gen" --is-helsinki --helsinki-model-language="sv"
 ```
 
 **Optional Arguments:**
@@ -149,6 +154,8 @@ python main.py --run="gen" --load-model-dir="my_sv_en_model" --token-output-dir=
 |----------|-------------|
 | `--load-model-dir` | Directory of the model to load |
 | `--token-output-dir` | Directory of the tokenizer |
+| `--is-helsinki` | Add this if you want to load and run a model from Helsinki Uniersity |
+| `--helsinki-model-language` | The language of the Helsinki model |
 
 ---
 
